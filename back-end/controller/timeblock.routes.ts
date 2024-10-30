@@ -34,6 +34,7 @@ const timeBlockRouter = express.Router();
 timeBlockRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const timeBlocks = timeBlockService.getAllTimeBlocks();
+        console.log(timeBlocks);
         res.status(200).json(timeBlocks);
     } catch (error) {
         next(error);
