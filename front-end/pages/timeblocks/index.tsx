@@ -4,7 +4,7 @@ import Header from "@components/header";
 import styles from "@styles/home.module.css";
 import { useEffect, useState } from "react";
 import { TimeBlock } from "@types";
-import TimeBlockService from "@services/timeBlockService";
+import TimeBlockService from "@services/TimeBlockService";
 
 const Home: React.FC = () => {
   const [timeBlocks, setTimeBlocks] = useState<Array<TimeBlock>>([]);
