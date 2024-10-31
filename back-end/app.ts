@@ -5,7 +5,7 @@ import * as bodyParser from 'body-parser';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { NotFoundError } from './errors';
-import { timeBlockRouter } from './controller/timeBlocks.routes';
+import { timeBlockRouter } from './controller/timeBlock.routes';
 
 const app = express();
 dotenv.config();

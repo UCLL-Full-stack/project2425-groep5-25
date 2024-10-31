@@ -1,4 +1,4 @@
-import { TimeBlock } from "./timeBlocks";
+import { TimeBlock } from "./timeBlock";
 import { User } from "./user";
 
 export class WorkDay {
