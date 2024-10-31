@@ -15,7 +15,7 @@ app.use(cors({ origin: 'http://localhost:8080' }));
 app.use(bodyParser.json());
 
 app.get('/status', (req, res) => {
-    res.json({ message: 'Courses API is running...' });
+    res.json({ message: 'Time Tracker API Running...' });
 });
 
 app.use('/timeblocks', timeBlockRouter);
