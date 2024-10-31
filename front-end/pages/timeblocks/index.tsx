@@ -12,7 +12,6 @@ const Home: React.FC = () => {
   const getTimeBlocks = async () => {
     const [response] = await Promise.all([TimeBlockService.getAllTimeBlocks()]);
     const [json] = await Promise.all([response.json()]);
-    console.log(json)
     setTimeBlocks(json);
   };
 

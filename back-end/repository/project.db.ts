@@ -1,26 +1,21 @@
+import { NotFoundError } from "../errors";
 import { Project } from "../model/project";
-import { User } from "../model/user";
-import { Color } from '../types';
-const projects=[
-    new Project({
-        id:1,name:'firstProject',color: Color.Red,users:[]
-    }),
-    new Project({
-        id:2,name:'secondProject',color:Color.Black,users:[]
-    })
-]
-const getAllProjects=():Project[] => {
-    return projects;
-}
-const getProjectById=({id}:{id?:number}):Project|null =>{
-    if(id===null)
-    {
-        console.log("invalid id")
-        return null;
+import userRepository from './user.db';
+import { projects } from './fakeData.db';
+
+const getProjectsByUserId = async ({ userId }: { userId: number }): Promise<Project[]> => {    
+    try {
+        const user = await userRepository.getUserById({ id: userId });
+        if (!user) throw new NotFoundError("User not found");
+        return user.getProjects();
+    } catch (error) {
+        throw new Error('Database error. See server log for details');
     }
-    console.log("project with id=",id,"is being returned")
-    return projects.find(project =>project.getId()===id) || null
-}
+};
+
+const getAllProjects = (): Project[] => projects;
+
 export default{
-    getAllProjects,getProjectById
+    getProjectsByUserId,
+    getAllProjects
 };

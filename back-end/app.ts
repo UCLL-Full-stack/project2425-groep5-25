@@ -5,7 +5,7 @@ import * as bodyParser from 'body-parser';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { NotFoundError } from './errors';
-import { timeBlockRouter } from './controller/timeblock.routes';
+import { projectRouter } from './controller/project.routes';
 
 const app = express();
 dotenv.config();
@@ -18,7 +18,7 @@ app.get('/status', (req, res) => {
     res.json({ message: 'Time Tracker API Running...' });
 });
 
-app.use('/timeblocks', timeBlockRouter);
+app.use('/projects', projectRouter);
 
 const swaggerOpts = {
     definition: {
