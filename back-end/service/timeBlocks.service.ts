@@ -1,5 +1,5 @@
-import { TimeBlock } from '../model/timeBlock';
-import timeBlockRepository from '../repository/timeBlock.db';
+import { TimeBlock } from '../model/timeBlocks';
+import timeBlockRepository from '../repository/timeBlocks.db';
 
 const getAllTimeBlocks = (): TimeBlock[] => timeBlockRepository.getTimeBlocks();
 
