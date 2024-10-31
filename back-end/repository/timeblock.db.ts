@@ -1,5 +1,5 @@
 import { Project } from '../model/project';
-import { TimeBlock } from '../model/timeBlock';
+import { TimeBlock } from '../model/timeblock';
 import { User } from '../model/user';
 import { WorkDay } from '../model/workDay';
 import { WorkSchedule } from '../model/workSchedule';
@@ -106,7 +106,12 @@ timeBlocks.forEach((timeBlock) => {
 const getTimeBlocks = (): TimeBlock[] => {
     return timeBlocks;
 };
+const createTimeBlocks =(timeBlock:TimeBlock): TimeBlock =>{
+    timeBlocks.push(timeBlock)
+    return timeBlock;
+
+}
 
 export default {
-    getTimeBlocks,
+    getTimeBlocks,createTimeBlocks
 };
