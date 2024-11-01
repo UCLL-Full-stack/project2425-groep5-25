@@ -1,5 +1,6 @@
-export type TimeBlock = {
-  id: number;
-  startTime: Date;
-  endTime?: Date;
+export type ProjectUserCount = {
+  id?: number;
+  name?: string;
+  color?: String;
+  userCount?: number;
 };
