@@ -10,8 +10,8 @@ const Header: React.FC = () => {
         <Link href="/" className="nav-link px-4 fs-5 text-white">
           Home
         </Link>
-        <Link href="/timeblocks" className="nav-link px-4 fs-5 text-white">
-          TimeBlock
+        <Link href="/projects" className="nav-link px-4 fs-5 text-white">
+          Projects
         </Link>
       </nav>
     </header>
