@@ -37,6 +37,10 @@ export class Project {
         return this.users || [];
     }
 
+    setId(id: number): void {
+        this.id = id;
+    }
+
     setName(name: string): void {
         this.name = name;
     }

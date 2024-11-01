@@ -44,6 +44,10 @@ export class TimeBlock {
         return this.workday;
     }
 
+    setId(id: number): void {
+        this.id = id;
+    }
+
     setStartTime(startTime: Date): void {
         this.startTime = startTime;
     }

@@ -81,6 +81,10 @@ export class User {
         return this.workSchedule;
     }
 
+    setId(id: number): void {
+        this.id = id;
+    }
+
     setUsername(username: string): void {
         this.username = username;
     }
