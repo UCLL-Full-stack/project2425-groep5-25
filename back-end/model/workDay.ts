@@ -51,6 +51,10 @@ export class WorkDay {
         return this.timeBlocks || [];
     }
 
+    setId(id: number): void {
+        this.id = id;
+    }
+
     setExpectedHours(expectedHours: number): void {
         this.expectedHours = expectedHours;
     }

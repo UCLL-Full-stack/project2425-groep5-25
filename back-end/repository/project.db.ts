@@ -15,7 +15,14 @@ const getProjectsByUserId = async ({ userId }: { userId: number }): Promise<Proj
 
 const getAllProjects = (): Project[] => projects;
 
+const createProject = async (project: Project): Promise<Project> => {
+    project.setId(projects.length + 1);
+    await projects.push(project);
+    return project;
+}
+
 export default{
     getProjectsByUserId,
-    getAllProjects
+    getAllProjects,
+    createProject
 };

@@ -71,6 +71,10 @@ export class WorkSchedule {
         return this.sundayHours;
     }
 
+    setId(id: number): void {
+        this.id = id;
+    }
+
     setUser(user: User): void {
         this.user = user;
     }

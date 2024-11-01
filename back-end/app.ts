@@ -45,4 +45,5 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 
 app.listen(port || 3000, () => {
     console.log(`Time Tracker API Running on port ${port}.`);
+    console.log(`Swagger running on http://localhost:${port}/api-docs.`);
 });

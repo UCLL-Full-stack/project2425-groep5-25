@@ -11,7 +11,14 @@ enum Color {
     White = '#FFFFFF',
 }
 
+type ProjectInput = {
+    name: string;
+    color: Color;
+    userIds?: number[];
+};
+
 export {
     Role,
-    Color
+    Color,
+    ProjectInput
 };
