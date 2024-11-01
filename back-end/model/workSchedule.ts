@@ -135,4 +135,27 @@ export class WorkSchedule {
             this.sundayHours === workSchedule.getSundayHours()
         );
     }
+
+    getExpectedHoursForDate(date: Date): number {
+        const dayOfWeek = date.getDay();
+
+        switch (dayOfWeek) {
+            case 0: // Sunday
+                return this.sundayHours;
+            case 1: // Monday
+                return this.mondayHours;
+            case 2: // Tuesday
+                return this.tuesdayHours;
+            case 3: // Wednesday
+                return this.wednesdayHours;
+            case 4: // Thursday
+                return this.thursdayHours;
+            case 5: // Friday
+                return this.fridayHours;
+            case 6: // Saturday
+                return this.saturdayHours;
+            default:
+                throw new Error('Invalid day of the week');
+        }
+    }
 }

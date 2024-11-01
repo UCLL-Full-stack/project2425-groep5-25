@@ -13,7 +13,7 @@ export class User {
     private role: Role;
     private projects: Project[];
     private workDays?: WorkDay[]
-    private workSchedule?: WorkSchedule;
+    private workSchedule: WorkSchedule;
 
     constructor(user: {
         id?: number;
@@ -25,7 +25,7 @@ export class User {
         role: Role;
         projects: Project[];
         workDays?: WorkDay[];
-        workSchedule?: WorkSchedule;
+        workSchedule: WorkSchedule;
     }) {
         this.validate(user);
 
@@ -77,7 +77,7 @@ export class User {
         return this.workDays || [];
     }
 
-    getWorkSchedule(): WorkSchedule | undefined {
+    getWorkSchedule(): WorkSchedule {
         return this.workSchedule;
     }
 
@@ -113,7 +113,7 @@ export class User {
         this.workDays = workDays;
     }
     
-    setWorkSchedule(workSchedule: WorkSchedule | undefined): void {
+    setWorkSchedule(workSchedule: WorkSchedule): void {
         this.workSchedule = workSchedule;
     }
 
@@ -146,7 +146,8 @@ export class User {
             this.projects.length === user.getProjects().length &&
             this.projects.every((project, index) => project.equals(user.getProjects()[index])) &&
             this.workDays?.length === user.getWorkDays().length &&
-            this.workDays?.every((workDay, index) => workDay.equals(user.getWorkDays()[index]))
+            this.workDays?.every((workDay, index) => workDay.equals(user.getWorkDays()[index])) &&
+            this.workSchedule === user.getWorkSchedule()
         );
     }
 

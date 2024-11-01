@@ -27,18 +27,17 @@
  *              description: Course credits.
  */
 import express, { NextFunction, Request, Response } from 'express';
-import timeBlockService from '../service/timeBlock.service';
+import projectService from '../service/project.service';
 
-const timeBlockRouter = express.Router();
+const projectRouter = express.Router();
 
-timeBlockRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
+projectRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const timeBlocks = timeBlockService.getAllTimeBlocks();
-        console.log(timeBlocks);
-        res.status(200).json(timeBlocks);
+        const projects = await projectService.getAllProjects();
+        res.status(200).json(projects);
     } catch (error) {
         next(error);
     }
 });
 
-export { timeBlockRouter };
+export { projectRouter };
