@@ -8,9 +8,17 @@ const getAllTimeBlocks = async () => {
     },
   });
 };
+const startTimeBlock = async() => {
+  return await fetch(process.env.NEXT_PUBLIC_API_URL+`/timeblocks`,{
+    method : "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },}
+  );
+};
 
 const TimeBlockService = {
-  getAllTimeBlocks,
+  getAllTimeBlocks,startTimeBlock
 };
 
 export default TimeBlockService;
