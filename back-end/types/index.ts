@@ -6,9 +6,7 @@ enum Color {
     Blue = '#0000FF',
     Yellow = '#FFFF00',
     Orange = '#FFA500',
-    Purple = '#800080',
-    Black = '#000000',
-    White = '#FFFFFF',
+    Purple = '#800080'
 }
 
 type ProjectInput = {
@@ -17,8 +15,14 @@ type ProjectInput = {
     userIds?: number[];
 };
 
+type IdName = {
+    id?: number;
+    name: string;
+}
+
 export {
     Role,
     Color,
-    ProjectInput
+    ProjectInput,
+    IdName
 };

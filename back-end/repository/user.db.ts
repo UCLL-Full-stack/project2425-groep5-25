@@ -11,7 +11,6 @@ const getUserById = async ({ id }: { id: number }): Promise<User | null> => {
 
 const getAllUsers = (): User[] => users;
 
-
 export default{
     getUserById,
     getAllUsers
