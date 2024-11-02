@@ -15,20 +15,21 @@ const Home: React.FC = () => {
       <Header />
       <main className={styles.main}>
         <span>
-          <Image
+          {/* <Image
             src="/images/Logo-Icon.png"
             alt="Time Tracker Logo"
             className={styles.vercelLogo}
             width={125}
             height={125}
             priority
-          />
+          /> */}
           <h1>Welcome!</h1>
         </span>
 
         <div className={styles.description}>
           <p>
-            This is our main page. To get started, click on the "Log In" tab
+            This will be our main page, in the future, it remains empty for now.
+            We make use of a of fake database, values or things stored will not be permanent.
           </p>
         </div>
       </main>
