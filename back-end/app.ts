@@ -6,6 +6,7 @@ import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { NotFoundError } from './errors';
 import { projectRouter } from './controller/project.routes';
+import { userRouter } from './controller/user.routes';
 
 const app = express();
 dotenv.config();
@@ -19,6 +20,7 @@ app.get('/status', (req, res) => {
 });
 
 app.use('/projects', projectRouter);
+app.use('/users', userRouter);
 
 const swaggerOpts = {
     definition: {

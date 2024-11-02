@@ -6,17 +6,20 @@
     "start": "npm run dev"
   },
   "dependencies": {
+    "@fortawesome/free-solid-svg-icons": "^6.6.0",
+    "@fortawesome/react-fontawesome": "^0.2.2",
     "@types/react": "18.0.28",
     "bootstrap": "5.2.3",
     "classnames": "^2.3.2",
     "dayjs": "^1.11.7",
     "i18next": "^23.7.6",
-    "next": "^14.2.6",
+    "next": "^15.0.2",
     "next-i18next": "^15.0.0",
     "react": "^18.3.1",
     "react-datepicker": "^4.16.0",
     "react-dom": "^18.3.1",
     "react-i18next": "^13.4.1",
+    "react-select": "^5.8.2",
     "swr": "^2.2.0",
     "use-interval": "^1.4.0"
   },

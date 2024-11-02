@@ -17,8 +17,14 @@ type ProjectInput = {
     userIds?: number[];
 };
 
+type IdName = {
+    id?: number;
+    name: string;
+}
+
 export {
     Role,
     Color,
-    ProjectInput
+    ProjectInput,
+    IdName
 };
