@@ -11,8 +11,22 @@ const getAllProjects = async () => {
     },
   });
 };
+const createProject= async(formData:any)=>{
+
+    return await fetch(process.env.NEXT_PUBLIC_API_URL + `/projects`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      body: JSON.stringify(formData),
+    });
+
+
+  }
+ 
+
 const ProjectService = {
-  getAllProjects,
+  getAllProjects,createProject
 };
 
 export default ProjectService;

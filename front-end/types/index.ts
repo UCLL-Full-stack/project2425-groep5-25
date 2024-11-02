@@ -1,16 +1,16 @@
 import { WorkDay } from '../../back-end/model/workDay';
 
-export type Project = {
+export type ProjectDto = {
   name?: string;
   color?: String;
   userCount?:number ;
 };
 
-export type ProjectDto = {
-  id: number;
+export type ProjectInputDto = {
+  
   name: string;
   color: string;
-  users: number;
+  users: number[];
   
 };
 ;
