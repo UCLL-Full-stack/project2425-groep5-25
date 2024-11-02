@@ -17,9 +17,7 @@ export enum Color {
   Blue = '#0000FF',
   Yellow = '#FFFF00',
   Orange = '#FFA500',
-  Purple = '#800080',
-  Black = '#000000',
-  White = '#FFFFFF',
+  Purple = '#800080'
 }
 
 export type IdName = {

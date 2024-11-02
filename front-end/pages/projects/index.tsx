@@ -43,7 +43,7 @@ const Home: React.FC = () => {
       </Head>
       <Header />
       <main className={styles.main}>
-        <div className="d-flex flex-column" style={{ gap: '1rem' }}>
+        <div className="d-flex flex-column w-100" style={{ gap: '1rem' }}>
           <div className={styles.projectCard}>
             <span>
               <h1>Work Projects</h1>

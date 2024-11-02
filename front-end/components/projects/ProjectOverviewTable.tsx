@@ -1,4 +1,5 @@
 import { ProjectUserCountDto } from "@types";
+import { formatOptionLabel, hexToColorNameMap } from "utils/optionFormatters";
 import React from "react";
 
 type Props = {
@@ -28,14 +29,10 @@ const ProjectOverviewTable: React.FC<Props> = ({
               >
                 <td>{project.id}</td>
                 <td className="align-content-center">
-                  <div
-                    style={{
-                      width: '20px',
-                      height: '20px',
-                      borderRadius: '50%',
-                      backgroundColor: String(project.color),
-                    }}
-                  />
+                  {formatOptionLabel({
+                    label: hexToColorNameMap[project.color as string] || "Unknown",
+                    value: project.color as string,
+                  })}
                 </td>
                 <td>{project.name}</td>
                 <td>{project.userCount}</td>

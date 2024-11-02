@@ -5,6 +5,7 @@ import { Color, IdName, ProjectInputDto } from "@types";
 import styles from "@styles/ProjectSidePanel.module.css";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { formatOptionLabel } from "utils/optionFormatters";
 
 type Props = {
   userIdNames: Array<IdName>;
@@ -61,8 +62,8 @@ const ProjectSidePanel: React.FC<Props> = ({
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Enter project name"
-              required
               className={styles.input}
+              required
             />
           </div>
 
@@ -71,11 +72,10 @@ const ProjectSidePanel: React.FC<Props> = ({
             <Select
               options={colorOptions}
               value={colorOptions.find((option) => option.value === color)}
-              onChange={(selectedOption) =>
-                setColor(selectedOption?.value as Color)
-              }
+              onChange={(selectedOption) => setColor(selectedOption?.value as Color) }
               placeholder="Select a color"
               required
+              formatOptionLabel={formatOptionLabel}
             />
           </div>
 
@@ -85,14 +85,8 @@ const ProjectSidePanel: React.FC<Props> = ({
               options={userOptions}
               isMulti
               placeholder="Select users"
-              onChange={(selectedOptions) =>
-                setUserIds(
-                  selectedOptions.map((option) => option.value as number)
-                )
-              }
-              value={userOptions.filter((option) =>
-                userIds.includes(option.value as number)
-              )}
+              onChange={(selectedOptions) => setUserIds(selectedOptions.map((option) => option.value as number))}
+              value={userOptions.filter((option) => userIds.includes(option.value as number))}
             />
           </div>
 
