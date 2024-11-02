@@ -12,6 +12,8 @@ const app = express();
 dotenv.config();
 const port = process.env.APP_PORT || 3000;
 
+const faultyPort: string = port; // Error: Type 'number' is not assignable to type 'string'
+
 app.use(cors({ origin: 'http://localhost:8080' }));
 app.use(bodyParser.json());
 
@@ -45,7 +47,7 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     }
 });
 
-app.listen(port || 3000, () => {
+app.listen(faultyPort, () => { // Trying to listen on a string type
     console.log(`Time Tracker API Running on port ${port}.`);
     console.log(`Swagger running on http://localhost:${port}/api-docs.`);
 });
