@@ -5,7 +5,8 @@ import * as bodyParser from 'body-parser';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { NotFoundError } from './errors';
-import { timeBlockRouter } from './controller/timeblock.routes';
+import { projectRouter } from './controller/project.routes';
+import { userRouter } from './controller/user.routes';
 
 const app = express();
 dotenv.config();
@@ -15,10 +16,11 @@ app.use(cors({ origin: 'http://localhost:8080' }));
 app.use(bodyParser.json());
 
 app.get('/status', (req, res) => {
-    res.json({ message: 'Courses API is running...' });
+    res.json({ message: 'Time Tracker API Running...' });
 });
 
-app.use('/timeblocks', timeBlockRouter);
+app.use('/projects', projectRouter);
+app.use('/users', userRouter);
 
 const swaggerOpts = {
     definition: {
@@ -36,8 +38,6 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     if (err.name === 'UnauthorizedError') {
         res.status(401).json({ status: 'unauthorized', message: err.message });
-    } else if (err.name === 'CoursesError') {
-        res.status(400).json({ status: 'domain error', message: err.message });
     } else if (err instanceof NotFoundError) {
         res.status(404).json({ status: 'not found', message: err.message });
     } else {
@@ -46,5 +46,6 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 });
 
 app.listen(port || 3000, () => {
-    console.log(`Courses API is running on port ${port}.`);
+    console.log(`Time Tracker API Running on port ${port}.`);
+    console.log(`Swagger running on http://localhost:${port}/api-docs.`);
 });
