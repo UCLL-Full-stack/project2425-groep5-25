@@ -3,7 +3,7 @@ import Select from "react-select";
 import ProjectService from "@services/ProjectService";
 import { Color, IdName, ProjectInputDto } from "@types";
 import styles from "@styles/ProjectSidePanel.module.css";
-import { faTimes } from "@fortawesome/free-solid-svg-icons"; // Import the close icon
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 type Props = {

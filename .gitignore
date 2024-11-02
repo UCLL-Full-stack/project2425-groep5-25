@@ -78,6 +78,10 @@ typings/
 .nuxt
 dist
 
+# dotenv environment variables file
+.env
+.env.test
+
 # Gatsby files
 .cache/
 # Comment in the public line in if your project uses Gatsby and *not* Next.js
