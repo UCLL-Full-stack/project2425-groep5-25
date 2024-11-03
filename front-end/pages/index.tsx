@@ -1,6 +1,4 @@
 import Head from "next/head";
-import Image from "next/image";
-import Header from "@components/header";
 import styles from "@styles/home.module.css";
 
 const Home: React.FC = () => {
@@ -12,7 +10,6 @@ const Home: React.FC = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Header />
       <main className={styles.main}>
         <span>
           {/* <Image

@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import Select from "react-select";
 import ProjectService from "@services/ProjectService";
-import { Color, ErrorLabelMessage, IdName, ProjectInputDto } from "@types";
 import styles from "@styles/ProjectSidePanel.module.css";
-import { faTimes } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { formatOptionLabel } from "utils/optionFormatters";
 import ErrorMessage from "@components/shared/ErrorMessage";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { formatOptionLabel } from "utils/optionFormatters";
+import { Color, ErrorLabelMessage, IdName, ProjectInputDto } from "@types";
 
 type Props = {
   userIdNames: Array<IdName>;

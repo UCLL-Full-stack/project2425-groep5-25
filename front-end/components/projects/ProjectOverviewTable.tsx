@@ -1,6 +1,6 @@
+import React from "react";
 import { ProjectUserCountDto } from "@types";
 import { formatOptionLabel, hexToColorNameMap } from "utils/optionFormatters";
-import React from "react";
 
 type Props = {
   projects: Array<ProjectUserCountDto>;

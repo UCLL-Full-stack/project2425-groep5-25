@@ -1,12 +1,11 @@
 import Head from "next/head";
-import Header from "@components/header";
 import styles from "@styles/home.module.css";
 import ProjectService from "@services/ProjectService";
-import { useEffect, useState, useRef } from "react";
-import { Color, IdName, ProjectInputDto, ProjectUserCountDto } from "@types";
 import ProjectOverviewTable from "@components/projects/ProjectOverviewTable";
 import UserService from "@services/UserService";
 import ProjectSidePanel from "@components/projects/ProjectSidePanel";
+import { useEffect, useState } from "react";
+import { IdName, ProjectUserCountDto } from "@types";
 
 const Home: React.FC = () => {
   const [userIdNames, setUserIdNames] = useState<IdName[]>([]);
@@ -41,18 +40,19 @@ const Home: React.FC = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Header />
       <main className={styles.main}>
-        <div className="d-flex flex-column w-100" style={{ gap: '1rem' }}>
+        <div className="d-flex flex-column w-100" style={{ gap: '0.5rem' }}>
           <div className={styles.projectCard}>
             <span>
-              <h1>Work Projects</h1>
+              <h4>Projects</h4>
             </span>
 
             <button onClick={toggleSidePanel} className={styles.button}>
               Add Project
             </button>
           </div>
+
+          <hr />
 
           {isSidePanelOpen && (
             <ProjectSidePanel
