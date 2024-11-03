@@ -13,6 +13,14 @@ const getProjectsByUserId = async ({ userId }: { userId: number }): Promise<Proj
     }
 };
 
+const getProjectsByName = async ({ name }: { name: string }): Promise<Project[]> => {    
+    try {
+        return projects.filter((project) => project.getName() === name);
+    } catch (error) {
+        throw new Error('Database error. See server log for details');
+    }
+};
+
 const getAllProjects = (): Project[] => projects;
 
 const createProject = async (project: Project): Promise<Project> => {
@@ -23,6 +31,7 @@ const createProject = async (project: Project): Promise<Project> => {
 
 export default{
     getProjectsByUserId,
+    getProjectsByName,
     getAllProjects,
     createProject
 };
