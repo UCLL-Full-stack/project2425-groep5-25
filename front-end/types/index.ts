@@ -24,3 +24,8 @@ export type IdName = {
   id?: number;
   name: string;
 }
+
+export type ErrorLabelMessage = {
+  label: string;
+  message: string;
+}
