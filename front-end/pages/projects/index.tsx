@@ -14,8 +14,8 @@ const Home: React.FC = () => {
   const [isSidePanelOpen, setIsSidePanelOpen] = useState<boolean>(false);
 
   const getAllUsersIdName = async () => {
-    const response = await UserService.getAllUsersIdName();
-    const users = await response.json();
+    const [response] = await Promise.all([UserService.getAllUsersIdName()]);
+    const [users] = await Promise.all([response.json()]);
     setUserIdNames(users);
   };
 

@@ -1,0 +1,14 @@
+
+.error-container {
+    background: #FECACA;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    display: flex;
+    gap: 0.25rem;
+    flex-direction: column;
+    color: #991B1B;
+}
+
+.error-container > label {
+    font-weight: 600;
+}
