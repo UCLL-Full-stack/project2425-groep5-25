@@ -13,9 +13,10 @@ const getProjectsByUserId = async ({ userId }: { userId: number }): Promise<Proj
     }
 };
 
-const getProjectsByName = async ({ name }: { name: string }): Promise<Project[]> => {    
+const getProjectsByName = async ({ name }: { name: string }): Promise<Project | null> => {    
     try {
-        return projects.filter((project) => project.getName() === name);
+        const foundProject = projects.find((project) => project.getName() === name);
+        return foundProject || null;
     } catch (error) {
         throw new Error('Database error. See server log for details');
     }

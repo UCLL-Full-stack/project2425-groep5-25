@@ -23,7 +23,7 @@ const createProject = async ({ name, color, userIds }: ProjectInput): Promise<Pr
     if (existingProject) {
         throw new Error('A project with this name already exists. Please choose a different name.');
     }
-
+    
     const project = new Project({ name, color, users: [] });
 
     if (userIds && userIds.length > 0) {
