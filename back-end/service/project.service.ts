@@ -16,6 +16,7 @@ const getAllProjects = (): ProjectDto[] => {
 
 const createProject = async ({ name, color, userIds }: ProjectInput): Promise<ProjectDto> => {
     if (!name || !color) throw new Error('Name & color is required');
+    if (name.trim().length < 6) throw new Error('Project name must be at least 6 characters long.');
     if (!Object.values(Color).includes(color)) throw new Error('Invalid color value.');
 
     const project = new Project({ name, color, users: [] });
