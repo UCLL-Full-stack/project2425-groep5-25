@@ -26,7 +26,7 @@ const swaggerOpts = {
     definition: {
         openapi: '3.0.0',
         info: {
-            title: 'Courses API',
+            title: 'Time Tracker API',
             version: '1.0.0',
         },
     },
