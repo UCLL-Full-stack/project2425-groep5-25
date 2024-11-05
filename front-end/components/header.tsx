@@ -13,6 +13,9 @@ const Header: React.FC = () => {
         <Link href="/projects" className={`nav-link px-4 fs-5 text-white ${router.pathname === '/projects' ? 'border-bottom' : ''}`}>
           Projects
         </Link>
+        <Link href="/workdays" className={`nav-link px-4 fs-5 text-white ${router.pathname === '/workdays' ? 'border-bottom' : ''}`}>
+          Workdays
+        </Link>
       </nav>
       <a className="fs-2 d-flex justify-content-center text-white-50 text-decoration-none">
         Time Tracker
