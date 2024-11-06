@@ -1,6 +1,9 @@
 import { WorkDay } from '../model/workDay';
 import userRepository from './user.db';
 import { NotFoundError } from '../errors';
+import { workDays } from './fakeData.db';
+
+const getAllWorkDays = (): WorkDay[] => workDays;
 
 const getCurrentWorkday = async ({ userId }: { userId: number }): Promise<WorkDay | null> => {
     try {
@@ -20,5 +23,6 @@ const getCurrentWorkday = async ({ userId }: { userId: number }): Promise<WorkDa
 };
 
 export default{
+    getAllWorkDays,
     getCurrentWorkday
 }
