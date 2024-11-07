@@ -1,7 +1,7 @@
 {
-    "name": "courses_api",
+    "name": "timetracker_api",
     "version": "1.0.0",
-    "description": "Courses API",
+    "description": "TimeTracker API",
     "author": "johanpck",
     "license": "ISC",
     "main": "app.ts",
