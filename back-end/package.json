@@ -2,7 +2,7 @@
     "name": "timetracker_api",
     "version": "1.0.0",
     "description": "TimeTracker API",
-    "author": "johanpck",
+    "author": "roel",
     "license": "ISC",
     "main": "app.ts",
     "prisma": {
