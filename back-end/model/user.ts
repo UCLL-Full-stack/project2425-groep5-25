@@ -1,10 +1,10 @@
 import { Role } from '../types';
+import { ModelBase } from './modelBase';
 import { Project } from './project';
 import { WorkDay } from './workDay';
 import { WorkSchedule } from './workSchedule';
 
-export class User {
-    private id?: number;
+export class User extends ModelBase {
     private username: string;
     private firstName: string;
     private lastName: string;
@@ -12,7 +12,7 @@ export class User {
     private password: string;
     private role: Role;
     private projects: Project[];
-    private workDays?: WorkDay[]
+    private workDays?: WorkDay[];
     private workSchedule: WorkSchedule;
 
     constructor(user: {
@@ -26,10 +26,12 @@ export class User {
         projects: Project[];
         workDays?: WorkDay[];
         workSchedule: WorkSchedule;
+        createdDate?: Date;
+        updatedDate?: Date;
     }) {
+        super({ id: user.id, createdDate: user.createdDate, updatedDate: user.updatedDate });
         this.validate(user);
 
-        this.id = user.id;
         this.username = user.username;
         this.firstName = user.firstName;
         this.lastName = user.lastName;
@@ -37,7 +39,7 @@ export class User {
         this.password = user.password;
         this.role = user.role;
         this.projects = user.projects;
-        this.workDays = user.workDays;
+        this.workDays = user.workDays ?? [];
         this.workSchedule = user.workSchedule;
     }
 

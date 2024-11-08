@@ -1,0 +1,88 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model WorkSchedule {
+  // ModelBase
+  id                  Int                 @id @default(autoincrement())  
+  createdDate         DateTime?           @default(now())
+  updatedDate         DateTime?           @updatedAt
+
+  mondayHours         Float
+  tuesdayHours        Float
+  wednesdayHours      Float
+  thursdayHours       Float
+  fridayHours         Float
+  saturdayHours       Float
+  sundayHours         Float
+
+  // Relations
+  user                User?               
+}
+
+model User {
+  // ModelBase
+  id             Int                      @id @default(autoincrement())  
+  createdDate    DateTime?                @default(now())
+  updatedDate    DateTime?                @updatedAt
+
+  username        String
+  firstname       String
+  lastname        String
+  email           String                  @unique
+  password        String
+  role            String
+
+  // Relations
+  workScheduleId      Int                 @unique
+  workSchedule        WorkSchedule        @relation(fields: [workScheduleId], references: [id])
+  projects            Project[]
+  workdays            Workday[]
+}
+
+model Project {
+  // ModelBase
+  id             Int                      @id @default(autoincrement())  
+  createdDate    DateTime?                @default(now())
+  updatedDate    DateTime?                @updatedAt
+
+  name            String
+  color           String
+
+  // Relations
+  users           User[]   
+}
+
+model Workday {
+  // ModelBase
+  id             Int                      @id @default(autoincrement())  
+  createdDate    DateTime?                @default(now())
+  updatedDate    DateTime?                @updatedAt
+
+  expectedHours            Float
+  achievedHours           Float?
+  date    DateTime
+
+  // Relations
+  userId        Int       @unique
+  user          User      @relation(fields: [userId], references: [id])      
+}
+
+model TimeBlock {
+  // ModelBase
+  id             Int                      @id @default(autoincrement())  
+  createdDate    DateTime?                @default(now())
+  updatedDate    DateTime?                @updatedAt
+
+  startTime    DateTime
+  endTime    DateTime?
+
+  // Relations
+  projectId        Int          @unique
+  project          Project      @relation(fields: [projectId], references: [id])      
+}

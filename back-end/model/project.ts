@@ -1,24 +1,27 @@
 import { Color } from "../types";
+import { ModelBase } from "./modelBase";
 import { User } from "./user";
 
-export class Project {
-    private id?: number;
+export class Project extends ModelBase {
     private name: string;
     private color: Color;
     private users?: User[];
-
+    private timeBlocks?: TimeBlock[]
+    
     constructor(project: {
         id?: number;
         name: string;
         color: Color;
-        users?: User[];       
+        users?: User[];
+        createdDate?: Date;
+        updatedDate?: Date;
     }) {
+        super({ id: project.id, createdDate: project.createdDate, updatedDate: project.updatedDate });
         this.validate(project);
 
-        this.id = project.id;
         this.name = project.name;
         this.color = project.color;
-        this.users = project.users;
+        this.users = project.users ?? [];
     }
 
     getId(): number | undefined {
