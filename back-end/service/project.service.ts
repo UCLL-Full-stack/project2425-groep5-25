@@ -15,25 +15,14 @@ const getAllProjects = (): ProjectDto[] => {
 };
 
 const createProject = async ({ name, color, userIds }: ProjectInput): Promise<ProjectDto> => {
-    if (!name || !color) throw new Error('Name & color is required');
-    if (name.trim().length < 6) throw new Error('Project name must be at least 6 characters long.');
-    if (!Object.values(Color).includes(color)) throw new Error('Invalid color value.');
-
-    const existingProject = await projectRepository.getProjectsByName({ name });
-    if (existingProject) {
-        throw new Error('A project with this name already exists. Please choose a different name.');
-    }
     
+    const existingProject = await projectRepository.getProjectsByName({ name });
+    if (existingProject)
+        throw new Error('A project with this name already exists. Please choose a different name.');
+
     const project = new Project({ name, color, users: [] });
 
     if (userIds && userIds.length > 0) {
-        if (!userIds.every((id) => typeof id === 'number'))
-            throw new Error('All userIds must be valid numbers.');
-
-        const uniqueUserIds = new Set(userIds);
-        if (uniqueUserIds.size !== userIds.length)
-            throw new Error('UserIds must be unique. Duplicates found.');
-
         const allUsers = await userRepository.getAllUsers();
         const validUsers = allUsers.filter((user) => userIds.includes(user.getId() as number));
         const missingUserIds = userIds.filter(

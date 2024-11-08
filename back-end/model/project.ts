@@ -56,9 +56,20 @@ export class Project {
     validate(project: {
         name: string;
         color: Color;
+        users?: User[];
     }) {
-        if (!project.name?.trim()) throw new Error('Project name is required');        
-        if (!project.color) throw new Error('Project color is required');        
+        if (!project.name) throw new Error('Project name is required');
+        if (!project.color) throw new Error('Project color is required');
+        if (project.name.trim().length < 6) throw new Error('Project name must be at least 6 characters long');
+        if (!Object.values(Color).includes(project.color)) throw new Error('Invalid color value');
+
+        if (project.users) {
+            const allNumbers = project.users.every(user => typeof user === 'number');
+            if (!allNumbers) throw new Error('All usersIds must be numbers');
+    
+            const uniqueUsers = new Set(project.users);
+            if (uniqueUsers.size !== project.users.length) throw new Error('UserId list contains duplicate values');
+        }
     }
 
     equals(project: Project): boolean {
