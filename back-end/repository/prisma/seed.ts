@@ -17,7 +17,7 @@ const main = async () => {
 
     // Step 2: Generate WorkSchedules
     const workSchedules = await Promise.all(
-        Array.from({ length: 15 }).map(() =>
+        Array.from({ length: 25 }).map(() =>
             prisma.workSchedule.create({
                 data: {
                     mondayHours: parseFloat(casual.double(0, 8).toFixed(1)),
@@ -53,7 +53,7 @@ const main = async () => {
 
     // Step 4: Generate Projects
     const projects = await Promise.all(
-        Array.from({ length: 5 }).map(() =>
+        Array.from({ length: 10 }).map(() =>
             prisma.project.create({
                 data: {
                     name: casual.company_name,
@@ -67,7 +67,7 @@ const main = async () => {
     // Step 5: Generate Workdays
     const workdays = await Promise.all(
         users.map((user) => {
-            const userWorkdays = Array.from({ length: 30 }).map(() =>
+            const userWorkdays = Array.from({ length: 90 }).map(() =>
                 prisma.workday.create({
                     data: {
                         expectedHours: parseFloat(casual.double(0, 8).toFixed(1)),
