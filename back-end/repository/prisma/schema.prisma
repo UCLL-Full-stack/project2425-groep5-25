@@ -70,7 +70,7 @@ model Workday {
   date                DateTime
 
   // Relations
-  userId              Int          @unique
+  userId              Int          
   user                User         @relation(fields: [userId], references: [id])
   timeBlocks          TimeBlock[]
 }
@@ -85,8 +85,8 @@ model TimeBlock {
   endTime             DateTime?
 
   // Relations
-  projectId           Int          @unique
+  projectId           Int          
   project             Project      @relation(fields: [projectId], references: [id])
-  workDayId           Int          @unique
+  workDayId           Int          
   workDay             Workday      @relation(fields: [workDayId], references: [id])
 }

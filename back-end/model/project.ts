@@ -6,14 +6,12 @@ import { User } from "./user";
 export class Project extends ModelBase {
     private name: string;
     private color: Color;
-    private users?: User[];
     private timeBlocks?: TimeBlock[]
     
     constructor(project: {
         id?: number;
         name: string;
         color: Color;
-        users?: User[];
         timeBlocks?: TimeBlock[];
         createdDate?: Date;
         updatedDate?: Date;
@@ -23,7 +21,6 @@ export class Project extends ModelBase {
 
         this.name = project.name;
         this.color = project.color;
-        this.users = project.users ?? [];
         this.timeBlocks =  project.timeBlocks ?? [];
     }
 
@@ -37,10 +34,6 @@ export class Project extends ModelBase {
 
     getColor(): Color {
         return this.color;
-    }
-
-    getUsers(): User[] {
-        return this.users || [];
     }
 
     getTimeBlocks(): TimeBlock[] {
@@ -59,10 +52,6 @@ export class Project extends ModelBase {
         this.color = color;
     }
     
-    setUsers(users: User[]): void {
-        this.users = users;
-    }    
-
     setTimeBlocks(timeBlocks: TimeBlock[]): void {
         this.timeBlocks = timeBlocks;
     } 
@@ -89,26 +78,8 @@ export class Project extends ModelBase {
     equals(project: Project): boolean {
         return (
             this.name === project.getName() &&
-            this.color === project.getColor() &&
-            this.users?.length === project.getUsers().length &&
-            this.users?.every((user, index) => user.equals(project.getUsers()[index]))
+            this.color === project.getColor()
         );
-    }
-
-    addUser(user: User): void {
-        if (!this.users) {
-            this.users = [];
-        }
-
-        if (!this.users.find(u => u.getId() === user.getId())) {
-            this.users.push(user);
-        }
-    }
-
-    removeUser(user: User): void {
-        if (this.users) {
-            this.users = this.users.filter(u => u.getId() !== user.getId());
-        }
     }
 
     addTimeBlock(timeBlock: TimeBlock): void {
