@@ -1,8 +1,8 @@
+import { ModelBase } from "./modelBase";
 import { TimeBlock } from "./timeBlock";
 import { User } from "./user";
 
-export class WorkDay {
-    private id?: number;
+export class WorkDay extends ModelBase {
     private expectedHours: number;
     private achievedHours?: number;
     private date: Date;
@@ -16,15 +16,17 @@ export class WorkDay {
         date: Date;
         user: User;
         timeBlocks?: TimeBlock[];
+        createdDate?: Date;
+        updatedDate?: Date;
      }) {
+        super({ id: workDay.id, createdDate: workDay.createdDate, updatedDate: workDay.updatedDate });
         this.validate(workDay);
 
-        this.id = workDay.id;
         this.expectedHours = workDay.expectedHours;
         this.achievedHours = workDay.achievedHours;
         this.date = workDay.date;
         this.user = workDay.user;
-        this.timeBlocks = workDay.timeBlocks;
+        this.timeBlocks = workDay.timeBlocks ?? [];
     }
 
     getId(): number | undefined {

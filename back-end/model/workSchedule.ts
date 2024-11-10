@@ -1,7 +1,7 @@
+import { ModelBase } from "./modelBase";
 import { User } from "./user";
 
-export class WorkSchedule {
-    private id?: number;
+export class WorkSchedule extends ModelBase {
     private user: User;
     private mondayHours: number;
     private tuesdayHours: number;
@@ -21,10 +21,12 @@ export class WorkSchedule {
         fridayHours: number;
         saturdayHours: number;
         sundayHours: number;
+        createdDate?: Date;
+        updatedDate?: Date;
     }) {
+        super({ id: workSchedule.id, createdDate: workSchedule.createdDate, updatedDate: workSchedule.updatedDate });
         this.validate(workSchedule);
 
-        this.id = workSchedule.id;
         this.user = workSchedule.user;
         this.mondayHours = workSchedule.mondayHours;
         this.tuesdayHours = workSchedule.tuesdayHours;
