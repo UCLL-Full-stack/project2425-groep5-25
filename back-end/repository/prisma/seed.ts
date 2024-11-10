@@ -13,8 +13,9 @@ const main = async () => {
     await prisma.user.deleteMany();
     await prisma.workSchedule.deleteMany();
     await prisma.project.deleteMany();
+    console.log('Cleaned the database!');
 
-    // Step 2: Generate WorkSchedules (15 users)
+    // Step 2: Generate WorkSchedules
     const workSchedules = await Promise.all(
         Array.from({ length: 15 }).map(() =>
             prisma.workSchedule.create({
@@ -30,8 +31,9 @@ const main = async () => {
             })
         )
     );
+    console.log('WorkSchedules seeded successfully!');
 
-    // Step 3: Generate Users linked to WorkSchedules
+    // Step 3: Generate Users
     const users = await Promise.all(
         workSchedules.map((schedule) =>
             prisma.user.create({
@@ -47,8 +49,9 @@ const main = async () => {
             })
         )
     );
+    console.log('Users seeded successfully!');
 
-    // Step 4: Generate Projects with random colors
+    // Step 4: Generate Projects
     const projects = await Promise.all(
         Array.from({ length: 5 }).map(() =>
             prisma.project.create({
@@ -59,11 +62,11 @@ const main = async () => {
             })
         )
     );
+    console.log('Projects seeded successfully!');
 
-    // Step 5: Generate Workdays linked to Users with valid ISO 8601 date format
+    // Step 5: Generate Workdays
     const workdays = await Promise.all(
         users.map((user) => {
-            // Generate 30 workdays for each user
             const userWorkdays = Array.from({ length: 30 }).map(() =>
                 prisma.workday.create({
                     data: {
@@ -71,47 +74,43 @@ const main = async () => {
                         achievedHours: casual.boolean
                             ? parseFloat(casual.double(0, 8).toFixed(1))
                             : null,
-                        date: new Date(casual.date('YYYY-MM-DD')).toISOString(), // Ensure ISO 8601 format
+                        date: new Date(casual.date('YYYY-MM-DD')).toISOString(),
                         userId: user.id,
                     },
                 })
             );
-
             return Promise.all(userWorkdays);
         })
     );
+    console.log('Workdays seeded successfully!');
 
-    // Step 6: Generate TimeBlocks linked to Projects and Workdays with valid ISO 8601 date format
+    // Step 6: Generate TimeBlocks
     const timeBlocks = await Promise.all(
         workdays.map((userWorkdays) =>
             Promise.all(
                 userWorkdays.map((workday) => {
-                    // Generate between 1 to 3 time blocks for each workday
-                    const numberOfTimeBlocks = casual.integer(1, 3);
-
-                    const timeBlockPromises = Array.from({ length: numberOfTimeBlocks }).map(() =>
+                    const timeBlockPromises = Array.from({ length: casual.integer(1, 3) }).map(() =>
                         prisma.timeBlock.create({
                             data: {
-                                // Generate valid ISO 8601 DateTime for startTime and endTime
                                 startTime: new Date(
                                     casual.date('YYYY-MM-DD') + ' ' + casual.time('HH:mm:ss')
-                                ).toISOString(), // ISO 8601 format
+                                ).toISOString(),
                                 endTime: new Date(
                                     casual.date('YYYY-MM-DD') + ' ' + casual.time('HH:mm:ss')
-                                ).toISOString(), // ISO 8601 format
+                                ).toISOString(),
                                 projectId: projects[casual.integer(0, projects.length - 1)].id,
                                 workDayId: workday.id,
                             },
                         })
                     );
-
                     return Promise.all(timeBlockPromises);
                 })
             )
         )
     );
+    console.log('TimeBlocks seeded successfully!');
 
-    console.log('Database seeded successfully using casual!');
+    console.log('Database seeded successfully!');
 };
 
 (async () => {
