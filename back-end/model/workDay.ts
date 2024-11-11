@@ -1,32 +1,30 @@
-import { ModelBase } from "./modelBase";
-import { TimeBlock } from "./timeBlock";
-import { User } from "./user";
+import { Workday as PrismaWorkday} from '@prisma/client';
+import { ModelBase } from './modelBase';
+import { TimeBlock } from './timeBlock';
 
 export class WorkDay extends ModelBase {
     private expectedHours: number;
     private achievedHours?: number;
     private date: Date;
-    private user: User;
-    private timeBlocks?: TimeBlock[];
-
-    constructor(workDay: { 
+    
+    constructor(workDay: {
         id?: number;
         expectedHours: number;
         achievedHours?: number;
         date: Date;
-        user: User;
-        timeBlocks?: TimeBlock[];
-        createdDate?: Date;
-        updatedDate?: Date;
-     }) {
-        super({ id: workDay.id, createdDate: workDay.createdDate, updatedDate: workDay.updatedDate });
+        createdDate: Date;
+        updatedDate: Date;
+    }) {
+        super({
+            id: workDay.id,
+            createdDate: workDay.createdDate,
+            updatedDate: workDay.updatedDate,
+        });
         this.validate(workDay);
 
         this.expectedHours = workDay.expectedHours;
         this.achievedHours = workDay.achievedHours;
         this.date = workDay.date;
-        this.user = workDay.user;
-        this.timeBlocks = workDay.timeBlocks ?? [];
     }
 
     getId(): number | undefined {
@@ -45,45 +43,9 @@ export class WorkDay extends ModelBase {
         return this.date;
     }
 
-    getUser(): User {
-        return this.user;
-    }
-
-    getTimeBlocks(): TimeBlock[] {
-        return this.timeBlocks || [];
-    }
-
-    setId(id: number): void {
-        this.id = id;
-    }
-
-    setExpectedHours(expectedHours: number): void {
-        this.expectedHours = expectedHours;
-    }
-    
-    setAchievedHours(achievedHours: number | undefined): void {
-        this.achievedHours = achievedHours;
-    }
-    
-    setDate(date: Date): void {
-        this.date = date;
-    }
-    
-    setUser(user: User): void {
-        this.user = user;
-    }
-    
-    setTimeBlocks(timeBlocks: TimeBlock[]): void {
-        this.timeBlocks = timeBlocks;
-    }    
-
-    validate(workDay: {
-        expectedHours: number;
-        date: Date;
-        user: User;
-    }) {
-        if (workDay.expectedHours < 0) throw new Error('Expected hours must be a non-negative number');
-        if (!workDay.user) throw new Error('User is required');
+    validate(workDay: { expectedHours: number; date: Date; }) {
+        if (workDay.expectedHours < 0)
+            throw new Error('Expected hours must be a non-negative number');
         if (!workDay.date) throw new Error('Valid date is required');
     }
 
@@ -91,23 +53,25 @@ export class WorkDay extends ModelBase {
         return (
             this.expectedHours === workDay.getExpectedHours() &&
             this.achievedHours === workDay.getAchievedHours() &&
-            this.date.getTime() === workDay.getDate().getTime() &&
-            this.user.equals(workDay.getUser()) &&
-            this.timeBlocks?.length === workDay.getTimeBlocks().length &&
-            this.timeBlocks?.every((tb, index) => tb.equals(workDay.getTimeBlocks()[index]))
+            this.date.getTime() === workDay.getDate().getTime()            
         );
     }
 
-    addTimeBlock(timeBlock: TimeBlock): void {
-        if (!this.timeBlocks) {
-            this.timeBlocks = [];
-        }
-        this.timeBlocks.push(timeBlock);
-    }
-
-    removeTimeBlock(timeBlockId: number): void {
-        if (this.timeBlocks) {
-            this.timeBlocks = this.timeBlocks.filter(tb => tb.getId() !== timeBlockId);
-        }
+    static from({
+        id,
+        expectedHours,
+        achievedHours,
+        date,
+        createdDate,
+        updatedDate,
+    }: PrismaWorkday) {
+        return new WorkDay({
+            id,
+            expectedHours,
+            achievedHours: achievedHours ?? undefined,
+            date,
+            createdDate: createdDate,
+            updatedDate: updatedDate,
+        });
     }
 }

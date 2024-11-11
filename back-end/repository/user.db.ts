@@ -1,17 +1,43 @@
 import { User } from "../model/user";
-import { users } from './fakeData.db';
+import { IdName } from "../types";
+import database from "./database";
 
-const getUserById = async ({ id }: { id: number }): Promise<User | null> => {
+const getAllUsers = async (): Promise<User[]> => {
     try {
-        return await users.find((user) => user.getId() === id) || null;
+        const usersPrisma = await database.user.findMany({
+            include: {
+                workSchedule: true,
+                projects: true,
+                workDays: true,
+            },
+        });
+        return usersPrisma.map((x) => User.from(x));
     } catch (error) {
+        console.error(error);
         throw new Error('Database error. See server log for details.');
     }
 };
 
-const getAllUsers = (): User[] => users;
+const getAllUsersIdName = async (): Promise<IdName[]> => {
+    try {
+        const usersPrisma = await database.user.findMany({
+            select: {
+                id: true,
+                firstName: true,
+                lastName: true
+            }
+        });
+        return usersPrisma.map((user) => ({
+            id: user.id,
+            name: `${user.firstName} ${user.lastName}`
+        }));
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
 
 export default{
-    getUserById,
-    getAllUsers
+    getAllUsers,
+    getAllUsersIdName
 };

@@ -5,8 +5,8 @@ export abstract class ModelBase {
 
     constructor(base?: { id?: number; createdDate?: Date; updatedDate?: Date }) {
         this.id = base?.id;
-        this.createdDate = base?.createdDate || new Date();
-        this.updatedDate = base?.updatedDate || new Date();
+        this.createdDate = base?.createdDate;
+        this.updatedDate = base?.updatedDate;
     }
     
     getId(): number | undefined {
@@ -19,17 +19,5 @@ export abstract class ModelBase {
 
     getUpdatedDate(): Date | undefined {
         return this.updatedDate;
-    }
-
-    setId(id: number): void {
-        this.id = id;
-    }
-
-    setCreatedDate(date: Date): void {
-        this.createdDate = date;
-    }
-
-    setUpdatedDate(date: Date): void {
-        this.updatedDate = date;
     }
 }
