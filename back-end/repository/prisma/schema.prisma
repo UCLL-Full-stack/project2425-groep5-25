@@ -7,11 +7,27 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  admin
+  student
+  lecturer
+  guest
+}
+
+enum Color {
+    Red
+    Green
+    Blue 
+    Yellow
+    Orange
+    Purple
+}
+
 model WorkSchedule {
   // ModelBase
-  id                  Int       @id @default(autoincrement())
-  createdDate         DateTime? @default(now())
-  updatedDate         DateTime? @updatedAt
+  id                  Int           @id @default(autoincrement())
+  createdDate         DateTime     @default(now())
+  updatedDate         DateTime     @updatedAt
 
   mondayHours         Float
   tuesdayHours        Float
@@ -27,66 +43,66 @@ model WorkSchedule {
 
 model User {
   // ModelBase
-  id                  Int          @id @default(autoincrement())
-  createdDate         DateTime?    @default(now())
-  updatedDate         DateTime?    @updatedAt
+  id                  Int             @id @default(autoincrement())
+  createdDate         DateTime       @default(now())
+  updatedDate         DateTime       @updatedAt
 
-  username            String
-  firstname           String
-  lastname            String
-  email               String       @unique
-  password            String
-  role                String
+  userName            String
+  firstName           String
+  lastName            String
+  email               String          @unique
+  passWord            String
+  role                Role
 
   // Relations
-  workScheduleId      Int          @unique
-  workSchedule        WorkSchedule @relation(fields: [workScheduleId], references: [id])
-  projects            Project[]
-  workdays            Workday[]
+  workScheduleId      Int             @unique
+  workSchedule        WorkSchedule    @relation(fields: [workScheduleId], references: [id])
+  projects            Project[]       @relation("UserProjects")
+  workDays            Workday[]
 }
 
 model Project {
   // ModelBase
-  id                  Int          @id @default(autoincrement())
-  createdDate         DateTime?    @default(now())
-  updatedDate         DateTime?    @updatedAt
+  id                  Int           @id @default(autoincrement())
+  createdDate         DateTime     @default(now())
+  updatedDate         DateTime     @updatedAt
 
   name                String
-  color               String
+  color               Color
 
   // Relations
-  users               User[]
+  users               User[]        @relation("UserProjects")
   timeBlocks          TimeBlock[]
 }
 
 model Workday {
   // ModelBase
-  id                  Int          @id @default(autoincrement())
-  createdDate         DateTime?    @default(now())
-  updatedDate         DateTime?    @updatedAt
+  id                  Int           @id @default(autoincrement())
+  createdDate         DateTime     @default(now())
+  updatedDate         DateTime     @updatedAt
 
   expectedHours       Float
   achievedHours       Float?
   date                DateTime
 
   // Relations
-  userId              Int          @unique
-  user                User         @relation(fields: [userId], references: [id])
+  userId              Int          
+  user                User          @relation(fields: [userId], references: [id])
   timeBlocks          TimeBlock[]
 }
 
 model TimeBlock {
   // ModelBase
-  id                  Int          @id @default(autoincrement())
-  createdDate         DateTime?    @default(now())
-  updatedDate         DateTime?    @updatedAt
+  id                  Int           @id @default(autoincrement())
+  createdDate         DateTime     @default(now())
+  updatedDate         DateTime     @updatedAt
 
   startTime           DateTime
-  endTime             DateTime?
+  endTime             DateTime
 
   // Relations
-  projectId           Int          @unique
-  project             Project      @relation(fields: [projectId], references: [id])
-  workDayId           Int          @unique
-  workDay             Workday      @relation(fields: [workDayId], references: [id])
+  projectId           Int          
+  project             Project       @relation(fields: [projectId], references: [id])
+  workDayId           Int          
+  workDay             Workday       @relation(fields: [workDayId], references: [id])
 }

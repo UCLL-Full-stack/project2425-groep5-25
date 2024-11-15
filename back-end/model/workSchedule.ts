@@ -1,8 +1,7 @@
-import { ModelBase } from "./modelBase";
-import { User } from "./user";
+import { ModelBase } from './modelBase';
+import { WorkSchedule as PrismaWorkSchedule } from '@prisma/client';
 
 export class WorkSchedule extends ModelBase {
-    private user: User;
     private mondayHours: number;
     private tuesdayHours: number;
     private wednesdayHours: number;
@@ -13,7 +12,6 @@ export class WorkSchedule extends ModelBase {
 
     constructor(workSchedule: {
         id?: number;
-        user: User;
         mondayHours: number;
         tuesdayHours: number;
         wednesdayHours: number;
@@ -24,10 +22,13 @@ export class WorkSchedule extends ModelBase {
         createdDate?: Date;
         updatedDate?: Date;
     }) {
-        super({ id: workSchedule.id, createdDate: workSchedule.createdDate, updatedDate: workSchedule.updatedDate });
+        super({
+            id: workSchedule.id,
+            createdDate: workSchedule.createdDate,
+            updatedDate: workSchedule.updatedDate,
+        });
         this.validate(workSchedule);
 
-        this.user = workSchedule.user;
         this.mondayHours = workSchedule.mondayHours;
         this.tuesdayHours = workSchedule.tuesdayHours;
         this.wednesdayHours = workSchedule.wednesdayHours;
@@ -39,10 +40,6 @@ export class WorkSchedule extends ModelBase {
 
     getId(): number | undefined {
         return this.id;
-    }
-
-    getUser(): User {
-        return this.user;
     }
 
     getMondayHours(): number {
@@ -73,44 +70,7 @@ export class WorkSchedule extends ModelBase {
         return this.sundayHours;
     }
 
-    setId(id: number): void {
-        this.id = id;
-    }
-
-    setUser(user: User): void {
-        this.user = user;
-    }
-    
-    setMondayHours(mondayHours: number): void {
-        this.mondayHours = mondayHours;
-    }
-    
-    setTuesdayHours(tuesdayHours: number): void {
-        this.tuesdayHours = tuesdayHours;
-    }
-    
-    setWednesdayHours(wednesdayHours: number): void {
-        this.wednesdayHours = wednesdayHours;
-    }
-    
-    setThursdayHours(thursdayHours: number): void {
-        this.thursdayHours = thursdayHours;
-    }
-    
-    setFridayHours(fridayHours: number): void {
-        this.fridayHours = fridayHours;
-    }
-    
-    setSaturdayHours(saturdayHours: number): void {
-        this.saturdayHours = saturdayHours;
-    }
-    
-    setSundayHours(sundayHours: number): void {
-        this.sundayHours = sundayHours;
-    }    
-
     validate(workSchedule: {
-        user: User;
         mondayHours: number;
         tuesdayHours: number;
         wednesdayHours: number;
@@ -119,19 +79,24 @@ export class WorkSchedule extends ModelBase {
         saturdayHours: number;
         sundayHours: number;
     }) {
-        if (!workSchedule.user) throw new Error('User is required');        
-        if (workSchedule.mondayHours < 0) throw new Error('Monday hours must be a non-negative number');
-        if (workSchedule.tuesdayHours < 0) throw new Error('Tuesday hours must be a non-negative number');
-        if (workSchedule.wednesdayHours < 0) throw new Error('Wednesday hours must be a non-negative number');
-        if (workSchedule.thursdayHours < 0) throw new Error('Thursday hours must be a non-negative number');
-        if (workSchedule.fridayHours < 0) throw new Error('Friday hours must be a non-negative number');
-        if (workSchedule.saturdayHours < 0) throw new Error('Saturday hours must be a non-negative number');
-        if (workSchedule.sundayHours < 0) throw new Error('Sunday hours must be a non-negative number');
+        if (workSchedule.mondayHours < 0)
+            throw new Error('Monday hours must be a non-negative number');
+        if (workSchedule.tuesdayHours < 0)
+            throw new Error('Tuesday hours must be a non-negative number');
+        if (workSchedule.wednesdayHours < 0)
+            throw new Error('Wednesday hours must be a non-negative number');
+        if (workSchedule.thursdayHours < 0)
+            throw new Error('Thursday hours must be a non-negative number');
+        if (workSchedule.fridayHours < 0)
+            throw new Error('Friday hours must be a non-negative number');
+        if (workSchedule.saturdayHours < 0)
+            throw new Error('Saturday hours must be a non-negative number');
+        if (workSchedule.sundayHours < 0)
+            throw new Error('Sunday hours must be a non-negative number');
     }
 
     equals(workSchedule: WorkSchedule): boolean {
         return (
-            this.user.equals(workSchedule.getUser()) &&
             this.mondayHours === workSchedule.getMondayHours() &&
             this.tuesdayHours === workSchedule.getTuesdayHours() &&
             this.wednesdayHours === workSchedule.getWednesdayHours() &&
@@ -163,5 +128,31 @@ export class WorkSchedule extends ModelBase {
             default:
                 throw new Error('Invalid day of the week');
         }
+    }
+
+    static from({
+        id,
+        mondayHours,
+        tuesdayHours,
+        wednesdayHours,
+        thursdayHours,
+        fridayHours,
+        saturdayHours,
+        sundayHours,
+        createdDate,
+        updatedDate,
+    }: PrismaWorkSchedule) {
+        return new WorkSchedule({
+            id,
+            mondayHours,
+            tuesdayHours,
+            wednesdayHours,
+            thursdayHours,
+            fridayHours,
+            saturdayHours,
+            sundayHours,
+            createdDate: createdDate,
+            updatedDate: updatedDate
+        });
     }
 }

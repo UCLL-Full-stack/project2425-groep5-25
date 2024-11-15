@@ -1,29 +1,38 @@
-import { ModelBase } from "./modelBase";
-import { Project } from "./project";
-import { WorkDay } from "./workDay";
+import { ModelBase } from './modelBase';
+import { Project } from './project';
+import { WorkDay } from './workDay';
+import {
+    TimeBlock as TimeBlockPrisma,
+    Project as ProjectPrisma,
+    Workday as WorkDayPrisma,
+} from '@prisma/client';
 
 export class TimeBlock extends ModelBase {
     private startTime: Date;
     private endTime?: Date;
     private project: Project;
-    private workday: WorkDay;
+    private workDay: WorkDay;
 
     constructor(timeBlock: {
         id?: number;
         startTime: Date;
         endTime?: Date;
         project: Project;
-        workday: WorkDay;
-        createdDate?: Date;
-        updatedDate?: Date;
+        workDay: WorkDay;
+        createdDate: Date;
+        updatedDate: Date;
     }) {
-        super({ id: timeBlock.id, createdDate: timeBlock.createdDate, updatedDate: timeBlock.updatedDate });
+        super({
+            id: timeBlock.id,
+            createdDate: timeBlock.createdDate,
+            updatedDate: timeBlock.updatedDate,
+        });
         this.validate(timeBlock);
 
         this.startTime = timeBlock.startTime;
         this.endTime = timeBlock.endTime;
         this.project = timeBlock.project;
-        this.workday = timeBlock.workday;
+        this.workDay = timeBlock.workDay;
     }
 
     getId(): number | undefined {
@@ -43,44 +52,40 @@ export class TimeBlock extends ModelBase {
     }
 
     getWorkDay(): WorkDay {
-        return this.workday;
+        return this.workDay;
     }
 
-    setId(id: number): void {
-        this.id = id;
-    }
-
-    setStartTime(startTime: Date): void {
-        this.startTime = startTime;
-    }
-    
-    setEndTime(endTime: Date | undefined): void {
-        this.endTime = endTime;
-    }
-    
-    setProject(project: Project): void {
-        this.project = project;
-    }
-    
-    setWorkDay(workDay: WorkDay): void {
-        this.workday = workDay;
-    }    
-
-    validate(timeBlock: {
-        startTime: Date;
-        project: Project;
-        workday: WorkDay;
-    }) {
+    validate(timeBlock: { startTime: Date; project: Project; workDay: WorkDay }) {
         if (!timeBlock.startTime) throw new Error('Start time is required');
         if (!timeBlock.project) throw new Error('Project is required');
-        if (!timeBlock.workday) throw new Error('WorkDay is required');
+        if (!timeBlock.workDay) throw new Error('WorkDay is required');
     }
 
     equals(timeBlock: TimeBlock): boolean {
         return (
             this.startTime.getTime() === timeBlock.getStartTime().getTime() &&
             this.project.equals(timeBlock.getProject()) &&
-            this.workday.equals(timeBlock.getWorkDay())
+            this.workDay.equals(timeBlock.getWorkDay())
         );
+    }
+
+    static from({
+        id,
+        startTime,
+        endTime,
+        project,
+        workDay,
+        createdDate,
+        updatedDate
+    }: TimeBlockPrisma & { project: ProjectPrisma; workDay: WorkDayPrisma }) {
+        return new TimeBlock({
+            id,
+            startTime,
+            endTime: endTime ?? undefined,
+            project: Project.from(project),
+            workDay: WorkDay.from(workDay),
+            createdDate: createdDate,
+            updatedDate: updatedDate
+        });
     }
 }

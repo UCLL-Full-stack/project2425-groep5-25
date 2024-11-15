@@ -118,13 +118,13 @@ projectRouter.get('/', async (req: Request, res: Response, next: NextFunction) =
  *         description: Error occurred while creating project
  */
 projectRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const projectInput = <ProjectInput>req.body;
-        const result = await projectService.createProject(projectInput);
-        res.status(201).json(result);
-    } catch (error) {
-        next(error);
-    }
+    // try {
+    //     const projectInput = <ProjectInput>req.body;
+    //     const result = await projectService.createProject(projectInput);
+    //     res.status(201).json(result);
+    // } catch (error) {
+    //     next(error);
+    // }
 });
 
 export { projectRouter };

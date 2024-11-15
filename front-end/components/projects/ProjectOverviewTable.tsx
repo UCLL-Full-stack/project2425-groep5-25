@@ -30,7 +30,7 @@ const ProjectOverviewTable: React.FC<Props> = ({
                 <td>{project.id}</td>
                 <td className="align-content-center">
                   {formatOptionLabel({
-                    label: hexToColorNameMap[project.color as string] || "Unknown",
+                    label: project.color as string || "Unknown",
                     value: project.color as string,
                   })}
                 </td>

@@ -8,6 +8,7 @@ import { NotFoundError } from './errors';
 import { projectRouter } from './controller/project.routes';
 import { userRouter } from './controller/user.routes';
 import { workDayRouter } from './controller/workDay.routes';
+import { timeBlockRouter } from './controller/timeBlock.routes';
 
 const app = express();
 dotenv.config();
@@ -23,6 +24,7 @@ app.get('/status', (req, res) => {
 app.use('/projects', projectRouter);
 app.use('/users', userRouter);
 app.use('/workdays', workDayRouter);
+app.use('/timeblocks', timeBlockRouter);
 
 const swaggerOpts = {
     definition: {
