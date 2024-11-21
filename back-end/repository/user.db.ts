@@ -37,7 +37,7 @@ const getAllUsersIdName = async (): Promise<IdName[]> => {
     }
 };
 
-export default{
+export default {
     getAllUsers,
     getAllUsersIdName
 };
