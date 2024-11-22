@@ -1,5 +1,4 @@
 import { User } from "../model/user";
-import { IdName } from "../types";
 import database from "./database";
 
 const getAllUsers = async (): Promise<User[]> => {
@@ -18,26 +17,6 @@ const getAllUsers = async (): Promise<User[]> => {
     }
 };
 
-const getAllUsersIdName = async (): Promise<IdName[]> => {
-    try {
-        const usersPrisma = await database.user.findMany({
-            select: {
-                id: true,
-                firstName: true,
-                lastName: true
-            }
-        });
-        return usersPrisma.map((user) => ({
-            id: user.id,
-            name: `${user.firstName} ${user.lastName}`
-        }));
-    } catch (error) {
-        console.error(error);
-        throw new Error('Database error. See server log for details.');
-    }
-};
-
 export default {
-    getAllUsers,
-    getAllUsersIdName
+    getAllUsers
 };
