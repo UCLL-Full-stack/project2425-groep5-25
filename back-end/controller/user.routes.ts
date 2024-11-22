@@ -41,7 +41,7 @@ const userRouter = express.Router();
  */
 userRouter.get('/id-name', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const users = await userService.getAllUsers();
+        const users = await userService.getAllUsersIdName();
         res.status(200).json(users);
     } catch (error) {
         next(error);

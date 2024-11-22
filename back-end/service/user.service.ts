@@ -7,10 +7,14 @@ const getAllUsers = async (): Promise<User[]> => {
 };
 
 const getAllUsersIdName = async (): Promise<IdName[]> => {
-    return userRepository.getAllUsersIdName();
+    const users = await userRepository.getAllUsers();
+    return users.map((user) => ({
+        id: user.getId(),
+        name: `${user.getFirstName()} ${user.getLastName()}`,
+    }));
 };
 
 export default {
     getAllUsers,
-    getAllUsersIdName
+    getAllUsersIdName,
 };
