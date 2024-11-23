@@ -130,6 +130,18 @@ export class WorkSchedule extends ModelBase {
         }
     }
 
+    static createDefault(): WorkSchedule {        
+        return new WorkSchedule({
+            mondayHours: 8,
+            tuesdayHours: 8,
+            wednesdayHours: 8,
+            thursdayHours: 8,
+            fridayHours: 8,
+            saturdayHours: 0,
+            sundayHours: 0
+        });
+    }
+
     static from({
         id,
         mondayHours,
@@ -151,8 +163,8 @@ export class WorkSchedule extends ModelBase {
             fridayHours,
             saturdayHours,
             sundayHours,
-            createdDate: createdDate,
-            updatedDate: updatedDate
+            createdDate: createdDate || undefined,
+            updatedDate: updatedDate || undefined,
         });
     }
 }

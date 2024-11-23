@@ -13,9 +13,20 @@ type IdName = {
     name: string;
 }
 
+type UserInput = {
+    id?: number;
+    userName?: string;
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+    role?: Role;
+    passWord?: string;
+};
+
 export {
     Role,
     Color,
     ProjectInput,
-    IdName
+    IdName,
+    UserInput
 };

@@ -27,8 +27,8 @@ export class User extends ModelBase {
         projects: Project[];
         workDays?: WorkDay[];
         workSchedule: WorkSchedule;
-        createdDate: Date;
-        updatedDate: Date;
+        createdDate?: Date;
+        updatedDate?: Date;
     }) {
         super({ id: user.id, createdDate: user.createdDate, updatedDate: user.updatedDate });
         this.validate(user);
@@ -174,8 +174,8 @@ export class User extends ModelBase {
             workSchedule: WorkSchedule.from(workSchedule),
             projects: projects.map((project) => Project.from(project)),
             workDays: workDays.map((workDay) => WorkDay.from(workDay)),
-            createdDate,
-            updatedDate
+            createdDate: createdDate || undefined,
+            updatedDate: updatedDate || undefined,
         });
     }
 }

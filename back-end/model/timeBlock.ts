@@ -19,8 +19,8 @@ export class TimeBlock extends ModelBase {
         endTime?: Date;
         project: Project;
         workDay: WorkDay;
-        createdDate: Date;
-        updatedDate: Date;
+        createdDate?: Date;
+        updatedDate?: Date;
     }) {
         super({
             id: timeBlock.id,
@@ -84,8 +84,8 @@ export class TimeBlock extends ModelBase {
             endTime: endTime ?? undefined,
             project: Project.from(project),
             workDay: WorkDay.from(workDay),
-            createdDate: createdDate,
-            updatedDate: updatedDate
+            createdDate: createdDate || undefined,
+            updatedDate: updatedDate || undefined,
         });
     }
 }

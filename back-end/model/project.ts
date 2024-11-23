@@ -12,8 +12,8 @@ export class Project extends ModelBase {
         id?: number;
         name: string;
         color: Color;
-        createdDate: Date;
-        updatedDate: Date;
+        createdDate?: Date;
+        updatedDate?: Date;
     }) {
         super({
             id: project.id,
@@ -63,8 +63,8 @@ export class Project extends ModelBase {
             id,
             name,
             color,
-            createdDate: createdDate,
-            updatedDate: updatedDate,
+            createdDate: createdDate || undefined,
+            updatedDate: updatedDate || undefined,
         });
     }
 }
