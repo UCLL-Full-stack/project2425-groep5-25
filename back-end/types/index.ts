@@ -1,6 +1,6 @@
 type Role = 'admin' | 'student' | 'lecturer' | 'guest';
 
-type Color = 'Red' | 'Green' | 'Blue' | 'Yellow' | 'Orange' | 'Purple';
+type Color = 'Red' | 'Green' | 'Blue' | 'Yellow' | 'Orange' | 'Purple' | 'Gray';
 
 type ProjectInput = {
     name: string;

@@ -11,7 +11,7 @@
     "scripts": {
         "test": "jest",
         "start": "nodemon -L app.ts --delay 3",
-        "seed": "ts-node repository/prisma/seed.ts"
+        "seed": "ts-node repository/utils/seed.ts"
     },
     "nodemonConfig": {
         "ext": "ts",

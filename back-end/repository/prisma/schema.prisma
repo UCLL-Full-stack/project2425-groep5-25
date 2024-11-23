@@ -21,6 +21,7 @@ enum Color {
     Yellow
     Orange
     Purple
+    Gray
 }
 
 model WorkSchedule {
