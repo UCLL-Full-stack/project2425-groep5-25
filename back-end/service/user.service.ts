@@ -23,7 +23,7 @@ const getAllUsersIdName = async (): Promise<IdName[]> => {
 const getUserByUserName = async ({ userName }: { userName: string }): Promise<User> => {
     const user = await userDB.getUserByUserName({ userName });
     if (!user) {
-        throw new Error(`User with username: ${userName} does not exist.`);
+        throw new Error(`User with username <${userName}> does not exist.`);
     }
     return user;
 };
@@ -32,10 +32,10 @@ const userSignUp = async (userInput: UserInput): Promise<User> => {
     const { userName, passWord, firstName, lastName, email, role } = userInput;
 
     const existingUser = await userDB.getUserByUserName({ userName });
-    if (existingUser) throw new Error(`User with username: ${userName} already exists.`);
+    if (existingUser) throw new Error(`User with username <${userName}> already exists.`);
 
     const defaultProject = await projectDb.getProjectByName({ name: projectNames.DEFAULT_PROJECT });
-    if (!defaultProject) throw new Error(`Project with name: ${projectNames.DEFAULT_PROJECT} doesn't exist.`);
+    if (!defaultProject) throw new Error(`Project with name <${projectNames.DEFAULT_PROJECT}> doesn't exist.`);
 
     const workSchedule = await workScheduleDb.createWorkSchedule(WorkSchedule.createDefault());
     const hashedPassword = await bcrypt.hash(passWord, 12);
