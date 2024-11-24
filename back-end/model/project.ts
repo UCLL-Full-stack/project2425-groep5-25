@@ -62,7 +62,7 @@ export class Project extends ModelBase {
         return new Project({
             id,
             name,
-            color,
+            color: color as Color,
             createdDate: createdDate || undefined,
             updatedDate: updatedDate || undefined,
         });

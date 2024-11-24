@@ -1,9 +1,3 @@
--- CreateEnum
-CREATE TYPE "Role" AS ENUM ('admin', 'student', 'lecturer', 'guest');
-
--- CreateEnum
-CREATE TYPE "Color" AS ENUM ('Red', 'Green', 'Blue', 'Yellow', 'Orange', 'Purple');
-
 -- CreateTable
 CREATE TABLE "WorkSchedule" (
     "id" SERIAL NOT NULL,
@@ -30,7 +24,7 @@ CREATE TABLE "User" (
     "lastName" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "passWord" TEXT NOT NULL,
-    "role" "Role" NOT NULL,
+    "role" TEXT NOT NULL,
     "workScheduleId" INTEGER NOT NULL,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
@@ -42,7 +36,7 @@ CREATE TABLE "Project" (
     "createdDate" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
     "updatedDate" TIMESTAMP(3),
     "name" TEXT NOT NULL,
-    "color" "Color" NOT NULL,
+    "color" TEXT NOT NULL,
 
     CONSTRAINT "Project_pkey" PRIMARY KEY ("id")
 );
