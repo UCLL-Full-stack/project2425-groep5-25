@@ -135,8 +135,62 @@ userRouter.get('/id-name', async (req: Request, res: Response, next: NextFunctio
 userRouter.post('/signup', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const userInput = <UserInput>req.body;
-        const newUser = await userService.createUser(userInput);
+        const newUser = await userService.userSignUp(userInput);
         res.status(201).json(newUser);
+    } catch (error) {
+        next(error);
+    }
+});
+
+/**
+ * @swagger
+ * /users/login:
+ *   post:
+ *     summary: Login using userName and password. Returns a JWT token and user details.
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               userName:
+ *                 type: string
+ *                 description: The userName of the user.
+ *               passWord:
+ *                 type: string
+ *                 description: The password of the user.
+ *             required:
+ *               - userName
+ *               - passWord
+ *     responses:
+ *       200:
+ *         description: Authenticated successfully. Returns a JWT token and user details.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Authenticated Successfully
+ *                   description: A success message.
+ *                 token:
+ *                   type: string
+ *                   description: JWT token for authentication.
+ *                 userName:
+ *                   type: string
+ *                   description: The userName of the authenticated user.
+ *                 fullname:
+ *                   type: string
+ *                   description: The full name of the authenticated user.
+ */
+userRouter.post('/login', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const userInput = <UserInput>req.body;
+        const response = await userService.userAuthenticate(userInput);
+        res.status(200).json({ message: 'Authenticated Successfully', ...response });
     } catch (error) {
         next(error);
     }

@@ -53,9 +53,7 @@ const createUser = async (user: User): Promise<User> => {
                 },
                 workDays: {
                     connect: user.getWorkDays().map((x) => ({ id: x.getId() })),
-                },
-                createdDate: user.getCreatedDate(),
-                updatedDate: user.getUpdatedDate(),
+                }
             },
             include: {
                 workSchedule: true,
