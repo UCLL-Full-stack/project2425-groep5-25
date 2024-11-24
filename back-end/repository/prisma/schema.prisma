@@ -7,23 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Role {
-  admin
-  student
-  lecturer
-  guest
-}
-
-enum Color {
-    Red
-    Green
-    Blue 
-    Yellow
-    Orange
-    Purple
-    Gray
-}
-
 model WorkSchedule {
   // ModelBase
   id                  Int           @id @default(autoincrement())
@@ -53,7 +36,7 @@ model User {
   lastName            String
   email               String          @unique
   passWord            String
-  role                Role
+  role                String
 
   // Relations
   workScheduleId      Int             @unique
@@ -69,7 +52,7 @@ model Project {
   updatedDate         DateTime?     @updatedAt
 
   name                String
-  color               Color
+  color               String
 
   // Relations
   users               User[]        @relation("UserProjects")

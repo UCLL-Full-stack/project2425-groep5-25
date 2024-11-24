@@ -1,4 +1,4 @@
-import { Color, PrismaClient } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 import casual from 'casual';
 import { projectNames } from '../../constants';
 

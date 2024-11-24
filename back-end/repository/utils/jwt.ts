@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { processEnv } from '../../env/env';
 
-const generateJwtToken = ({ userName, role }: { userName: string; role: string }): string => {
+const generateJwtToken = ({ userName, role }): string => {
     const options = { expiresIn: `${processEnv.getJwtExpiresHours()}h`, issuer: 'timeTracker_app' };
     try {
         return jwt.sign({ userName, role }, processEnv.getJwtSecret(), options);
