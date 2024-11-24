@@ -12,12 +12,17 @@ import { expressjwt } from 'express-jwt';
 import { processEnv } from './env/env';
 
 const app = express();
-
 dotenv.config();
-const port = processEnv.getAppPort()
 
-app.use(cors({ origin: 'http://localhost:8080' }));
-app.use(bodyParser.json());
+const publicApiPort = processEnv.getApiPort()
+const publicFrontEndPort = processEnv.getFrontEndPort();
+
+app.use(
+    cors({ 
+        origin: `http://localhost:${publicFrontEndPort}` 
+    }), 
+    bodyParser.json()
+);
 
 app.use(
     expressjwt({
@@ -52,14 +57,14 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     if (err.name === 'UnauthorizedError') {
-        res.status(401).json({ status: 'unauthorized', message: err.message });
+        res.status(401).json({ status: 'Unauthorized', message: err.message });
     } else {
-        res.status(400).json({ status: 'application error', message: err.message });
+        res.status(400).json({ status: 'Application Error', message: err.message });
     }
 });
 
-app.listen(port, () => {
-    console.log(`Time Tracker API Running on port ${port}.`);
-    console.log(`Swagger running on http://localhost:${port}/api-docs.`);
-    console.log(`Check Tokens on https://jwt.io.`);
+app.listen(publicApiPort, () => {
+    console.log(`Time Tracker API Running on port ${publicApiPort}.`);
+    console.log(`Swagger running on http://localhost:${publicApiPort}/api-docs.`);
+    console.log(`Check Tokens on https://jwt.io & create secrets here https://jwtsecret.com/generate.`);
 });
