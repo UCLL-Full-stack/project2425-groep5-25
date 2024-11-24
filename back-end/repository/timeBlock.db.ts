@@ -1,9 +1,5 @@
-import { enIE } from 'date-fns/locale';
-import { NotFoundError } from '../errors';
 import { TimeBlock } from '../model/timeBlock';
-import { WorkDay } from '../model/workDay';
-import userRepository from './user.db';
-import database from './database';
+import database from './utils/database';
 
 // const getTimeBlocksFromUser = async ({ userId }: { userId: number }): Promise<TimeBlock[]> => {
 //     try {

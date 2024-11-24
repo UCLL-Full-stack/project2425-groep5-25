@@ -1,10 +1,11 @@
-import { PrismaClient } from '@prisma/client';
+import { Color, PrismaClient } from '@prisma/client';
 import casual from 'casual';
+import { projectNames } from '../../constants';
 
 const prisma = new PrismaClient();
 
 const roles = ['admin', 'student', 'lecturer', 'guest'];
-const colors = ['Red', 'Green', 'Blue', 'Yellow', 'Orange', 'Purple'];
+const colors = ['Red', 'Green', 'Blue', 'Yellow', 'Orange', 'Purple', 'Gray'];
 
 const main = async () => {
     // Step 1: Clean the database
@@ -33,20 +34,29 @@ const main = async () => {
     );
     console.log('WorkSchedules seeded successfully!');
 
-    // Step 3: Generate Projects
+    // Step 3: Create the Specific Project (Global Project)
+    const globalProject = await prisma.project.create({
+        data: {
+            name: projectNames.DEFAULT_PROJECT,
+            color: 'Gray',
+        },
+    });
+    console.log('Global Project created successfully!');
+
+    // Step 4: Generate Projects
     const projects = await Promise.all(
         Array.from({ length: 10 }).map(() =>
             prisma.project.create({
                 data: {
                     name: casual.company_name,
-                    color: casual.random_element(colors),
+                    color: casual.random_element(colors.filter((color) => color !== 'Gray')),
                 },
             })
         )
     );
     console.log('Projects seeded successfully!');
 
-    // Step 4: Generate Users and associate with Projects
+    // Step 5: Generate Users and associate with Projects, including Global Project
     const users = await Promise.all(
         workSchedules.map((schedule) =>
             prisma.user.create({
@@ -59,9 +69,12 @@ const main = async () => {
                     role: casual.random_element(roles),
                     workScheduleId: schedule.id,
                     projects: {
-                        connect: Array.from({ length: casual.integer(1, 3) }).map(() => ({
-                            id: projects[casual.integer(0, projects.length - 1)].id,
-                        })),
+                        connect: [
+                            ...Array.from({ length: casual.integer(1, 3) }).map(() => ({
+                                id: projects[casual.integer(0, projects.length - 1)].id,
+                            })),
+                            { id: globalProject.id },
+                        ],
                     },
                 },
             })
@@ -69,7 +82,7 @@ const main = async () => {
     );
     console.log('Users seeded successfully!');
 
-    // Step 5: Generate Workdays
+    // Step 6: Generate Workdays
     const workdays = await Promise.all(
         users.map((user) => {
             const userWorkdays = Array.from({ length: 45 }).map(() =>
@@ -89,7 +102,7 @@ const main = async () => {
     );
     console.log('Workdays seeded successfully!');
 
-    // Step 6: Generate TimeBlocks
+    // Step 7: Generate TimeBlocks
     const timeBlocks = await Promise.all(
         workdays.map((userWorkdays) =>
             Promise.all(

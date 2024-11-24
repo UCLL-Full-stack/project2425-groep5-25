@@ -1,7 +1,8 @@
 import { ProjectUserCountDto } from "@types";
+import { processEnv } from "env/env";
 
 const getAllProjects = async () => {
-  return await fetch(process.env.NEXT_PUBLIC_API_URL + `/projects`, {
+  return await fetch(processEnv.getApiUrl() + `/projects`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -10,7 +11,7 @@ const getAllProjects = async () => {
 };
 
 const createProject = async (formData: ProjectUserCountDto) => {
-  return await fetch(process.env.NEXT_PUBLIC_API_URL + `/projects`, {
+  return await fetch(processEnv.getApiUrl() + `/projects`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

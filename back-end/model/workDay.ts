@@ -12,8 +12,8 @@ export class WorkDay extends ModelBase {
         expectedHours: number;
         achievedHours?: number;
         date: Date;
-        createdDate: Date;
-        updatedDate: Date;
+        createdDate?: Date;
+        updatedDate?: Date;
     }) {
         super({
             id: workDay.id,
@@ -70,8 +70,8 @@ export class WorkDay extends ModelBase {
             expectedHours,
             achievedHours: achievedHours ?? undefined,
             date,
-            createdDate: createdDate,
-            updatedDate: updatedDate,
+            createdDate: createdDate || undefined,
+            updatedDate: updatedDate || undefined,
         });
     }
 }

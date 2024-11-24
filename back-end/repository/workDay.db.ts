@@ -1,7 +1,5 @@
 import { WorkDay } from '../model/workDay';
-import userRepository from './user.db';
-import { NotFoundError } from '../errors';
-import database from './database';
+import database from './utils/database';
 
 // const getAllWorkDays = (): WorkDay[] => workDays;
 

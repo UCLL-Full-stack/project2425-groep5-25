@@ -21,13 +21,14 @@ enum Color {
     Yellow
     Orange
     Purple
+    Gray
 }
 
 model WorkSchedule {
   // ModelBase
   id                  Int           @id @default(autoincrement())
-  createdDate         DateTime     @default(now())
-  updatedDate         DateTime     @updatedAt
+  createdDate         DateTime?     @default(now())
+  updatedDate         DateTime?     @updatedAt
 
   mondayHours         Float
   tuesdayHours        Float
@@ -44,8 +45,8 @@ model WorkSchedule {
 model User {
   // ModelBase
   id                  Int             @id @default(autoincrement())
-  createdDate         DateTime       @default(now())
-  updatedDate         DateTime       @updatedAt
+  createdDate         DateTime?       @default(now())
+  updatedDate         DateTime?       @updatedAt
 
   userName            String
   firstName           String
@@ -64,8 +65,8 @@ model User {
 model Project {
   // ModelBase
   id                  Int           @id @default(autoincrement())
-  createdDate         DateTime     @default(now())
-  updatedDate         DateTime     @updatedAt
+  createdDate         DateTime?     @default(now())
+  updatedDate         DateTime?     @updatedAt
 
   name                String
   color               Color
@@ -78,8 +79,8 @@ model Project {
 model Workday {
   // ModelBase
   id                  Int           @id @default(autoincrement())
-  createdDate         DateTime     @default(now())
-  updatedDate         DateTime     @updatedAt
+  createdDate         DateTime?     @default(now())
+  updatedDate         DateTime?     @updatedAt
 
   expectedHours       Float
   achievedHours       Float?
@@ -94,11 +95,11 @@ model Workday {
 model TimeBlock {
   // ModelBase
   id                  Int           @id @default(autoincrement())
-  createdDate         DateTime     @default(now())
-  updatedDate         DateTime     @updatedAt
+  createdDate         DateTime?     @default(now())
+  updatedDate         DateTime?     @updatedAt
 
   startTime           DateTime
-  endTime             DateTime
+  endTime             DateTime?
 
   // Relations
   projectId           Int          

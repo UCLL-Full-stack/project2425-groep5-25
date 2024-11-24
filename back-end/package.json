@@ -11,7 +11,7 @@
     "scripts": {
         "test": "jest",
         "start": "nodemon -L app.ts --delay 3",
-        "seed": "ts-node repository/prisma/seed.ts"
+        "seed": "ts-node repository/utils/seed.ts"
     },
     "nodemonConfig": {
         "ext": "ts",
@@ -28,7 +28,7 @@
         "casual": "^1.6.2",
         "cors": "^2.8.0",
         "date-fns": "^2.30.0",
-        "dotenv": "^16.0.0",
+        "dotenv": "^16.4.5",
         "express": "^4.18.0",
         "express-jwt": "^8.4.1",
         "helmet": "^7.1.0",
