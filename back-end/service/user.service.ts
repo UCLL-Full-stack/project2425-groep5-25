@@ -1,11 +1,12 @@
 import userDB from '../repository/user.db';
 import { User } from '../model/user';
-import { IdName, UserInput } from '../types';
+import { AuthenticationResponse, IdName, UserInput } from '../types';
 import bcrypt from 'bcrypt';
 import { WorkSchedule } from '../model/workSchedule';
 import { projectNames } from '../constants';
 import projectDb from '../repository/project.db';
 import workScheduleDb from '../repository/workSchedule.db';
+import { generateJwtToken } from '../repository/utils/jwt';
 
 const getAllUsers = async (): Promise<User[]> => {
     return userDB.getAllUsers();
@@ -19,7 +20,15 @@ const getAllUsersIdName = async (): Promise<IdName[]> => {
     }));
 };
 
-const createUser = async (userInput: UserInput): Promise<User> => {
+const getUserByUserName = async ({ userName }: { userName: string }): Promise<User> => {
+    const user = await userDB.getUserByUserName({ userName });
+    if (!user) {
+        throw new Error(`User with username: ${userName} does not exist.`);
+    }
+    return user;
+};
+
+const userSignUp = async (userInput: UserInput): Promise<User> => {
     const { userName, passWord, firstName, lastName, email, role } = userInput;
 
     const existingUser = await userDB.getUserByUserName({ userName });
@@ -46,8 +55,25 @@ const createUser = async (userInput: UserInput): Promise<User> => {
     return await userDB.createUser(newUser);
 };
 
+const userAuthenticate = async (userInput: UserInput): Promise<AuthenticationResponse> => {
+    const { userName, passWord, role } = userInput;
+    const user = await getUserByUserName({ userName });
+
+    const isValidPassword = await bcrypt.compare(passWord, user.getPassWord());
+    if (!isValidPassword) throw new Error('Invalid credentials.');    
+
+    return {
+        token: generateJwtToken({ userName, role }),
+        username: user.getUserName(),
+        fullname: `${user.getFirstName()} ${user.getLastName()}`,
+        role
+    }
+}
+
 export default {
     getAllUsers,
     getAllUsersIdName,
-    createUser
+    getUserByUserName,
+    userSignUp,
+    userAuthenticate
 };

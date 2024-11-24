@@ -23,10 +23,18 @@ type UserInput = {
     passWord?: string;
 };
 
+type AuthenticationResponse = {
+    token: string;
+    username: string;
+    fullname: string;
+    role: Role;
+};
+
 export {
     Role,
     Color,
     ProjectInput,
     IdName,
-    UserInput
+    UserInput,
+    AuthenticationResponse
 };
