@@ -1,3 +1,4 @@
+import { Project } from '../model/project';
 import { User } from '../model/user';
 import database from './utils/database';
 
@@ -69,8 +70,34 @@ const createUser = async (user: User): Promise<User> => {
     }
 };
 
+const addProjectToUser = async (user: User, project: Project): Promise<User> => {
+    try {
+        const userPrisma = await database.user.update({
+            where: { id: user.getId() },
+            data: {
+                projects: {
+                    connect: {
+                        id: project.getId(),
+                    },
+                },
+            },
+            include: {
+                workSchedule: true,
+                workDays: true,
+                projects: true,
+            },
+        });
+
+        return User.from(userPrisma);
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
 export default {
     getAllUsers,
     getUserByUserName,
     createUser,
+    addProjectToUser
 };

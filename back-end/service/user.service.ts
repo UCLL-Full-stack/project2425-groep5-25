@@ -1,6 +1,6 @@
 import userDB from '../repository/user.db';
 import { User } from '../model/user';
-import { AuthenticationResponse, IdName, UserInput } from '../types';
+import { AuthenticationResponse, IdName, ProjectInput, UserInput } from '../types';
 import bcrypt from 'bcrypt';
 import { WorkSchedule } from '../model/workSchedule';
 import { projectNames } from '../constants';
@@ -70,10 +70,22 @@ const userAuthenticate = async (userInput: UserInput): Promise<AuthenticationRes
     }
 }
 
+const addProjectToUser = async (userInput: UserInput, projectInput: ProjectInput): Promise<User> => {
+    const { userName } = userInput;
+    const { name } = projectInput;
+
+    const user = await getUserByUserName({ userName });
+    const project = await projectDb.getProjectByName({ name });
+    if (!project) throw new Error(`Project with name <${name}> doesn't exist.`);
+
+    return await userDB.addProjectToUser(user, project);
+}
+
 export default {
     getAllUsers,
     getAllUsersIdName,
     getUserByUserName,
     userSignUp,
-    userAuthenticate
+    userAuthenticate,
+    addProjectToUser
 };
