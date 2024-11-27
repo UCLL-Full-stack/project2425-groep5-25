@@ -4,23 +4,23 @@ import styles from "@styles/InputField.module.css";
 import { Color } from "@types";
 import { formatOptionLabel } from "utils/optionFormatters";
 
-type ColorSelectFieldProps = {
+type Props = {
   label: string;
   value: Color | null;
   onChange: (value: Color | null) => void;
-  required?: boolean;
-  placeholder?: string;
   validate?: (value: Color | null) => string | null;
+  placeholder: string;
+  required: boolean;
 };
 
-const ColorSelectField: React.FC<ColorSelectFieldProps> = ({
+const ColorSelectField: React.FC<Props> = ({
   label,
   value,
   onChange,
-  required,
-  placeholder = "Select color",
   validate,
-}) => {
+  placeholder,
+  required,
+}: Props) => {
   const [error, setError] = useState<string | null>(null);
   const options = Object.entries(Color)
     .filter(([label, hex]) => hex !== Color.Gray)

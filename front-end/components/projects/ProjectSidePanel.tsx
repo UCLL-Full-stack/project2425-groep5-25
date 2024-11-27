@@ -162,6 +162,7 @@ const ProjectSidePanel: React.FC<Props> = ({
               onChange={setUserIds}
               validate={validateUserSelection}
               placeholder="Select users (optional)"
+              required={false}
             />
           )}
 

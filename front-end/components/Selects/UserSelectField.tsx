@@ -3,25 +3,25 @@ import Select, { ActionMeta, MultiValue } from "react-select";
 import { IdName } from "@types";
 import styles from "@styles/InputField.module.css";
 
-type UserSelectFieldProps = {
+type Props = {
   label: string;
   userIdNames: Array<IdName>;
   value: number[];
   onChange: (value: number[]) => void;
-  required?: boolean;
-  placeholder?: string;
   validate?: (value: number[]) => string | null;
+  placeholder: string;
+  required: boolean;
 };
 
-const UserSelectField: React.FC<UserSelectFieldProps> = ({
+const UserSelectField: React.FC<Props> = ({
   label,
   userIdNames,
   value,
   onChange,
-  required,
-  placeholder = "Select users (optional)",
   validate,
-}) => {
+  placeholder,
+  required,
+}: Props) => {
   const [error, setError] = useState<string | null>(null);
   const options = userIdNames
     .filter((user) => user.id !== undefined)

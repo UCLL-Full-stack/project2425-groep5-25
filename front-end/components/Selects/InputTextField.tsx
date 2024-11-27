@@ -1,23 +1,23 @@
 import React, { useState } from "react";
 import styles from "@styles/InputField.module.css";
 
-type InputFieldProps = {
+type Props = {
   label: string;
   value: string | null;
-  placeholder?: string;
   onChange: (value: string | null) => void;
-  required?: boolean;
   validate?: (value: string | null) => string | null;
+  placeholder: string;
+  required: boolean;
 };
 
-const InputField: React.FC<InputFieldProps> = ({
+const InputField: React.FC<Props> = ({
   label,
   value,
-  placeholder,
   onChange,
-  required,
   validate,
-}) => {
+  placeholder,
+  required,
+}: Props) => {
   const [error, setError] = useState<string | null>(null);
 
   const validation = (newValue: string | null) => {
