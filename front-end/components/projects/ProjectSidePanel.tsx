@@ -12,7 +12,7 @@ import {
   ProjectToUserInput,
 } from "@types";
 import UserService from "@services/UserService";
-import InputField from "@components/Selects/InputTextField";
+import InputField from "@components/Selects/InputField";
 import ColorSelectField from "@components/Selects/ColorSelectField";
 import UserSelectField from "@components/Selects/UserSelectField";
 import { toast } from "react-toastify";
@@ -129,6 +129,7 @@ const ProjectSidePanel: React.FC<Props> = ({
         </div>
         <form onSubmit={createProject} className={styles["form-container"]}>
           <InputField
+            type="text"
             label="Project Name:"
             value={name}
             onChange={setName}
@@ -142,7 +143,7 @@ const ProjectSidePanel: React.FC<Props> = ({
             value={color}
             onChange={setColor}
             validate={validateColor}
-            placeholder="Select color"
+            placeholder="Select a color"
             required
           />
 

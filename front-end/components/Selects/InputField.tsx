@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styles from "@styles/InputField.module.css";
 
 type Props = {
+  type: React.HTMLInputTypeAttribute;
   label: string;
   value: string | null;
   onChange: (value: string | null) => void;
@@ -11,6 +12,7 @@ type Props = {
 };
 
 const InputField: React.FC<Props> = ({
+  type,
   label,
   value,
   onChange,
@@ -41,7 +43,7 @@ const InputField: React.FC<Props> = ({
         <label>{label}</label>
         <div className={styles.innerInputContainer}>
           <input
-            type="text"
+            type={type}
             value={value || ""}
             required={required}
             placeholder={placeholder}
