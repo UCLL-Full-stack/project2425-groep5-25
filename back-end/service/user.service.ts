@@ -1,12 +1,19 @@
 import userDB from '../repository/user.db';
 import { User } from '../model/user';
-import { AuthenticationResponse, IdName, ProjectInput, UserInput } from '../types';
+import {
+    AuthenticationResponse,
+    IdName,
+    ProjectInput,
+    ProjectToUserInput,
+    UserInput,
+} from '../types';
 import bcrypt from 'bcrypt';
 import { WorkSchedule } from '../model/workSchedule';
 import { projectNames } from '../constants';
 import projectDb from '../repository/project.db';
 import workScheduleDb from '../repository/workSchedule.db';
 import { generateJwtToken } from '../repository/utils/jwt';
+import userDb from '../repository/user.db';
 
 const getAllUsers = async (): Promise<User[]> => {
     return userDB.getAllUsers();
@@ -28,6 +35,18 @@ const getUserByUserName = async ({ userName }: { userName: string }): Promise<Us
     return user;
 };
 
+const getUserById = async ({ id }: { id: number }): Promise<User> => {
+    const user = await userDB.getUserById({ id });
+    if (!user) {
+        throw new Error(`User with id <${id}> does not exist.`);
+    }
+    return user;
+};
+
+const getUsersByIds = async ({ userIds }: { userIds: number[] }): Promise<User[]> => {
+    return await Promise.all(userIds.map((id) => getUserById({ id })));
+};
+
 const userSignUp = async (userInput: UserInput): Promise<User> => {
     const { userName, passWord, firstName, lastName, email, role } = userInput;
 
@@ -35,11 +54,12 @@ const userSignUp = async (userInput: UserInput): Promise<User> => {
     if (existingUser) throw new Error(`User with username <${userName}> already exists.`);
 
     const defaultProject = await projectDb.getProjectByName({ name: projectNames.DEFAULT_PROJECT });
-    if (!defaultProject) throw new Error(`Project with name <${projectNames.DEFAULT_PROJECT}> doesn't exist.`);
+    if (!defaultProject)
+        throw new Error(`Project with name <${projectNames.DEFAULT_PROJECT}> doesn't exist.`);
 
     const workSchedule = await workScheduleDb.createWorkSchedule(WorkSchedule.createDefault());
     const hashedPassword = await bcrypt.hash(passWord, 12);
-    
+
     const newUser = new User({
         userName,
         firstName,
@@ -60,32 +80,36 @@ const userAuthenticate = async (userInput: UserInput): Promise<AuthenticationRes
     const user = await getUserByUserName({ userName });
 
     const isValidPassword = await bcrypt.compare(passWord, user.getPassWord());
-    if (!isValidPassword) throw new Error('Invalid credentials.');    
+    if (!isValidPassword) throw new Error('Invalid credentials.');
 
     return {
         token: generateJwtToken({ userName, role: user.getRole() }),
         username: user.getUserName(),
         fullname: `${user.getFirstName()} ${user.getLastName()}`,
-        role
-    }
-}
+        role,
+    };
+};
 
-const addProjectToUser = async (userInput: UserInput, projectInput: ProjectInput): Promise<User> => {
-    const { userName } = userInput;
-    const { name } = projectInput;
+const addProjectToUsers = async (projectToUserInput: ProjectToUserInput): Promise<User[]> => {
+    const { projectId, userIds } = projectToUserInput;
 
-    const user = await getUserByUserName({ userName });
-    const project = await projectDb.getProjectByName({ name });
-    if (!project) throw new Error(`Project with name <${name}> doesn't exist.`);
+    const users = await getUsersByIds({ userIds });
+    const project = await projectDb.getProjectById({ id: projectId });
+    if (!project) throw new Error(`Project with id <${projectId}> doesn't exist.`);
 
-    return await userDB.addProjectToUser(user, project);
-}
+    const enrollmentCheck = await Promise.all(users.map((user) => userDb.checkUserInProject(user, project)));
+    if (enrollmentCheck.includes(true)) throw new Error('Some users are already enrolled in this project.');
+    
+    return await userDB.addProjectToUsers(users, project);
+};
 
 export default {
     getAllUsers,
     getAllUsersIdName,
     getUserByUserName,
+    getUserById,
+    getUsersByIds,
     userSignUp,
     userAuthenticate,
-    addProjectToUser
+    addProjectToUsers,
 };

@@ -38,7 +38,7 @@ app.use(
         secret: processEnv.getJwtSecret(),
         algorithms: ['HS256'],
     }).unless({
-        path: ['/api-docs', /^\/api-docs\/.*/, '/users/signup', '/users/login', '/status'],
+        path: ['/api-docs', /^\/api-docs\/.*/, /^\/users\/.*/, /^\/projects\/.*/, '/users/signup', '/users/login', '/status'],
     })
 );
 

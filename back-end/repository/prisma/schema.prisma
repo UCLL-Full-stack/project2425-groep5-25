@@ -31,7 +31,7 @@ model User {
   createdDate         DateTime?       @default(now())
   updatedDate         DateTime?       @updatedAt
 
-  userName            String
+  userName            String          @unique
   firstName           String
   lastName            String
   email               String          @unique
