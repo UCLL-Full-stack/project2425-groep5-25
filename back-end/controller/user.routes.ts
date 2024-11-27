@@ -1,6 +1,6 @@
 import express, { NextFunction, Request, Response } from 'express';
 import userService from '../service/user.service';
-import { UserInput } from '../types';
+import { ProjectToUserInput, UserInput } from '../types';
 
 /**
  * @swagger
@@ -191,6 +191,59 @@ userRouter.post('/login', async (req: Request, res: Response, next: NextFunction
         const userInput = <UserInput>req.body;
         const response = await userService.userAuthenticate(userInput);
         res.status(200).json({ message: 'Authenticated Successfully', ...response });
+    } catch (error) {
+        next(error);
+    }
+});
+
+/**
+ * @swagger
+ * /users/enroll-project:
+ *   post:
+ *     summary: Enroll multiple users in a project
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               userIds:
+ *                 type: array
+ *                 items:
+ *                   type: number
+ *                 description: List of user IDs to enroll in the project
+ *                 example: [1, 2, 3]
+ *               projectId:
+ *                 type: number
+ *                 description: The ID of the project to enroll the users in
+ *                 example: 101
+ *             required:
+ *               - userIds
+ *               - projectId
+ *     responses:
+ *       200:
+ *         description: Users successfully enrolled in the project
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: "Users successfully enrolled in the project."
+ */
+userRouter.post('/enroll-projects', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const projectToUserInput = <ProjectToUserInput>req.body;
+        const response = await userService.addProjectToUsers(projectToUserInput);
+        res.status(200).json(response);
     } catch (error) {
         next(error);
     }

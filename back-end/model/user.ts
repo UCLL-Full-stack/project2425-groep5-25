@@ -119,32 +119,6 @@ export class User extends ModelBase {
         );
     }
 
-    addProject(project: Project): void {
-        if (!this.projects.find((p) => p.getId() === project.getId())) {
-            this.projects.push(project);
-        }
-    }
-
-    removeProject(project: Project): void {
-        this.projects = this.projects.filter((p) => p.getId() !== project.getId());
-    }
-
-    addWorkDay(workDay: WorkDay): void {
-        if (!this.workDays) {
-            this.workDays = [];
-        }
-
-        if (!this.workDays.find((wd) => wd.getId() === workDay.getId())) {
-            this.workDays.push(workDay);
-        }
-    }
-
-    removeWorkDay(workDay: WorkDay): void {
-        if (this.workDays) {
-            this.workDays = this.workDays.filter((wd) => wd.getId() !== workDay.getId());
-        }
-    }
-
     static from({
         id,
         userName,

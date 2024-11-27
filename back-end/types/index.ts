@@ -1,17 +1,19 @@
 type Role = 'admin' | 'student' | 'lecturer' | 'guest';
 
-type Color = 'Red' | 'Green' | 'Blue' | 'Yellow' | 'Orange' | 'Purple' | 'Gray';
-
-type ProjectInput = {
-    name: string;
-    color: Color;
-    userIds?: number[];
-};
+enum Color {
+    Red = '#FF0000',
+    Green = '#00FF00',
+    Blue = '#0000FF',
+    Yellow = '#FFFF00',
+    Orange = '#FFA500',
+    Purple = '#800080',
+    Gray = '#000000',
+}
 
 type IdName = {
     id?: number;
     name: string;
-}
+};
 
 type UserInput = {
     id?: number;
@@ -30,11 +32,15 @@ type AuthenticationResponse = {
     role: Role;
 };
 
-export {
-    Role,
-    Color,
-    ProjectInput,
-    IdName,
-    UserInput,
-    AuthenticationResponse
+type ProjectInput = {
+    id?: number;
+    name?: string;
+    color?: Color;
 };
+
+type ProjectToUserInput = {
+    projectId?: number;
+    userIds?: number[];
+};
+
+export { Role, Color, ProjectInput, IdName, UserInput, AuthenticationResponse, ProjectToUserInput };

@@ -1,14 +1,12 @@
 import React from "react";
 import { ProjectUserCountDto } from "@types";
-import { formatOptionLabel, hexToColorNameMap } from "utils/optionFormatters";
+import { formatOptionLabel, getColorName } from "utils/optionFormatters";
 
 type Props = {
   projects: Array<ProjectUserCountDto>;
 };
 
-const ProjectOverviewTable: React.FC<Props> = ({
-  projects,
-}: Props) => {
+const ProjectOverviewTable: React.FC<Props> = ({ projects }: Props) => {
   return (
     <>
       {projects && (
@@ -18,24 +16,19 @@ const ProjectOverviewTable: React.FC<Props> = ({
               <th scope="col">Id</th>
               <th scope="col">Color</th>
               <th scope="col">Name</th>
-              <th scope="col">Aantal Gebruikers</th>
             </tr>
           </thead>
           <tbody>
             {projects.map((project, index) => (
-              <tr
-                key={index}                
-                role="button"
-              >
+              <tr key={index} role="button">
                 <td>{project.id}</td>
                 <td className="align-content-center">
                   {formatOptionLabel({
-                    label: project.color as string || "Unknown",
+                    label: getColorName(project.color as string),
                     value: project.color as string,
                   })}
                 </td>
                 <td>{project.name}</td>
-                <td>{project.userCount}</td>
               </tr>
             ))}
           </tbody>

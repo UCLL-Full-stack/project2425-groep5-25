@@ -25,3 +25,7 @@ export const hexToColorNameMap = Object.entries(Color).reduce(
   (acc, [name, hex]) => ({ ...acc, [hex]: name }),
   {} as { [key: string]: string }
 );
+
+export const getColorName = (hex: string): string => {
+  return hexToColorNameMap[hex] || "Unknown";
+};

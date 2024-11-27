@@ -1,11 +1,9 @@
 import { PrismaClient } from '@prisma/client';
 import casual from 'casual';
 import { projectNames } from '../../constants';
+import { Color, Role } from '../../types';
 
 const prisma = new PrismaClient();
-
-const roles = ['admin', 'student', 'lecturer', 'guest'];
-const colors = ['Red', 'Green', 'Blue', 'Yellow', 'Orange', 'Purple', 'Gray'];
 
 const main = async () => {
     // Step 1: Clean the database
@@ -38,18 +36,19 @@ const main = async () => {
     const globalProject = await prisma.project.create({
         data: {
             name: projectNames.DEFAULT_PROJECT,
-            color: 'Gray',
+            color: Color.Gray,
         },
     });
     console.log('Global Project created successfully!');
 
     // Step 4: Generate Projects
+    const availableColors = Object.keys(Color).filter(color => color !== 'Gray');
     const projects = await Promise.all(
         Array.from({ length: 10 }).map(() =>
             prisma.project.create({
                 data: {
                     name: casual.company_name,
-                    color: casual.random_element(colors.filter((color) => color !== 'Gray')),
+                    color: Color[casual.random_element(availableColors) as keyof typeof Color],                
                 },
             })
         )
@@ -66,7 +65,7 @@ const main = async () => {
                     lastName: casual.last_name,
                     email: casual.email,
                     passWord: casual.password,
-                    role: casual.random_element(roles),
+                    role: casual.random_element(['admin', 'student', 'lecturer', 'guest']) as Role,
                     workScheduleId: schedule.id,
                     projects: {
                         connect: [

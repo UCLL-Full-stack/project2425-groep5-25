@@ -1,12 +1,21 @@
 import React, { useState } from "react";
-import Select from "react-select";
 import ProjectService from "@services/ProjectService";
 import styles from "@styles/ProjectSidePanel.module.css";
 import ErrorMessage from "@components/shared/ErrorMessage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
-import { formatOptionLabel } from "utils/optionFormatters";
-import { Color, ErrorLabelMessage, IdName, ProjectInputDto } from "@types";
+import {
+  Color,
+  ErrorLabelMessage,
+  IdName,
+  ProjectInput,
+  ProjectToUserInput,
+} from "@types";
+import UserService from "@services/UserService";
+import InputField from "@components/Selects/InputField";
+import ColorSelectField from "@components/Selects/ColorSelectField";
+import UserSelectField from "@components/Selects/UserSelectField";
+import { toast } from "react-toastify";
 
 type Props = {
   userIdNames: Array<IdName>;
@@ -14,69 +23,90 @@ type Props = {
   onClose: () => void;
 };
 
-const colorOptions = Object.entries(Color).map(([label, hex]) => ({
-  value: hex,
-  label: label,
-}));
-
 const ProjectSidePanel: React.FC<Props> = ({
   userIdNames,
   onProjectCreated,
   onClose,
 }: Props) => {
-  const [name, setName] = useState<string>("");
-  const [color, setColor] = useState<Color>(Color.Red);
+  const [name, setName] = useState<string | null>(null);
+  const [color, setColor] = useState<Color | null>(null);
   const [userIds, setUserIds] = useState<number[]>([]);
-  const [errorLabelMessage, setErrorLabelMessage] = useState<ErrorLabelMessage>();
+  const [showUserSelector, setShowUserSelector] = useState<boolean>(false);
+  const [errorLabelMessage, setErrorLabelMessage] =
+    useState<ErrorLabelMessage>();
 
-  const userOptions = userIdNames.map((user) => ({
-    value: user.id,
-    label: user.name,
-  }));
+  const validateName = (name: string | null) => {
+    if (!name || name?.trim().length < 6)
+      return "Project name must be at least 6 characters long";
+    return null;
+  };
+
+  const validateColor = (color: Color | null) => {
+    if (!color || !Object.values(Color).includes(color))
+      return "Please select a valid project color.";
+    return null;
+  };
+
+  const validateUserSelection = (value: number[]) => {
+    const uniqueUserIds = new Set(value);
+    if (uniqueUserIds.size !== value.length)
+      return "You cannot select the same user more than once.";
+    return null;
+  };
 
   const createProject = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorLabelMessage(undefined);
 
-    if (!name || name.trim().length < 6) {
+    const nameError = validateName(name);
+    const colorError = validateColor(color);
+    const userError = showUserSelector ? validateUserSelection(userIds) : null;
+
+    if (nameError || colorError || userError) {
       setErrorLabelMessage({
-        label: "Invalid Project Name",
-        message: "Project name must be at least 6 characters long",
+        label: "Validation Error",
+        message: nameError || colorError || userError || "",
       });
       return;
-    }
-
-    if (!color || !Object.values(Color).includes(color)) {
-      setErrorLabelMessage({
-        label: "Invalid Project Color",
-        message: "Please select a color for the project",
-      });
-      return;
-    }
-
-    if (userIds && userIds.length > 0) {
-      const uniqueUserIds = new Set(userIds);
-      if (uniqueUserIds.size !== userIds.length) {
-        setErrorLabelMessage({
-          label: "Invalid Project Users",
-          message: "You cannot select the same user more than once",
-        });
-        return;
-      }
     }
 
     try {
-      const formData: ProjectInputDto = { name, color, userIds };
-      const [response] = await Promise.all([ProjectService.createProject(formData)]);
-      const [json] = await Promise.all([response.json()]);
-      if (!response.ok) {    
-        setErrorLabelMessage({
-          label: "Validation Error",
-          message:json.message || "An error occurred while creating the project.",
-        });
-        return;
-      };
+      const projectFormData: ProjectInput = { name: name!, color: color! };
+      const [projectResponse] = await Promise.all([
+        ProjectService.createProject(projectFormData),
+      ]);
+      const [projectJson] = await Promise.all([projectResponse.json()]);
+
+      if (!projectResponse.ok)
+        throw new Error(
+          projectJson.message || "An error occurred while creating the project."
+        );
+
+      if (showUserSelector && userIds.length > 0) {
+        const userFormData: ProjectToUserInput = {
+          projectId: projectJson.id,
+          userIds,
+        };
+        const [userResponse] = await Promise.all([
+          UserService.enrollProject(userFormData),
+        ]);
+        const [userJson] = await Promise.all([userResponse.json()]);
+
+        if (!userResponse.ok)
+          throw new Error(
+            userJson.message ||
+              "An error occurred while enrolling users in the project."
+          );
+      }
+
       onProjectCreated();
+      toast.success(
+        `Project ${
+          showUserSelector && userIds.length > 0
+            ? "with users"
+            : ""
+        } was created successfully!`
+      );
       onClose();
     } catch (error) {
       if (error instanceof Error) {
@@ -98,48 +128,44 @@ const ProjectSidePanel: React.FC<Props> = ({
           </button>
         </div>
         <form onSubmit={createProject} className={styles["form-container"]}>
-          <div className={styles.inputContainer}>
-            <label>Project Name:</label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Enter project name"
-              className={styles.input}
-              required
-            />
-          </div>
+          <InputField
+            type="text"
+            label="Project Name:"
+            value={name}
+            onChange={setName}
+            validate={validateName}
+            placeholder="Enter name"
+            required
+          />
 
-          <div className={styles.inputContainer}>
-            <label>Project Color:</label>
-            <Select
-              options={colorOptions}
-              value={colorOptions.find((option) => option.value === color)}
-              onChange={(selectedOption) =>
-                setColor(selectedOption?.value as Color)
-              }
-              placeholder="Select a color"
-              required
-              formatOptionLabel={formatOptionLabel}
-            />
-          </div>
+          <ColorSelectField
+            label="Select Color:"
+            value={color}
+            onChange={setColor}
+            validate={validateColor}
+            placeholder="Select a color"
+            required
+          />
 
-          <div className={styles.inputContainer}>
-            <label>Select Users:</label>
-            <Select
-              options={userOptions}
-              isMulti
+          {!showUserSelector ? (
+            <button
+              type="button"
+              className={styles.button}
+              onClick={() => setShowUserSelector(true)}
+            >
+              Want to add users?
+            </button>
+          ) : (
+            <UserSelectField
+              label="Select Users:"
+              userIdNames={userIdNames}
+              value={userIds}
+              onChange={setUserIds}
+              validate={validateUserSelection}
               placeholder="Select users (optional)"
-              onChange={(selectedOptions) =>
-                setUserIds(
-                  selectedOptions.map((option) => option.value as number)
-                )
-              }
-              value={userOptions.filter((option) =>
-                userIds.includes(option.value as number)
-              )}
+              required={false}
             />
-          </div>
+          )}
 
           <button type="submit" className={styles.button}>
             Create Project
