@@ -1,5 +1,5 @@
-import { ModelBase } from './modelBase';
 import { WorkSchedule as PrismaWorkSchedule } from '@prisma/client';
+import { ModelBase } from './modelBase';
 
 export class WorkSchedule extends ModelBase {
     private mondayHours: number;

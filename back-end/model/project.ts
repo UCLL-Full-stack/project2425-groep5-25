@@ -1,7 +1,6 @@
-import { Project as PrismaProject, TimeBlock as PrismaTimeBlock } from '@prisma/client';
+import { Project as PrismaProject } from '@prisma/client';
 import { Color } from '../types';
 import { ModelBase } from './modelBase';
-import { TimeBlock } from './timeBlock';
 import { User } from './user';
 
 export class Project extends ModelBase {

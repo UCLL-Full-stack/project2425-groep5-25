@@ -1,11 +1,11 @@
+import {
+    Project as ProjectPrisma,
+    TimeBlock as TimeBlockPrisma,
+    Workday as WorkDayPrisma,
+} from '@prisma/client';
 import { ModelBase } from './modelBase';
 import { Project } from './project';
 import { WorkDay } from './workDay';
-import {
-    TimeBlock as TimeBlockPrisma,
-    Project as ProjectPrisma,
-    Workday as WorkDayPrisma,
-} from '@prisma/client';
 
 export class TimeBlock extends ModelBase {
     private startTime: Date;

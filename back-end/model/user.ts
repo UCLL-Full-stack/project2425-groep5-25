@@ -1,4 +1,4 @@
-import { User as PrismaUser, WorkSchedule as PrismaWorkSchedule, Project as PrismaProject, Workday as PrismaWorkday } from '@prisma/client';
+import { Project as PrismaProject, User as PrismaUser, Workday as PrismaWorkday, WorkSchedule as PrismaWorkSchedule } from '@prisma/client';
 import { Role } from '../types';
 import { ModelBase } from './modelBase';
 import { Project } from './project';

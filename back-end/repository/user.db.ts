@@ -1,4 +1,3 @@
-import { th } from 'date-fns/locale';
 import { Project } from '../model/project';
 import { User } from '../model/user';
 import database from './utils/database';
@@ -12,6 +11,7 @@ const getAllUsers = async (): Promise<User[]> => {
                 workDays: true,
             },
         });
+        
         return usersPrisma.map((x) => User.from(x));
     } catch (error) {
         console.error(error);

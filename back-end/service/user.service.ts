@@ -1,19 +1,17 @@
-import userDB from '../repository/user.db';
+import bcrypt from 'bcrypt';
+import { projectNames } from '../constants';
 import { User } from '../model/user';
+import { WorkSchedule } from '../model/workSchedule';
+import projectDb from '../repository/project.db';
+import { default as userDB, default as userDb } from '../repository/user.db';
+import { generateJwtToken } from '../repository/utils/jwt';
+import workScheduleDb from '../repository/workSchedule.db';
 import {
     AuthenticationResponse,
     IdName,
-    ProjectInput,
     ProjectToUserInput,
-    UserInput,
+    UserInput
 } from '../types';
-import bcrypt from 'bcrypt';
-import { WorkSchedule } from '../model/workSchedule';
-import { projectNames } from '../constants';
-import projectDb from '../repository/project.db';
-import workScheduleDb from '../repository/workSchedule.db';
-import { generateJwtToken } from '../repository/utils/jwt';
-import userDb from '../repository/user.db';
 
 const getAllUsers = async (): Promise<User[]> => {
     return userDB.getAllUsers();

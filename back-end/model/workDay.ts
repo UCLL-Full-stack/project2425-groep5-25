@@ -1,6 +1,5 @@
-import { Workday as PrismaWorkday} from '@prisma/client';
+import { Workday as PrismaWorkday } from '@prisma/client';
 import { ModelBase } from './modelBase';
-import { TimeBlock } from './timeBlock';
 
 export class WorkDay extends ModelBase {
     private expectedHours: number;
