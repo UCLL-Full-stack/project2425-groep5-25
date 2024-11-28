@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import Select, { ActionMeta, MultiValue } from "react-select";
-import { IdName } from "@types";
 import styles from "@styles/InputField.module.css";
+import { IdName } from "@types";
+import React, { useState } from "react";
+import Select, { MultiValue } from "react-select";
 
 type Props = {
   label: string;

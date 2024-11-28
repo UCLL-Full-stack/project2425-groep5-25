@@ -1,11 +1,11 @@
-import Head from "next/head";
-import styles from "@styles/home.module.css";
-import ProjectService from "@services/ProjectService";
 import ProjectOverviewTable from "@components/projects/ProjectOverviewTable";
-import UserService from "@services/UserService";
 import ProjectSidePanel from "@components/projects/ProjectSidePanel";
-import { useEffect, useState } from "react";
+import ProjectService from "@services/ProjectService";
+import UserService from "@services/UserService";
+import styles from "@styles/home.module.css";
 import { IdName, ProjectUserCountDto } from "@types";
+import Head from "next/head";
+import { useEffect, useState } from "react";
 
 const Home: React.FC = () => {
   const [userIdNames, setUserIdNames] = useState<IdName[]>([]);
@@ -41,7 +41,7 @@ const Home: React.FC = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-        <div className="d-flex flex-column w-100" style={{ gap: '0.5rem' }}>
+        <div className="d-flex flex-column w-100" style={{ gap: "0.5rem" }}>
           <div className={styles.projectCard}>
             <span>
               <h4>Projects</h4>

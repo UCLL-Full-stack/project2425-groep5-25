@@ -1,9 +1,12 @@
-import React, { useState } from "react";
-import ProjectService from "@services/ProjectService";
-import styles from "@styles/ProjectSidePanel.module.css";
+import ColorSelectField from "@components/Selects/ColorSelectField";
+import InputField from "@components/Selects/InputField";
+import UserSelectField from "@components/Selects/UserSelectField";
 import ErrorMessage from "@components/shared/ErrorMessage";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import ProjectService from "@services/ProjectService";
+import UserService from "@services/UserService";
+import styles from "@styles/ProjectSidePanel.module.css";
 import {
   Color,
   ErrorLabelMessage,
@@ -11,10 +14,7 @@ import {
   ProjectInput,
   ProjectToUserInput,
 } from "@types";
-import UserService from "@services/UserService";
-import InputField from "@components/Selects/InputField";
-import ColorSelectField from "@components/Selects/ColorSelectField";
-import UserSelectField from "@components/Selects/UserSelectField";
+import React, { useState } from "react";
 import { toast } from "react-toastify";
 
 type Props = {
@@ -102,9 +102,7 @@ const ProjectSidePanel: React.FC<Props> = ({
       onProjectCreated();
       toast.success(
         `Project ${
-          showUserSelector && userIds.length > 0
-            ? "with users"
-            : ""
+          showUserSelector && userIds.length > 0 ? "with users" : ""
         } was created successfully!`
       );
       onClose();

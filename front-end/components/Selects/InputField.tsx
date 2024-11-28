@@ -1,5 +1,5 @@
-import React, { useState } from "react";
 import styles from "@styles/InputField.module.css";
+import React, { useState } from "react";
 
 type Props = {
   type: React.HTMLInputTypeAttribute;

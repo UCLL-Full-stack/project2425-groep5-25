@@ -7,13 +7,28 @@ const Header: React.FC = () => {
   return (
     <header className="d-flex justify-content-between p-3 border-bottom bg-dark bg-gradient">
       <nav className="nav justify-content-center">
-        <Link href="/" className={`nav-link px-4 fs-5 text-white ${router.pathname === '/' ? 'border-bottom' : ''}`}>
+        <Link
+          href="/"
+          className={`nav-link px-4 fs-5 text-white ${
+            router.pathname === "/" ? "border-bottom" : ""
+          }`}
+        >
           Home
         </Link>
-        <Link href="/projects" className={`nav-link px-4 fs-5 text-white ${router.pathname === '/projects' ? 'border-bottom' : ''}`}>
+        <Link
+          href="/projects"
+          className={`nav-link px-4 fs-5 text-white ${
+            router.pathname === "/projects" ? "border-bottom" : ""
+          }`}
+        >
           Projects
         </Link>
-        <Link href="/workdays" className={`nav-link px-4 fs-5 text-white ${router.pathname === '/workdays' ? 'border-bottom' : ''}`}>
+        <Link
+          href="/workdays"
+          className={`nav-link px-4 fs-5 text-white ${
+            router.pathname === "/workdays" ? "border-bottom" : ""
+          }`}
+        >
           Workdays
         </Link>
       </nav>

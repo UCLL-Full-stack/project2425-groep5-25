@@ -1,5 +1,5 @@
-import Head from "next/head";
 import styles from "@styles/home.module.css";
+import Head from "next/head";
 
 const Home: React.FC = () => {
   return (
@@ -26,7 +26,8 @@ const Home: React.FC = () => {
         <div className={styles.description}>
           <p>
             This will be our main page, in the future, it remains empty for now.
-            We make use of a of fake database, values or things stored will not be permanent.
+            We make use of a of fake database, values or things stored will not
+            be permanent.
           </p>
         </div>
       </main>

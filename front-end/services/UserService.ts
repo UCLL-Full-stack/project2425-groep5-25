@@ -20,10 +20,9 @@ const enrollProject = async (formData: ProjectToUserInput) => {
   });
 };
 
-
 const UserService = {
   getAllUsersIdName,
-  enrollProject
+  enrollProject,
 };
 
 export default UserService;
