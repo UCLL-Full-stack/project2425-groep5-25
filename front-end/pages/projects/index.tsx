@@ -3,13 +3,13 @@ import ProjectSidePanel from "@components/projects/ProjectSidePanel";
 import ProjectService from "@services/ProjectService";
 import UserService from "@services/UserService";
 import styles from "@styles/home.module.css";
-import { IdName, ProjectUserCountDto } from "@types";
+import { IdName, ProjectOutput } from "@types";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 
 const Home: React.FC = () => {
   const [userIdNames, setUserIdNames] = useState<IdName[]>([]);
-  const [projects, setProjects] = useState<ProjectUserCountDto[]>([]);
+  const [projects, setProjects] = useState<ProjectOutput[]>([]);
   const [isSidePanelOpen, setIsSidePanelOpen] = useState<boolean>(false);
 
   const getAllUsersIdName = async () => {
@@ -18,19 +18,20 @@ const Home: React.FC = () => {
     setUserIdNames(users);
   };
 
-  const getAllProjectsUserCount = async () => {
-    const projects = await ProjectService.getAllProjectsUserCount();
+  const getAllProjects = async () => {
+    const [response] = await Promise.all([ProjectService.getAllProjects()]);
+    const [projects] = await Promise.all([response.json()]);
     setProjects(projects);
+  };
+
+  const addProject = (project: ProjectOutput) => {
+    setProjects((x) => [...x, project]);
   };
 
   useEffect(() => {
     getAllUsersIdName();
-    getAllProjectsUserCount();
+    getAllProjects();
   }, []);
-
-  const toggleSidePanel = () => {
-    setIsSidePanelOpen(!isSidePanelOpen);
-  };
 
   return (
     <>
@@ -47,7 +48,10 @@ const Home: React.FC = () => {
               <h4>Projects</h4>
             </span>
 
-            <button onClick={toggleSidePanel} className={styles.button}>
+            <button
+              onClick={() => setIsSidePanelOpen(!isSidePanelOpen)}
+              className={styles.button}
+            >
               Add Project
             </button>
           </div>
@@ -58,7 +62,8 @@ const Home: React.FC = () => {
             <ProjectSidePanel
               userIdNames={userIdNames}
               onClose={() => setIsSidePanelOpen(false)}
-              onProjectCreated={() => getAllProjectsUserCount()}
+              addProject={addProject}
+              onProjectCreated={() => getAllProjects()}
             />
           )}
 

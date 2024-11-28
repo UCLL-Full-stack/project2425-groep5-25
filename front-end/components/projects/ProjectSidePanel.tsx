@@ -12,6 +12,7 @@ import {
   ErrorLabelMessage,
   IdName,
   ProjectInput,
+  ProjectOutput,
   ProjectToUserInput,
 } from "@types";
 import React, { useState } from "react";
@@ -19,12 +20,14 @@ import { toast } from "react-toastify";
 
 type Props = {
   userIdNames: Array<IdName>;
+  addProject: (project: ProjectOutput) => void;
   onProjectCreated: () => void;
   onClose: () => void;
 };
 
 const ProjectSidePanel: React.FC<Props> = ({
   userIdNames,
+  addProject,
   onProjectCreated,
   onClose,
 }: Props) => {
@@ -106,6 +109,12 @@ const ProjectSidePanel: React.FC<Props> = ({
         } was created successfully!`
       );
       onClose();
+
+      addProject({
+        id: projectJson.id,
+        name: projectJson.name,
+        color: projectJson.color,
+      });
     } catch (error) {
       if (error instanceof Error) {
         setErrorLabelMessage({

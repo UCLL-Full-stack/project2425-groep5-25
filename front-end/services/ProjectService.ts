@@ -1,4 +1,4 @@
-import { ProjectUserCountDto } from "@types";
+import { ProjectOutput } from "@types";
 import { processEnv } from "env/env";
 
 const getAllProjects = async () => {
@@ -10,7 +10,7 @@ const getAllProjects = async () => {
   });
 };
 
-const createProject = async (formData: ProjectUserCountDto) => {
+const createProject = async (formData: ProjectOutput) => {
   return await fetch(processEnv.getApiUrl() + `/projects`, {
     method: "POST",
     headers: {
@@ -20,24 +20,9 @@ const createProject = async (formData: ProjectUserCountDto) => {
   });
 };
 
-const getAllProjectsUserCount = async () => {
-  const [response] = await Promise.all([getAllProjects()]);
-  const [projectResponse] = await Promise.all([response.json()]);
-  const projectUserCounts: ProjectUserCountDto[] = projectResponse.map(
-    (project: any) => ({
-      id: project.id,
-      name: project.name,
-      color: project.color,
-      userCount: project.users ? project.users.length : 0,
-    })
-  );
-  return projectUserCounts;
-};
-
 const ProjectService = {
   getAllProjects,
   createProject,
-  getAllProjectsUserCount,
 };
 
 export default ProjectService;

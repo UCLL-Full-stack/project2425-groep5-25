@@ -1,9 +1,9 @@
-import { ProjectUserCountDto } from "@types";
+import { ProjectOutput } from "@types";
 import React from "react";
 import { formatOptionLabel, getColorName } from "utils/optionFormatters";
 
 type Props = {
-  projects: Array<ProjectUserCountDto>;
+  projects: Array<ProjectOutput>;
 };
 
 const ProjectOverviewTable: React.FC<Props> = ({ projects }: Props) => {

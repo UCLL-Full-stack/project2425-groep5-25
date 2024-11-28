@@ -1,8 +1,7 @@
-export type ProjectUserCountDto = {
+export type ProjectOutput = {
   id?: number;
   name?: string;
   color?: String;
-  userCount?: number;
 };
 
 export type ProjectInput = {
