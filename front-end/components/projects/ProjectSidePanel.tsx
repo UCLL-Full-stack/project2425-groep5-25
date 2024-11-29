@@ -4,8 +4,8 @@ import UserSelectField from "@components/Selects/UserSelectField";
 import ErrorMessage from "@components/shared/ErrorMessage";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { projectService } from "@services/projectServices";
-import { userService } from "@services/userServices";
+import { projectService } from "@services/projectService";
+import { userService } from "@services/userService";
 import styles from "@styles/ProjectSidePanel.module.css";
 import {
   Color,
