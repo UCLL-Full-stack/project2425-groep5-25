@@ -1,7 +1,7 @@
 import ProjectOverviewTable from "@components/projects/ProjectOverviewTable";
 import ProjectSidePanel from "@components/projects/ProjectSidePanel";
-import { projectService } from "@services/ProjectService";
-import { userService } from "@services/UserService";
+import { projectService } from "@services/projectServices";
+import { userService } from "@services/userServices";
 import styles from "@styles/home.module.css";
 import { IdName, ProjectOutput } from "@types";
 import Head from "next/head";
