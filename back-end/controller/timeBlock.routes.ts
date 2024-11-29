@@ -1,5 +1,5 @@
 import express, { NextFunction, Request, Response } from 'express';
-import timeBlockService from '../service/timeBlock.service';
+import { timeBlockService } from '../service/timeBlock.service';
 
 const timeBlockRouter = express.Router();
 

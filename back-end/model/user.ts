@@ -1,4 +1,9 @@
-import { Project as PrismaProject, User as PrismaUser, Workday as PrismaWorkday, WorkSchedule as PrismaWorkSchedule } from '@prisma/client';
+import {
+    Project as PrismaProject,
+    User as PrismaUser,
+    Workday as PrismaWorkday,
+    WorkSchedule as PrismaWorkSchedule,
+} from '@prisma/client';
 import { Role } from '../types';
 import { ModelBase } from './modelBase';
 import { Project } from './project';
@@ -131,7 +136,7 @@ export class User extends ModelBase {
         projects,
         workDays,
         createdDate,
-        updatedDate
+        updatedDate,
     }: PrismaUser & {
         workSchedule: PrismaWorkSchedule;
         projects: PrismaProject[];

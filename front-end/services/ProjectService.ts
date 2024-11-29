@@ -20,9 +20,7 @@ const createProject = async (formData: ProjectOutput) => {
   });
 };
 
-const ProjectService = {
+export const projectService = {
   getAllProjects,
   createProject,
 };
-
-export default ProjectService;

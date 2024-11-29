@@ -20,9 +20,7 @@ const enrollProject = async (formData: ProjectToUserInput) => {
   });
 };
 
-const UserService = {
+export const userService = {
   getAllUsersIdName,
   enrollProject,
 };
-
-export default UserService;

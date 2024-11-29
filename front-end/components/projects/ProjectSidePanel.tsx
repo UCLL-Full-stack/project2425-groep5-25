@@ -4,8 +4,8 @@ import UserSelectField from "@components/Selects/UserSelectField";
 import ErrorMessage from "@components/shared/ErrorMessage";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import ProjectService from "@services/ProjectService";
-import UserService from "@services/UserService";
+import { projectService } from "@services/ProjectService";
+import { userService } from "@services/UserService";
 import styles from "@styles/ProjectSidePanel.module.css";
 import {
   Color,
@@ -76,7 +76,7 @@ const ProjectSidePanel: React.FC<Props> = ({
     try {
       const projectFormData: ProjectInput = { name: name!, color: color! };
       const [projectResponse] = await Promise.all([
-        ProjectService.createProject(projectFormData),
+        projectService.createProject(projectFormData),
       ]);
       const [projectJson] = await Promise.all([projectResponse.json()]);
 
@@ -91,7 +91,7 @@ const ProjectSidePanel: React.FC<Props> = ({
           userIds,
         };
         const [userResponse] = await Promise.all([
-          UserService.enrollProject(userFormData),
+          userService.enrollProject(userFormData),
         ]);
         const [userJson] = await Promise.all([userResponse.json()]);
 

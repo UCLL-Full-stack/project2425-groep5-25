@@ -2,23 +2,18 @@ import bcrypt from 'bcrypt';
 import { projectNames } from '../constants';
 import { User } from '../model/user';
 import { WorkSchedule } from '../model/workSchedule';
-import projectDb from '../repository/project.db';
-import { default as userDB, default as userDb } from '../repository/user.db';
+import { projectDb } from '../repository/project.db';
 import { generateJwtToken } from '../repository/utils/jwt';
-import workScheduleDb from '../repository/workSchedule.db';
-import {
-    AuthenticationResponse,
-    IdName,
-    ProjectToUserInput,
-    UserInput
-} from '../types';
+import { workScheduleDb } from '../repository/workSchedule.db';
+import { AuthenticationResponse, IdName, ProjectToUserInput, UserInput } from '../types';
+import { userDb } from '../repository/user.db';
 
 const getAllUsers = async (): Promise<User[]> => {
-    return userDB.getAllUsers();
+    return userDb.getAllUsers();
 };
 
 const getAllUsersIdName = async (): Promise<IdName[]> => {
-    const users = await userDB.getAllUsers();
+    const users = await userDb.getAllUsers();
     return users.map((user) => ({
         id: user.getId(),
         name: `${user.getFirstName()} ${user.getLastName()}`,
@@ -26,7 +21,7 @@ const getAllUsersIdName = async (): Promise<IdName[]> => {
 };
 
 const getUserByUserName = async ({ userName }: { userName: string }): Promise<User> => {
-    const user = await userDB.getUserByUserName({ userName });
+    const user = await userDb.getUserByUserName({ userName });
     if (!user) {
         throw new Error(`User with username <${userName}> does not exist.`);
     }
@@ -34,7 +29,7 @@ const getUserByUserName = async ({ userName }: { userName: string }): Promise<Us
 };
 
 const getUserById = async ({ id }: { id: number }): Promise<User> => {
-    const user = await userDB.getUserById({ id });
+    const user = await userDb.getUserById({ id });
     if (!user) {
         throw new Error(`User with id <${id}> does not exist.`);
     }
@@ -48,7 +43,7 @@ const getUsersByIds = async ({ userIds }: { userIds: number[] }): Promise<User[]
 const userSignUp = async (userInput: UserInput): Promise<User> => {
     const { userName, passWord, firstName, lastName, email, role } = userInput;
 
-    const existingUser = await userDB.getUserByUserName({ userName });
+    const existingUser = await userDb.getUserByUserName({ userName });
     if (existingUser) throw new Error(`User with username <${userName}> already exists.`);
 
     const defaultProject = await projectDb.getProjectByName({ name: projectNames.DEFAULT_PROJECT });
@@ -70,7 +65,7 @@ const userSignUp = async (userInput: UserInput): Promise<User> => {
         workDays: [],
     });
 
-    return await userDB.createUser(newUser);
+    return await userDb.createUser(newUser);
 };
 
 const userAuthenticate = async (userInput: UserInput): Promise<AuthenticationResponse> => {
@@ -95,13 +90,16 @@ const addProjectToUsers = async (projectToUserInput: ProjectToUserInput): Promis
     const project = await projectDb.getProjectById({ id: projectId });
     if (!project) throw new Error(`Project with id <${projectId}> doesn't exist.`);
 
-    const enrollmentCheck = await Promise.all(users.map((user) => userDb.checkUserInProject(user, project)));
-    if (enrollmentCheck.includes(true)) throw new Error('Some users are already enrolled in this project.');
-    
-    return await userDB.addProjectToUsers(users, project);
+    const enrollmentCheck = await Promise.all(
+        users.map((user) => userDb.checkUserInProject(user, project))
+    );
+    if (enrollmentCheck.includes(true))
+        throw new Error('Some users are already enrolled in this project.');
+
+    return await userDb.addProjectToUsers(users, project);
 };
 
-export default {
+export const userService = {
     getAllUsers,
     getAllUsersIdName,
     getUserByUserName,

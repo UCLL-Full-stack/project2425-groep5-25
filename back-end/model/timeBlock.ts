@@ -76,7 +76,7 @@ export class TimeBlock extends ModelBase {
         project,
         workDay,
         createdDate,
-        updatedDate
+        updatedDate,
     }: TimeBlockPrisma & { project: ProjectPrisma; workDay: WorkDayPrisma }) {
         return new TimeBlock({
             id,

@@ -53,11 +53,11 @@
  *                 type: string
  *               role:
  *                 type: string
- * 
+ *
  */
 
 import express, { NextFunction, Request, Response } from 'express';
-import projectService from '../service/project.service';
+import { projectService } from '../service/project.service';
 import { ProjectInput } from '../types';
 
 const projectRouter = express.Router();
@@ -149,3 +149,4 @@ projectRouter.post('/', async (req: Request, res: Response, next: NextFunction) 
 });
 
 export { projectRouter };
+

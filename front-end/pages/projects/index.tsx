@@ -1,7 +1,7 @@
 import ProjectOverviewTable from "@components/projects/ProjectOverviewTable";
 import ProjectSidePanel from "@components/projects/ProjectSidePanel";
-import ProjectService from "@services/ProjectService";
-import UserService from "@services/UserService";
+import { projectService } from "@services/ProjectService";
+import { userService } from "@services/UserService";
 import styles from "@styles/home.module.css";
 import { IdName, ProjectOutput } from "@types";
 import Head from "next/head";
@@ -13,13 +13,13 @@ const Home: React.FC = () => {
   const [isSidePanelOpen, setIsSidePanelOpen] = useState<boolean>(false);
 
   const getAllUsersIdName = async () => {
-    const [response] = await Promise.all([UserService.getAllUsersIdName()]);
+    const [response] = await Promise.all([userService.getAllUsersIdName()]);
     const [users] = await Promise.all([response.json()]);
     setUserIdNames(users);
   };
 
   const getAllProjects = async () => {
-    const [response] = await Promise.all([ProjectService.getAllProjects()]);
+    const [response] = await Promise.all([projectService.getAllProjects()]);
     const [projects] = await Promise.all([response.json()]);
     setProjects(projects);
   };

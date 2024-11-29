@@ -5,7 +5,7 @@ export class WorkDay extends ModelBase {
     private expectedHours: number;
     private achievedHours?: number;
     private date: Date;
-    
+
     constructor(workDay: {
         id?: number;
         expectedHours: number;
@@ -42,7 +42,7 @@ export class WorkDay extends ModelBase {
         return this.date;
     }
 
-    validate(workDay: { expectedHours: number; date: Date; }) {
+    validate(workDay: { expectedHours: number; date: Date }) {
         if (workDay.expectedHours < 0)
             throw new Error('Expected hours must be a non-negative number');
         if (!workDay.date) throw new Error('Valid date is required');
@@ -52,7 +52,7 @@ export class WorkDay extends ModelBase {
         return (
             this.expectedHours === workDay.getExpectedHours() &&
             this.achievedHours === workDay.getAchievedHours() &&
-            this.date.getTime() === workDay.getDate().getTime()            
+            this.date.getTime() === workDay.getDate().getTime()
         );
     }
 

@@ -1,5 +1,5 @@
 import express, { NextFunction, Request, Response } from 'express';
-import workDayService from '../service/workDay.service';
+import { workDayService } from '../service/workDay.service';
 
 const workDayRouter = express.Router();
 

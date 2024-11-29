@@ -1,5 +1,5 @@
-import { WorkSchedule } from "../model/workSchedule";
-import database from "./utils/database";
+import { WorkSchedule } from '../model/workSchedule';
+import database from './utils/database';
 
 const createWorkSchedule = async (workSchedule: WorkSchedule): Promise<WorkSchedule> => {
     try {
@@ -12,7 +12,7 @@ const createWorkSchedule = async (workSchedule: WorkSchedule): Promise<WorkSched
                 fridayHours: workSchedule.getFridayHours(),
                 saturdayHours: workSchedule.getSaturdayHours(),
                 sundayHours: workSchedule.getSaturdayHours(),
-            }
+            },
         });
 
         return WorkSchedule.from(workSchedulePrisma);
@@ -22,6 +22,6 @@ const createWorkSchedule = async (workSchedule: WorkSchedule): Promise<WorkSched
     }
 };
 
-export default {
-    createWorkSchedule
+export const workScheduleDb = {
+    createWorkSchedule,
 };

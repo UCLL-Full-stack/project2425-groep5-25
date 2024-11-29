@@ -1,5 +1,5 @@
 import { Project } from '../model/project';
-import projectDb from '../repository/project.db';
+import { projectDb } from '../repository/project.db';
 import { ProjectInput } from '../types';
 
 const getAllProjects = async (): Promise<Project[]> => {
@@ -14,13 +14,13 @@ const createProject = async (projectInput: ProjectInput): Promise<Project> => {
 
     const newProject = new Project({
         name,
-        color
+        color,
     });
 
     return await projectDb.createProject(newProject);
 };
 
-export default {
+export const projectService = {
     getAllProjects,
-    createProject
+    createProject,
 };

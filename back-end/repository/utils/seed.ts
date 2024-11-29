@@ -42,13 +42,13 @@ const main = async () => {
     console.log('Global Project created successfully!');
 
     // Step 4: Generate Projects
-    const availableColors = Object.keys(Color).filter(color => color !== 'Gray');
+    const availableColors = Object.keys(Color).filter((color) => color !== 'Gray');
     const projects = await Promise.all(
         Array.from({ length: 10 }).map(() =>
             prisma.project.create({
                 data: {
                     name: casual.company_name,
-                    color: Color[casual.random_element(availableColors) as keyof typeof Color],                
+                    color: Color[casual.random_element(availableColors) as keyof typeof Color],
                 },
             })
         )

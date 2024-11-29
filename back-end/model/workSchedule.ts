@@ -130,7 +130,7 @@ export class WorkSchedule extends ModelBase {
         }
     }
 
-    static createDefault(): WorkSchedule {        
+    static createDefault(): WorkSchedule {
         return new WorkSchedule({
             mondayHours: 8,
             tuesdayHours: 8,
@@ -138,7 +138,7 @@ export class WorkSchedule extends ModelBase {
             thursdayHours: 8,
             fridayHours: 8,
             saturdayHours: 0,
-            sundayHours: 0
+            sundayHours: 0,
         });
     }
 

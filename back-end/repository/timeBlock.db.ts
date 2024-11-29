@@ -48,6 +48,6 @@ const getAllTimeBlocks = async (): Promise<TimeBlock[]> => {
     }
 };
 
-export default{
-    getAllTimeBlocks
+export const timeBlockDb = {
+    getAllTimeBlocks,
 };

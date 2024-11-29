@@ -1,26 +1,26 @@
-import * as dotenv from 'dotenv';
-import express, { Request, Response, NextFunction } from 'express';
-import cors from 'cors';
 import * as bodyParser from 'body-parser';
+import cors from 'cors';
+import * as dotenv from 'dotenv';
+import express, { NextFunction, Request, Response } from 'express';
+import { expressjwt } from 'express-jwt';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { projectRouter } from './controller/project.routes';
+import { timeBlockRouter } from './controller/timeBlock.routes';
 import { userRouter } from './controller/user.routes';
 import { workDayRouter } from './controller/workDay.routes';
-import { timeBlockRouter } from './controller/timeBlock.routes';
-import { expressjwt } from 'express-jwt';
 import { processEnv } from './env/env';
 
 const app = express();
 dotenv.config();
 
-const publicApiPort = processEnv.getApiPort()
+const publicApiPort = processEnv.getApiPort();
 const publicFrontEndPort = processEnv.getFrontEndPort();
 
 app.use(
-    cors({ 
-        origin: `http://localhost:${publicFrontEndPort}` 
-    }), 
+    cors({
+        origin: `http://localhost:${publicFrontEndPort}`,
+    }),
     bodyParser.json()
 );
 
@@ -38,7 +38,15 @@ app.use(
         secret: processEnv.getJwtSecret(),
         algorithms: ['HS256'],
     }).unless({
-        path: ['/api-docs', /^\/api-docs\/.*/, /^\/users\/.*/, /^\/projects\/.*/, '/users/signup', '/users/login', '/status'],
+        path: [
+            '/api-docs',
+            /^\/api-docs\/.*/,
+            /^\/users\/.*/,
+            /^\/projects\/.*/,
+            '/users/signup',
+            '/users/login',
+            '/status',
+        ],
     })
 );
 
@@ -66,5 +74,7 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 app.listen(publicApiPort, () => {
     console.log(`Time Tracker API Running on port ${publicApiPort}.`);
     console.log(`Swagger running on http://localhost:${publicApiPort}/api-docs.`);
-    console.log(`Check Tokens on https://jwt.io & create secrets here https://jwtsecret.com/generate.`);
+    console.log(
+        `Check Tokens on https://jwt.io & create secrets here https://jwtsecret.com/generate.`
+    );
 });

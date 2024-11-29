@@ -8,7 +8,7 @@ export abstract class ModelBase {
         this.createdDate = base?.createdDate;
         this.updatedDate = base?.updatedDate;
     }
-    
+
     getId(): number | undefined {
         return this.id;
     }

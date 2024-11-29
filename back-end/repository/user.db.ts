@@ -11,7 +11,7 @@ const getAllUsers = async (): Promise<User[]> => {
                 workDays: true,
             },
         });
-        
+
         return usersPrisma.map((x) => User.from(x));
     } catch (error) {
         console.error(error);
@@ -137,11 +137,11 @@ const checkUserInProject = async (user: User, project: Project): Promise<boolean
     }
 };
 
-export default {
+export const userDb = {
     getAllUsers,
     getUserByUserName,
     getUserById,
     createUser,
     addProjectToUsers,
-    checkUserInProject
+    checkUserInProject,
 };

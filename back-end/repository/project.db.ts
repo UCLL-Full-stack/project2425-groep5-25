@@ -27,7 +27,7 @@ const getProjectByName = async ({ name }: { name: string }): Promise<Project | n
 const getProjectById = async ({ id }: { id: number }): Promise<Project | null> => {
     try {
         const projectPrisma = await database.project.findFirst({
-            where: { id }
+            where: { id },
         });
 
         return projectPrisma ? Project.from(projectPrisma) : null;
@@ -43,7 +43,7 @@ const createProject = async (project: Project): Promise<Project> => {
             data: {
                 name: project.getName(),
                 color: project.getColor(),
-            }
+            },
         });
 
         return Project.from(projectPrisma);
@@ -53,9 +53,9 @@ const createProject = async (project: Project): Promise<Project> => {
     }
 };
 
-export default {
+export const projectDb = {
     getAllProjects,
     getProjectByName,
     getProjectById,
-    createProject
+    createProject,
 };

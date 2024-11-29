@@ -11,7 +11,7 @@ const getFrontEndPort = (): number => {
 };
 
 const getDatabaseUrl = (): string => {
-    const value = process.env.DATABASE_URL || 'default_url'; 
+    const value = process.env.DATABASE_URL || 'default_url';
     return value;
 };
 
