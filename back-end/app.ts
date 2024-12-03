@@ -21,7 +21,7 @@ app.use(
     cors({
         origin: `http://localhost:${publicFrontEndPort}`,
     }),
-    bodyParser.json()
+    bodyParser.json(),
 );
 
 app.use('/projects', projectRouter);
@@ -47,7 +47,7 @@ app.use(
             '/users/login',
             '/status',
         ],
-    })
+    }),
 );
 
 const swaggerOpts = {
@@ -75,6 +75,6 @@ app.listen(publicApiPort, () => {
     console.log(`Time Tracker API Running on port ${publicApiPort}.`);
     console.log(`Swagger running on http://localhost:${publicApiPort}/api-docs.`);
     console.log(
-        `Check Tokens on https://jwt.io & create secrets here https://jwtsecret.com/generate.`
+        `Check Tokens on https://jwt.io & create secrets here https://jwtsecret.com/generate.`,
     );
 });

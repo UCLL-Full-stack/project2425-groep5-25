@@ -108,7 +108,7 @@ const addProjectToUsers = async (users: User[], project: Project): Promise<User[
                         projects: true,
                     },
                 });
-            })
+            }),
         );
 
         return updatedPrismaUsers.map((prismaUser) => User.from(prismaUser));

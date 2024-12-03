@@ -91,7 +91,7 @@ const addProjectToUsers = async (projectToUserInput: ProjectToUserInput): Promis
     if (!project) throw new Error(`Project with id <${projectId}> doesn't exist.`);
 
     const enrollmentCheck = await Promise.all(
-        users.map((user) => userDb.checkUserInProject(user, project))
+        users.map((user) => userDb.checkUserInProject(user, project)),
     );
     if (enrollmentCheck.includes(true))
         throw new Error('Some users are already enrolled in this project.');

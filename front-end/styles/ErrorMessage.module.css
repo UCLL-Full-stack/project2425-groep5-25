@@ -1,13 +1,13 @@
 .error-container {
-  background: #fecaca;
-  padding: 0.5rem 1rem;
-  border-radius: 0.25rem;
-  display: flex;
-  gap: 0.25rem;
-  flex-direction: column;
-  color: #991b1b;
+    background: #fecaca;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    display: flex;
+    gap: 0.25rem;
+    flex-direction: column;
+    color: #991b1b;
 }
 
-.error-container>label {
-  font-weight: 600;
+.error-container > label {
+    font-weight: 600;
 }

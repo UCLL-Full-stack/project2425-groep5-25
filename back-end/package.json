@@ -12,8 +12,9 @@
         "test": "jest",
         "start": "nodemon -L app.ts --delay 3",
         "seed": "ts-node repository/utils/seed.ts",
-        "db:create": "npx prisma migrate dev",
-        "db:update": "npx prisma generate"
+        "migrate": "npx prisma migrate dev",
+        "update": "npx prisma generate",
+        "format": "prettier --write ."
     },
     "nodemonConfig": {
         "ext": "ts",
@@ -35,6 +36,7 @@
         "express-jwt": "^8.4.1",
         "helmet": "^7.1.0",
         "jsonwebtoken": "^9.0.2",
+        "prettier": "^3.4.1",
         "swagger-jsdoc": "^6.2.0",
         "swagger-ui-express": "^4.6.0"
     },

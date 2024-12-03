@@ -1,3 +1,3 @@
 export const projectNames = {
-    DEFAULT_PROJECT: 'General'
+    DEFAULT_PROJECT: 'General',
 };

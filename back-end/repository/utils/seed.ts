@@ -27,8 +27,8 @@ const main = async () => {
                     saturdayHours: parseFloat(casual.double(0, 8).toFixed(1)),
                     sundayHours: parseFloat(casual.double(0, 8).toFixed(1)),
                 },
-            })
-        )
+            }),
+        ),
     );
     console.log('WorkSchedules seeded successfully!');
 
@@ -50,8 +50,8 @@ const main = async () => {
                     name: casual.company_name,
                     color: Color[casual.random_element(availableColors) as keyof typeof Color],
                 },
-            })
-        )
+            }),
+        ),
     );
     console.log('Projects seeded successfully!');
 
@@ -76,8 +76,8 @@ const main = async () => {
                         ],
                     },
                 },
-            })
-        )
+            }),
+        ),
     );
     console.log('Users seeded successfully!');
 
@@ -94,10 +94,10 @@ const main = async () => {
                         date: new Date(casual.date('YYYY-MM-DD')).toISOString(),
                         userId: user.id,
                     },
-                })
+                }),
             );
             return Promise.all(userWorkdays);
-        })
+        }),
     );
     console.log('Workdays seeded successfully!');
 
@@ -110,20 +110,20 @@ const main = async () => {
                         prisma.timeBlock.create({
                             data: {
                                 startTime: new Date(
-                                    casual.date('YYYY-MM-DD') + ' ' + casual.time('HH:mm:ss')
+                                    casual.date('YYYY-MM-DD') + ' ' + casual.time('HH:mm:ss'),
                                 ).toISOString(),
                                 endTime: new Date(
-                                    casual.date('YYYY-MM-DD') + ' ' + casual.time('HH:mm:ss')
+                                    casual.date('YYYY-MM-DD') + ' ' + casual.time('HH:mm:ss'),
                                 ).toISOString(),
                                 projectId: projects[casual.integer(0, projects.length - 1)].id,
                                 workDayId: workday.id,
                             },
-                        })
+                        }),
                     );
                     return Promise.all(timeBlockPromises);
-                })
-            )
-        )
+                }),
+            ),
+        ),
     );
     console.log('TimeBlocks seeded successfully!');
 
