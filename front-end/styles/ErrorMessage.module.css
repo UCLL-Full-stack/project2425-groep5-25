@@ -1,12 +1,11 @@
-
 .error-container {
-    background: #FECACA;
+    background: #fecaca;
     padding: 0.5rem 1rem;
     border-radius: 0.25rem;
     display: flex;
     gap: 0.25rem;
     flex-direction: column;
-    color: #991B1B;
+    color: #991b1b;
 }
 
 .error-container > label {

@@ -6,23 +6,41 @@ enum Color {
     Blue = '#0000FF',
     Yellow = '#FFFF00',
     Orange = '#FFA500',
-    Purple = '#800080'
+    Purple = '#800080',
+    Gray = '#000000',
 }
-
-type ProjectInput = {
-    name: string;
-    color: Color;
-    userIds?: number[];
-};
 
 type IdName = {
     id?: number;
     name: string;
-}
-
-export {
-    Role,
-    Color,
-    ProjectInput,
-    IdName
 };
+
+type UserInput = {
+    id?: number;
+    userName?: string;
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+    role?: Role;
+    passWord?: string;
+};
+
+type AuthenticationResponse = {
+    token: string;
+    username: string;
+    fullname: string;
+    role: Role;
+};
+
+type ProjectInput = {
+    id?: number;
+    name?: string;
+    color?: Color;
+};
+
+type ProjectToUserInput = {
+    projectId?: number;
+    userIds?: number[];
+};
+
+export { Role, Color, ProjectInput, IdName, UserInput, AuthenticationResponse, ProjectToUserInput };

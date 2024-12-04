@@ -7,8 +7,18 @@ html {
 
 html,
 body {
-    font-family: Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-        Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        Segoe UI,
+        Roboto,
+        Oxygen,
+        Ubuntu,
+        Cantarell,
+        Fira Sans,
+        Droid Sans,
+        Helvetica Neue,
         sans-serif;
     transition: all 0.3s ease;
     background-color: #f8f9fa;
@@ -120,6 +130,6 @@ input {
 
 /* Navigation */
 .nav-link {
-    padding-bottom: 10px;    
+    padding-bottom: 10px;
     transition: all 0.3s ease;
 }

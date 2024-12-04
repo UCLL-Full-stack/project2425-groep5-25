@@ -53,11 +53,11 @@
  *                 type: string
  *               role:
  *                 type: string
- * 
+ *
  */
 
 import express, { NextFunction, Request, Response } from 'express';
-import projectService from '../service/project.service';
+import { projectService } from '../service/project.service';
 import { ProjectInput } from '../types';
 
 const projectRouter = express.Router();
@@ -104,18 +104,39 @@ projectRouter.get('/', async (req: Request, res: Response, next: NextFunction) =
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/ProjectInput'
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: Name of the project
+ *                 example: "Project Alpha"
+ *               color:
+ *                 type: string
+ *                 description: Color associated with the project
+ *                 example: "Blue"
+ *             required:
+ *               - name
+ *               - color
  *     responses:
  *       201:
  *         description: Project created successfully
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/ProjectDto'
- *       400:
- *         description: Invalid input data
- *       500:
- *         description: Error occurred while creating project
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: number
+ *                   description: The auto-generated ID of the project
+ *                   example: 1
+ *                 name:
+ *                   type: string
+ *                   description: Name of the project
+ *                   example: "Project Alpha"
+ *                 color:
+ *                   type: string
+ *                   description: Color associated with the project
+ *                   example: "Blue"
  */
 projectRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
