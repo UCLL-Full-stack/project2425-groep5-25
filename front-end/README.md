@@ -2,7 +2,9 @@
 
 ## Environment File Requirements
 
-The frontend requires an environment file (.env) to configure the connection to the backend API and other settings, such as frontend ports. Below are the necessary environment variables that need to be set in the frontend .env file.
+The frontend requires an environment file (.env) to configure the connection to the backend API and
+other settings, such as frontend ports. Below are the necessary environment variables that need to
+be set in the frontend .env file.
 
 # Ports
 
