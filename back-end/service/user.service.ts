@@ -3,10 +3,10 @@ import { projectNames } from '../constants';
 import { User } from '../model/user';
 import { WorkSchedule } from '../model/workSchedule';
 import { projectDb } from '../repository/project.db';
+import { userDb } from '../repository/user.db';
 import { generateJwtToken } from '../repository/utils/jwt';
 import { workScheduleDb } from '../repository/workSchedule.db';
 import { AuthenticationResponse, IdName, ProjectToUserInput, UserInput } from '../types';
-import { userDb } from '../repository/user.db';
 
 const getAllUsers = async (): Promise<User[]> => {
     return userDb.getAllUsers();
