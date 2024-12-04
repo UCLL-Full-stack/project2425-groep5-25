@@ -29,12 +29,20 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Build the project
+    - name: Build frontend
       if: matrix.build-mode == 'manual'
       run: |
-        echo "Installing dependencies and building the project..."
+        cd front-end
         npm install
         npm run build
+
+    - name: Build backend
+      if: matrix.build-mode == 'manual'
+      run: |
+        cd back-end
+        npm install
+        npm run build
+
 
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v3
