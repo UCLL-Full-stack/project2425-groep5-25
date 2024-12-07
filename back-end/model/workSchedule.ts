@@ -1,5 +1,6 @@
-import { WorkSchedule as PrismaWorkSchedule } from '@prisma/client';
+import { User as PrismaUser, WorkSchedule as PrismaWorkSchedule } from '@prisma/client';
 import { ModelBase } from './modelBase';
+import { User } from './user';
 
 export class WorkSchedule extends ModelBase {
     private mondayHours: number;
@@ -9,6 +10,7 @@ export class WorkSchedule extends ModelBase {
     private fridayHours: number;
     private saturdayHours: number;
     private sundayHours: number;
+    private user: User;
 
     constructor(workSchedule: {
         id?: number;
@@ -19,6 +21,7 @@ export class WorkSchedule extends ModelBase {
         fridayHours: number;
         saturdayHours: number;
         sundayHours: number;
+        user: User;
         createdDate?: Date;
         updatedDate?: Date;
     }) {
@@ -36,6 +39,7 @@ export class WorkSchedule extends ModelBase {
         this.fridayHours = workSchedule.fridayHours;
         this.saturdayHours = workSchedule.saturdayHours;
         this.sundayHours = workSchedule.sundayHours;
+        this.user = workSchedule.user;
     }
 
     getId(): number | undefined {
@@ -70,6 +74,10 @@ export class WorkSchedule extends ModelBase {
         return this.sundayHours;
     }
 
+    getUser(): User {
+        return this.user;
+    }
+
     validate(workSchedule: {
         mondayHours: number;
         tuesdayHours: number;
@@ -78,6 +86,7 @@ export class WorkSchedule extends ModelBase {
         fridayHours: number;
         saturdayHours: number;
         sundayHours: number;
+        user: User;
     }) {
         if (workSchedule.mondayHours < 0)
             throw new Error('Monday hours must be a non-negative number');
@@ -93,6 +102,21 @@ export class WorkSchedule extends ModelBase {
             throw new Error('Saturday hours must be a non-negative number');
         if (workSchedule.sundayHours < 0)
             throw new Error('Sunday hours must be a non-negative number');
+
+        if (!workSchedule.user || !workSchedule.user.getId()) {
+            throw new Error('User must be valid');
+        }
+
+        const totalHours =
+            workSchedule.mondayHours +
+            workSchedule.tuesdayHours +
+            workSchedule.wednesdayHours +
+            workSchedule.thursdayHours +
+            workSchedule.fridayHours +
+            workSchedule.saturdayHours +
+            workSchedule.sundayHours;
+
+        if (totalHours > 40) throw new Error('Total work hours cannot exceed 40 hours per week');
     }
 
     equals(workSchedule: WorkSchedule): boolean {
@@ -103,43 +127,9 @@ export class WorkSchedule extends ModelBase {
             this.thursdayHours === workSchedule.getThursdayHours() &&
             this.fridayHours === workSchedule.getFridayHours() &&
             this.saturdayHours === workSchedule.getSaturdayHours() &&
-            this.sundayHours === workSchedule.getSundayHours()
+            this.sundayHours === workSchedule.getSundayHours() &&
+            this.user.equals(workSchedule.getUser())
         );
-    }
-
-    getExpectedHoursForDate(date: Date): number {
-        const dayOfWeek = date.getDay();
-
-        switch (dayOfWeek) {
-            case 0: // Sunday
-                return this.sundayHours;
-            case 1: // Monday
-                return this.mondayHours;
-            case 2: // Tuesday
-                return this.tuesdayHours;
-            case 3: // Wednesday
-                return this.wednesdayHours;
-            case 4: // Thursday
-                return this.thursdayHours;
-            case 5: // Friday
-                return this.fridayHours;
-            case 6: // Saturday
-                return this.saturdayHours;
-            default:
-                throw new Error('Invalid day of the week');
-        }
-    }
-
-    static createDefault(): WorkSchedule {
-        return new WorkSchedule({
-            mondayHours: 8,
-            tuesdayHours: 8,
-            wednesdayHours: 8,
-            thursdayHours: 8,
-            fridayHours: 8,
-            saturdayHours: 0,
-            sundayHours: 0,
-        });
     }
 
     static from({
@@ -151,9 +141,10 @@ export class WorkSchedule extends ModelBase {
         fridayHours,
         saturdayHours,
         sundayHours,
+        user,
         createdDate,
         updatedDate,
-    }: PrismaWorkSchedule) {
+    }: PrismaWorkSchedule & { user: PrismaUser }): WorkSchedule {
         return new WorkSchedule({
             id,
             mondayHours,
@@ -163,6 +154,7 @@ export class WorkSchedule extends ModelBase {
             fridayHours,
             saturdayHours,
             sundayHours,
+            user: User.from(user),
             createdDate: createdDate || undefined,
             updatedDate: updatedDate || undefined,
         });

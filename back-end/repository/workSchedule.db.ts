@@ -12,7 +12,9 @@ const createWorkSchedule = async (workSchedule: WorkSchedule): Promise<WorkSched
                 fridayHours: workSchedule.getFridayHours(),
                 saturdayHours: workSchedule.getSaturdayHours(),
                 sundayHours: workSchedule.getSaturdayHours(),
+                user: { connect: { id: workSchedule.getUser().getId() } },
             },
+            include: { user: true },
         });
 
         return WorkSchedule.from(workSchedulePrisma);

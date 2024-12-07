@@ -1,24 +1,21 @@
 import {
-    Project as ProjectPrisma,
-    TimeBlock as TimeBlockPrisma,
-    Workday as WorkDayPrisma,
+    Project as PrismaProject,
+    TimeBlock as PrismaTimeBlock,
+    User as PrismaUser,
 } from '@prisma/client';
 import { ModelBase } from './modelBase';
 import { Project } from './project';
-import { WorkDay } from './workDay';
 
 export class TimeBlock extends ModelBase {
     private startTime: Date;
     private endTime?: Date;
     private project: Project;
-    private workDay: WorkDay;
 
     constructor(timeBlock: {
         id?: number;
         startTime: Date;
         endTime?: Date;
         project: Project;
-        workDay: WorkDay;
         createdDate?: Date;
         updatedDate?: Date;
     }) {
@@ -32,7 +29,6 @@ export class TimeBlock extends ModelBase {
         this.startTime = timeBlock.startTime;
         this.endTime = timeBlock.endTime;
         this.project = timeBlock.project;
-        this.workDay = timeBlock.workDay;
     }
 
     getId(): number | undefined {
@@ -51,21 +47,22 @@ export class TimeBlock extends ModelBase {
         return this.project;
     }
 
-    getWorkDay(): WorkDay {
-        return this.workDay;
-    }
-
-    validate(timeBlock: { startTime: Date; project: Project; workDay: WorkDay }) {
+    validate(timeBlock: { startTime: Date; endTime?: Date; project: Project }) {
         if (!timeBlock.startTime) throw new Error('Start time is required');
         if (!timeBlock.project) throw new Error('Project is required');
-        if (!timeBlock.workDay) throw new Error('WorkDay is required');
+
+        if (timeBlock.endTime !== undefined) {
+            if (timeBlock.startTime > timeBlock.endTime) {
+                throw new Error('Start date cannot be after end date');
+            }
+        }
     }
 
     equals(timeBlock: TimeBlock): boolean {
         return (
-            this.startTime.getTime() === timeBlock.getStartTime().getTime() &&
-            this.project.equals(timeBlock.getProject()) &&
-            this.workDay.equals(timeBlock.getWorkDay())
+            this.startTime === timeBlock.getStartTime() &&
+            this.endTime === timeBlock.getEndTime() &&
+            this.project.equals(timeBlock.getProject())
         );
     }
 
@@ -74,16 +71,14 @@ export class TimeBlock extends ModelBase {
         startTime,
         endTime,
         project,
-        workDay,
         createdDate,
         updatedDate,
-    }: TimeBlockPrisma & { project: ProjectPrisma; workDay: WorkDayPrisma }) {
+    }: PrismaTimeBlock & { project: PrismaProject & { users: PrismaUser[] } }): TimeBlock {
         return new TimeBlock({
             id,
             startTime,
             endTime: endTime ?? undefined,
             project: Project.from(project),
-            workDay: WorkDay.from(workDay),
             createdDate: createdDate || undefined,
             updatedDate: updatedDate || undefined,
         });
