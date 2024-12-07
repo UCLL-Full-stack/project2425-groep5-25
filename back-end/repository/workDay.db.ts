@@ -22,7 +22,29 @@ import database from './utils/database';
 
 const getAllWorkDays = async (): Promise<WorkDay[]> => {
     try {
-        const workDaysPrisma = await database.workday.findMany();
+        const workDaysPrisma = await database.workday.findMany({
+            include: {
+                user: {
+                    // Include 'user' relation and 'workSchedule' for the user
+                    include: {
+                        workSchedule: true, // Include the 'workSchedule' relation for the user
+                    },
+                },
+                timeBlocks: {
+                    // Include timeBlocks and its 'user' and 'project'
+                    include: {
+                        user: {
+                            // Include 'user' inside 'timeBlocks'
+                            include: {
+                                workSchedule: true, // Include the 'workSchedule' for the user
+                            },
+                        },
+                        project: true, // Include the related 'project' in 'timeBlocks'
+                    },
+                },
+            },
+        });
+
         return workDaysPrisma.map((x) => WorkDay.from(x));
     } catch (error) {
         console.error(error);

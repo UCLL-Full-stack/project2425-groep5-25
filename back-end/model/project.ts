@@ -1,4 +1,8 @@
-import { Project as PrismaProject } from '@prisma/client';
+import {
+    Project as PrismaProject,
+    User as UserPrisma,
+    WorkSchedule as PrismaWorkSchedule,
+} from '@prisma/client';
 import { Color } from '../types';
 import { ModelBase } from './modelBase';
 import { User } from './user';
@@ -6,11 +10,13 @@ import { User } from './user';
 export class Project extends ModelBase {
     private name: string;
     private color: Color;
+    private users?: User[];
 
     constructor(project: {
         id?: number;
         name: string;
         color: Color;
+        users?: User[];
         createdDate?: Date;
         updatedDate?: Date;
     }) {
@@ -23,6 +29,7 @@ export class Project extends ModelBase {
 
         this.name = project.name;
         this.color = project.color;
+        this.users = project.users;
     }
 
     getId(): number | undefined {
@@ -57,11 +64,19 @@ export class Project extends ModelBase {
         return this.name === project.getName() && this.color === project.getColor();
     }
 
-    static from({ id, name, color, createdDate, updatedDate }: PrismaProject) {
+    static from({
+        id,
+        name,
+        color,
+        createdDate,
+        updatedDate,
+        users,
+    }: PrismaProject & { users?: (UserPrisma & { workSchedule: PrismaWorkSchedule })[] }) {
         return new Project({
             id,
             name,
             color: color as Color,
+            users: users.map((user) => User.from(user)),
             createdDate: createdDate || undefined,
             updatedDate: updatedDate || undefined,
         });

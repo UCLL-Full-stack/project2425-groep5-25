@@ -33,3 +33,24 @@ export type ProjectToUserInput = {
     projectId?: number;
     userIds?: number[];
 };
+
+export type TimeBlockDto = {
+    id?: number;
+    startTime: Date;
+    endTime: Date;
+    project: ProjectDto;
+    workDay: WorkDayDto;
+};
+
+export type ProjectDto = {
+    id?: number;
+    name: string;
+    color: Color;
+};
+
+export type WorkDayDto = {
+    id?: number;
+    date: Date;
+    expectedHours: number;
+    achievedHours: number;
+};

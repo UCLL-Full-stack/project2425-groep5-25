@@ -3,7 +3,12 @@ import database from './utils/database';
 
 const getAllProjects = async (): Promise<Project[]> => {
     try {
-        const projectsPrisma = await database.project.findMany();
+        const projectsPrisma = await database.project.findMany({
+            include: {
+                users: { include: { workSchedule: true } },
+            },
+        });
+
         return projectsPrisma.map((x) => Project.from(x));
     } catch (error) {
         console.error(error);
@@ -15,6 +20,9 @@ const getProjectByName = async ({ name }: { name: string }): Promise<Project | n
     try {
         const projectPrisma = await database.project.findFirst({
             where: { name },
+            include: {
+                users: { include: { workSchedule: true } },
+            },
         });
 
         return projectPrisma ? Project.from(projectPrisma) : null;
@@ -28,6 +36,9 @@ const getProjectById = async ({ id }: { id: number }): Promise<Project | null> =
     try {
         const projectPrisma = await database.project.findFirst({
             where: { id },
+            include: {
+                users: { include: { workSchedule: true } },
+            },
         });
 
         return projectPrisma ? Project.from(projectPrisma) : null;

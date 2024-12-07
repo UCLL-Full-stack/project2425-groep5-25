@@ -2,8 +2,39 @@ import { PrismaClient } from '@prisma/client';
 import casual from 'casual';
 import { projectNames } from '../../constants';
 import { Color, Role } from '../../types';
+import { calculateAchievedHours } from './workHours';
 
 const prisma = new PrismaClient();
+
+const generateDateGoingBack = (daysBack: number): string => {
+    const today = new Date();
+    today.setDate(today.getDate() - daysBack);
+    return today.toISOString().split('T')[0]; // Only return the date part (YYYY-MM-DD)
+};
+
+const generateWeekdayWorkday = (index: number, takenDates: Set<string>): string => {
+    let daysBack = index;
+    while (true) {
+        const date = generateDateGoingBack(daysBack);
+        const dayOfWeek = new Date(date).getDay();
+
+        // Skip weekends (0: Sunday, 6: Saturday)
+        if (dayOfWeek === 0 || dayOfWeek === 6) {
+            daysBack++;
+            continue;
+        }
+
+        // Check if the date has already been taken
+        if (takenDates.has(date)) {
+            daysBack++;
+            continue;
+        }
+
+        // Mark this date as taken and return it in ISO-8601 format
+        takenDates.add(date);
+        return new Date(date).toISOString(); // Ensure full ISO-8601 DateTime
+    }
+};
 
 const main = async () => {
     // Step 1: Clean the database
@@ -19,13 +50,13 @@ const main = async () => {
         Array.from({ length: 20 }).map(() =>
             prisma.workSchedule.create({
                 data: {
-                    mondayHours: parseFloat(casual.double(0, 8).toFixed(1)),
-                    tuesdayHours: parseFloat(casual.double(0, 8).toFixed(1)),
-                    wednesdayHours: parseFloat(casual.double(0, 8).toFixed(1)),
-                    thursdayHours: parseFloat(casual.double(0, 8).toFixed(1)),
-                    fridayHours: parseFloat(casual.double(0, 8).toFixed(1)),
-                    saturdayHours: parseFloat(casual.double(0, 8).toFixed(1)),
-                    sundayHours: parseFloat(casual.double(0, 8).toFixed(1)),
+                    mondayHours: 8,
+                    tuesdayHours: 8,
+                    wednesdayHours: 8,
+                    thursdayHours: 8,
+                    fridayHours: 8,
+                    saturdayHours: 0,
+                    sundayHours: 0,
                 },
             }),
         ),
@@ -81,51 +112,65 @@ const main = async () => {
     );
     console.log('Users seeded successfully!');
 
-    // Step 6: Generate Workdays
+    // Step 6: Generate Workdays (Going Back from Today)
     const workdays = await Promise.all(
         users.map((user) => {
-            const userWorkdays = Array.from({ length: 45 }).map(() =>
-                prisma.workday.create({
-                    data: {
-                        expectedHours: parseFloat(casual.double(0, 8).toFixed(1)),
-                        achievedHours: casual.boolean
-                            ? parseFloat(casual.double(0, 8).toFixed(1))
-                            : null,
-                        date: new Date(casual.date('YYYY-MM-DD')).toISOString(),
-                        userId: user.id,
-                    },
+            const takenDates = new Set<string>(); // Store unique dates for this user
+            return Promise.all(
+                Array.from({ length: 5 }).map((_, index) => {
+                    return prisma.workday.create({
+                        data: {
+                            expectedHours: 8,
+                            achievedHours: 0,
+                            date: generateWeekdayWorkday(index, takenDates),
+                            userId: user.id,
+                        },
+                    });
                 }),
             );
-            return Promise.all(userWorkdays);
         }),
     );
     console.log('Workdays seeded successfully!');
 
-    // Step 7: Generate TimeBlocks
-    const timeBlocks = await Promise.all(
-        workdays.map((userWorkdays) =>
-            Promise.all(
-                userWorkdays.map((workday) => {
-                    const timeBlockPromises = Array.from({ length: casual.integer(1, 3) }).map(() =>
-                        prisma.timeBlock.create({
-                            data: {
-                                startTime: new Date(
-                                    casual.date('YYYY-MM-DD') + ' ' + casual.time('HH:mm:ss'),
-                                ).toISOString(),
-                                endTime: new Date(
-                                    casual.date('YYYY-MM-DD') + ' ' + casual.time('HH:mm:ss'),
-                                ).toISOString(),
-                                projectId: projects[casual.integer(0, projects.length - 1)].id,
-                                workDayId: workday.id,
-                            },
-                        }),
+    // Step 7: Generate TimeBlocks and update achievedHours for each Workday
+    for (const userWorkdays of workdays) {
+        for (const workday of userWorkdays) {
+            const timeBlocks = await Promise.all(
+                Array.from({ length: casual.integer(1, 3) }).map(() => {
+                    const duration = casual.integer(90, 150) * 60000;
+                    const startTime = new Date(
+                        casual.date('YYYY-MM-DD') + ' ' + casual.time('HH:mm:ss'),
                     );
-                    return Promise.all(timeBlockPromises);
+                    const endTime = new Date(startTime.getTime() + duration);
+                    return prisma.timeBlock.create({
+                        data: {
+                            startTime: startTime.toISOString(),
+                            endTime: endTime.toISOString(),
+                            projectId: projects[casual.integer(0, projects.length - 1)].id,
+                            workDayId: workday.id,
+                        },
+                    });
                 }),
-            ),
-        ),
-    );
-    console.log('TimeBlocks seeded successfully!');
+            );
+
+            // Map TimeBlocks to a SimpleTimeBlock structure
+            const simpleTimeBlocks = timeBlocks
+                .filter((block) => block.endTime !== null)
+                .map((block) => ({
+                    startTime: new Date(block.startTime),
+                    endTime: new Date(block.endTime!),
+                }));
+
+            const achievedHours = calculateAchievedHours(simpleTimeBlocks);
+
+            await prisma.workday.update({
+                where: { id: workday.id },
+                data: { achievedHours },
+            });
+        }
+    }
+
+    console.log('TimeBlocks and Workday achievedHours seeded successfully!');
 
     console.log('Database seeded successfully!');
 };

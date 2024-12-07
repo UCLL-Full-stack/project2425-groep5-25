@@ -43,4 +43,24 @@ type ProjectToUserInput = {
     userIds?: number[];
 };
 
-export { Role, Color, ProjectInput, IdName, UserInput, AuthenticationResponse, ProjectToUserInput };
+type TimeBlockInput = {
+    startDate?: Date;
+    endDate?: Date;
+};
+
+type GenerateJwtTokenInput = {
+    userId: number;
+    role: Role;
+};
+
+export {
+    AuthenticationResponse,
+    Color,
+    GenerateJwtTokenInput,
+    IdName,
+    ProjectInput,
+    ProjectToUserInput,
+    Role,
+    TimeBlockInput,
+    UserInput,
+};

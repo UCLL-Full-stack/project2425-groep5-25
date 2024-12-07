@@ -1,16 +1,28 @@
-import { Workday as PrismaWorkday } from '@prisma/client';
+import {
+    Project as PrismaProject,
+    TimeBlock as PrismaTimeBlock,
+    User as UserPrisma,
+    Workday as PrismaWorkday,
+    WorkSchedule as PrismaWorkSchedule,
+} from '@prisma/client';
 import { ModelBase } from './modelBase';
+import { TimeBlock } from './timeBlock';
+import { User } from './user';
 
 export class WorkDay extends ModelBase {
     private expectedHours: number;
     private achievedHours?: number;
     private date: Date;
+    private user: User;
+    private timeBlocks?: TimeBlock[];
 
     constructor(workDay: {
         id?: number;
         expectedHours: number;
         achievedHours?: number;
         date: Date;
+        user: User;
+        timeBlocks?: TimeBlock[];
         createdDate?: Date;
         updatedDate?: Date;
     }) {
@@ -24,6 +36,8 @@ export class WorkDay extends ModelBase {
         this.expectedHours = workDay.expectedHours;
         this.achievedHours = workDay.achievedHours;
         this.date = workDay.date;
+        this.user = workDay.user;
+        this.timeBlocks = workDay.timeBlocks;
     }
 
     getId(): number | undefined {
@@ -40,6 +54,14 @@ export class WorkDay extends ModelBase {
 
     getDate(): Date {
         return this.date;
+    }
+
+    getUser(): User {
+        return this.user;
+    }
+
+    getTimeBlocks(): TimeBlock[] | undefined {
+        return this.timeBlocks;
     }
 
     validate(workDay: { expectedHours: number; date: Date }) {
@@ -61,14 +83,24 @@ export class WorkDay extends ModelBase {
         expectedHours,
         achievedHours,
         date,
+        user,
+        timeBlocks,
         createdDate,
         updatedDate,
-    }: PrismaWorkday) {
+    }: PrismaWorkday & {
+        user: UserPrisma & { workSchedule: PrismaWorkSchedule };
+        timeBlocks: (PrismaTimeBlock & {
+            user: UserPrisma & { workSchedule: PrismaWorkSchedule };
+            project: PrismaProject;
+        })[];
+    }) {
         return new WorkDay({
             id,
             expectedHours,
             achievedHours: achievedHours ?? undefined,
             date,
+            user: User.from(user),
+            timeBlocks: timeBlocks.map((timeBlock) => TimeBlock.from(timeBlock)),
             createdDate: createdDate || undefined,
             updatedDate: updatedDate || undefined,
         });

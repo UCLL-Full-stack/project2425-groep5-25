@@ -6,6 +6,7 @@ const getAllProjects = async () => {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
+            authorization: `Bearer ${localStorage.getItem('token')}`,
         },
     });
 };
@@ -15,6 +16,7 @@ const createProject = async (formData: ProjectOutput) => {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            authorization: `Bearer ${localStorage.getItem('token')}`,
         },
         body: JSON.stringify(formData),
     });

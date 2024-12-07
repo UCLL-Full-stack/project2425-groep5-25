@@ -1,38 +1,6 @@
 import { TimeBlock } from '../model/timeBlock';
 import database from './utils/database';
 
-// const getTimeBlocksFromUser = async ({ userId }: { userId: number }): Promise<TimeBlock[]> => {
-//     try {
-//         const user = await userRepository.getUserById({ id: userId });
-//         if (!user) throw new NotFoundError("User not found");
-
-//         const timeBlocks = user.getWorkDays()
-//             .flatMap((workDay: WorkDay) => workDay.getTimeBlocks());
-
-//         return timeBlocks;
-//     } catch (error) {
-//         throw new Error('Database error. See server log for details');
-//     }
-// };
-
-// const getRunningTimeBlock = async ({ userId }: { userId: number }): Promise<TimeBlock | null> => {
-//     try {
-//         const user = await userRepository.getUserById({ id: userId });
-//         if (!user) throw new NotFoundError("User not found");
-
-//         const timeBlocks = user.getWorkDays()
-//             .flatMap((workDay: WorkDay) => workDay.getTimeBlocks());
-
-//         return timeBlocks.find(timeBlock => timeBlock.getEndTime() === undefined) || null;
-//     } catch (error) {
-//         throw new Error('Database error. See server log for details');
-//     }
-// };
-
-// const createTimeBlock = ({ timeBlock }: { timeBlock: TimeBlock }): void => {
-//     console.log(timeBlock);
-// };
-
 const getAllTimeBlocks = async (): Promise<TimeBlock[]> => {
     try {
         const timeBlocksPrisma = await database.timeBlock.findMany({
@@ -48,6 +16,61 @@ const getAllTimeBlocks = async (): Promise<TimeBlock[]> => {
     }
 };
 
+const getWorkdaysByDateRange = async (startDate: Date, endDate: Date): Promise<TimeBlock[]> => {
+    try {
+        const timeBlocksPrisma = await database.timeBlock.findMany({
+            where: {
+                workDay: {
+                    date: {
+                        gte: startDate,
+                        lte: endDate,
+                    },
+                },
+            },
+            include: {
+                project: true,
+                workDay: true,
+            },
+        });
+
+        return timeBlocksPrisma.map((x) => TimeBlock.from(x));
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
+const getWorkdaysByDateRangeFromUser = async (
+    userId: number,
+    startDate: Date,
+    endDate: Date,
+): Promise<TimeBlock[]> => {
+    try {
+        const timeBlocksPrisma = await database.timeBlock.findMany({
+            where: {
+                workDay: {
+                    userId: userId,
+                    date: {
+                        gte: startDate,
+                        lte: endDate,
+                    },
+                },
+            },
+            include: {
+                project: true,
+                workDay: true,
+            },
+        });
+
+        return timeBlocksPrisma.map((x) => TimeBlock.from(x));
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
 export const timeBlockDb = {
     getAllTimeBlocks,
+    getWorkdaysByDateRange,
+    getWorkdaysByDateRangeFromUser,
 };

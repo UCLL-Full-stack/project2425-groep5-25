@@ -7,8 +7,6 @@ const getAllUsers = async (): Promise<User[]> => {
         const usersPrisma = await database.user.findMany({
             include: {
                 workSchedule: true,
-                projects: true,
-                workDays: true,
             },
         });
 
@@ -25,8 +23,6 @@ const getUserByUserName = async ({ userName }: { userName: string }): Promise<Us
             where: { userName },
             include: {
                 workSchedule: true,
-                projects: true,
-                workDays: true,
             },
         });
 
@@ -43,8 +39,6 @@ const getUserById = async ({ id }: { id: number }): Promise<User | null> => {
             where: { id },
             include: {
                 workSchedule: true,
-                projects: true,
-                workDays: true,
             },
         });
 
@@ -68,17 +62,9 @@ const createUser = async (user: User): Promise<User> => {
                 workSchedule: {
                     connect: { id: user.getWorkSchedule().getId() },
                 },
-                projects: {
-                    connect: user.getProjects().map((x) => ({ id: x.getId() })),
-                },
-                workDays: {
-                    connect: user.getWorkDays().map((x) => ({ id: x.getId() })),
-                },
             },
             include: {
                 workSchedule: true,
-                projects: true,
-                workDays: true,
             },
         });
 

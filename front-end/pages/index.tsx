@@ -13,13 +13,13 @@ const Home: React.FC = () => {
             <main className={styles.main}>
                 <span>
                     {/* <Image
-            src="/images/Logo-Icon.png"
-            alt="Time Tracker Logo"
-            className={styles.vercelLogo}
-            width={125}
-            height={125}
-            priority
-          /> */}
+                        src="/images/Logo-Icon.png"
+                        alt="Time Tracker Logo"
+                        className={styles.vercelLogo}
+                        width={125}
+                        height={125}
+                        priority
+                    /> */}
                     <h1>Welcome!</h1>
                 </span>
 

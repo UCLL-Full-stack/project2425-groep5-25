@@ -24,15 +24,6 @@ app.use(
     bodyParser.json(),
 );
 
-app.use('/projects', projectRouter);
-app.use('/users', userRouter);
-app.use('/workdays', workDayRouter);
-app.use('/timeblocks', timeBlockRouter);
-
-app.get('/status', (req, res) => {
-    res.json({ message: 'Time Tracker API Running...' });
-});
-
 app.use(
     expressjwt({
         secret: processEnv.getJwtSecret(),
@@ -49,6 +40,15 @@ app.use(
         ],
     }),
 );
+
+app.use('/projects', projectRouter);
+app.use('/users', userRouter);
+app.use('/workdays', workDayRouter);
+app.use('/timeblocks', timeBlockRouter);
+
+app.get('/status', (req, res) => {
+    res.json({ message: 'Time Tracker API Running...' });
+});
 
 const swaggerOpts = {
     definition: {
