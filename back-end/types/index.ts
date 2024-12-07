@@ -36,6 +36,7 @@ type ProjectInput = {
     id?: number;
     name?: string;
     color?: Color;
+    userIds: number[];
 };
 
 type ProjectToUserInput = {
@@ -43,4 +44,18 @@ type ProjectToUserInput = {
     userIds?: number[];
 };
 
-export { Role, Color, ProjectInput, IdName, UserInput, AuthenticationResponse, ProjectToUserInput };
+type GenerateJwtTokenInput = {
+    userId: number;
+    role: Role;
+};
+
+export {
+    AuthenticationResponse,
+    Color,
+    GenerateJwtTokenInput,
+    IdName,
+    ProjectInput,
+    ProjectToUserInput,
+    Role,
+    UserInput,
+};

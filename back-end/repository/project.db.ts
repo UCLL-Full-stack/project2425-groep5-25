@@ -3,8 +3,13 @@ import database from './utils/database';
 
 const getAllProjects = async (): Promise<Project[]> => {
     try {
-        const projectsPrisma = await database.project.findMany();
-        return projectsPrisma.map((x) => Project.from(x));
+        const projectsPrisma = await database.project.findMany({
+            include: {
+                users: true,
+            },
+        });
+
+        return projectsPrisma.map((project) => Project.from(project));
     } catch (error) {
         console.error(error);
         throw new Error('Database error. See server log for details.');
@@ -15,6 +20,9 @@ const getProjectByName = async ({ name }: { name: string }): Promise<Project | n
     try {
         const projectPrisma = await database.project.findFirst({
             where: { name },
+            include: {
+                users: true,
+            },
         });
 
         return projectPrisma ? Project.from(projectPrisma) : null;
@@ -28,6 +36,9 @@ const getProjectById = async ({ id }: { id: number }): Promise<Project | null> =
     try {
         const projectPrisma = await database.project.findFirst({
             where: { id },
+            include: {
+                users: true,
+            },
         });
 
         return projectPrisma ? Project.from(projectPrisma) : null;
@@ -43,6 +54,12 @@ const createProject = async (project: Project): Promise<Project> => {
             data: {
                 name: project.getName(),
                 color: project.getColor(),
+                users: {
+                    connect: project.getUsers().map((user) => ({ id: user.getId() })),
+                },
+            },
+            include: {
+                users: true,
             },
         });
 

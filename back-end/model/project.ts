@@ -1,4 +1,4 @@
-import { Project as PrismaProject } from '@prisma/client';
+import { Project as PrismaProject, User as PrismaUser } from '@prisma/client';
 import { Color } from '../types';
 import { ModelBase } from './modelBase';
 import { User } from './user';
@@ -6,11 +6,13 @@ import { User } from './user';
 export class Project extends ModelBase {
     private name: string;
     private color: Color;
+    private users: User[];
 
     constructor(project: {
         id?: number;
         name: string;
         color: Color;
+        users: User[];
         createdDate?: Date;
         updatedDate?: Date;
     }) {
@@ -23,6 +25,7 @@ export class Project extends ModelBase {
 
         this.name = project.name;
         this.color = project.color;
+        this.users = project.users;
     }
 
     getId(): number | undefined {
@@ -37,31 +40,47 @@ export class Project extends ModelBase {
         return this.color;
     }
 
+    getUsers(): User[] {
+        return this.users;
+    }
+
     validate(project: { name: string; color: Color; users?: User[] }) {
-        if (!project.name) throw new Error('Project name is required');
-        if (!project.color) throw new Error('Project color is required');
-        if (project.name.trim().length < 6)
+        if (!project.name?.trim()) throw new Error('Project name is required');
+        if (!project.color?.trim()) throw new Error('Project color is required');
+
+        if (project.name?.trim().length < 6)
             throw new Error('Project name must be at least 6 characters long');
 
         if (project.users) {
-            const allNumbers = project.users.every((user) => typeof user === 'number');
-            if (!allNumbers) throw new Error('All usersIds must be numbers');
-
-            const uniqueUsers = new Set(project.users);
-            if (uniqueUsers.size !== project.users.length)
-                throw new Error('UserId list contains duplicate values');
+            for (const user of project.users) {
+                if (!user.getId()) {
+                    throw new Error(`User with ID ${user.getId()} does not exist`);
+                }
+            }
         }
     }
 
     equals(project: Project): boolean {
-        return this.name === project.getName() && this.color === project.getColor();
+        return (
+            this.name === project.getName() &&
+            this.color === project.getColor() &&
+            this.users.every((user, index) => user.equals(project.getUsers()[index]))
+        );
     }
 
-    static from({ id, name, color, createdDate, updatedDate }: PrismaProject) {
+    static from({
+        id,
+        name,
+        color,
+        users,
+        createdDate,
+        updatedDate,
+    }: PrismaProject & { users: PrismaUser[] }): Project {
         return new Project({
             id,
             name,
             color: color as Color,
+            users: users.map((user) => User.from(user)),
             createdDate: createdDate || undefined,
             updatedDate: updatedDate || undefined,
         });

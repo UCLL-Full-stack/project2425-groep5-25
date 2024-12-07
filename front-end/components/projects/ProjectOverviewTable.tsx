@@ -16,6 +16,7 @@ const ProjectOverviewTable: React.FC<Props> = ({ projects }: Props) => {
                             <th scope="col">Id</th>
                             <th scope="col">Color</th>
                             <th scope="col">Name</th>
+                            <th scope="col">Aantal Gebruikers</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -29,6 +30,7 @@ const ProjectOverviewTable: React.FC<Props> = ({ projects }: Props) => {
                                     })}
                                 </td>
                                 <td>{project.name}</td>
+                                <td>{project.users?.length}</td>
                             </tr>
                         ))}
                     </tbody>

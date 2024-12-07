@@ -1,47 +1,16 @@
 import { TimeBlock } from '../model/timeBlock';
 import database from './utils/database';
 
-// const getTimeBlocksFromUser = async ({ userId }: { userId: number }): Promise<TimeBlock[]> => {
-//     try {
-//         const user = await userRepository.getUserById({ id: userId });
-//         if (!user) throw new NotFoundError("User not found");
-
-//         const timeBlocks = user.getWorkDays()
-//             .flatMap((workDay: WorkDay) => workDay.getTimeBlocks());
-
-//         return timeBlocks;
-//     } catch (error) {
-//         throw new Error('Database error. See server log for details');
-//     }
-// };
-
-// const getRunningTimeBlock = async ({ userId }: { userId: number }): Promise<TimeBlock | null> => {
-//     try {
-//         const user = await userRepository.getUserById({ id: userId });
-//         if (!user) throw new NotFoundError("User not found");
-
-//         const timeBlocks = user.getWorkDays()
-//             .flatMap((workDay: WorkDay) => workDay.getTimeBlocks());
-
-//         return timeBlocks.find(timeBlock => timeBlock.getEndTime() === undefined) || null;
-//     } catch (error) {
-//         throw new Error('Database error. See server log for details');
-//     }
-// };
-
-// const createTimeBlock = ({ timeBlock }: { timeBlock: TimeBlock }): void => {
-//     console.log(timeBlock);
-// };
-
 const getAllTimeBlocks = async (): Promise<TimeBlock[]> => {
     try {
         const timeBlocksPrisma = await database.timeBlock.findMany({
             include: {
-                project: true,
                 workDay: true,
+                project: { include: { users: true } },
             },
         });
-        return timeBlocksPrisma.map((x) => TimeBlock.from(x));
+
+        return timeBlocksPrisma.map((timeBlock) => TimeBlock.from(timeBlock));
     } catch (error) {
         console.error(error);
         throw new Error('Database error. See server log for details.');
