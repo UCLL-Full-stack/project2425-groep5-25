@@ -35,7 +35,7 @@
  */
 import express, { NextFunction, Request, Response } from 'express';
 import { timeBlockService } from '../service/timeBlock.service';
-import { Role } from '../types';
+import { JwtToken } from '../types';
 
 const timeBlockRouter = express.Router();
 
@@ -61,13 +61,8 @@ const timeBlockRouter = express.Router();
  */
 timeBlockRouter.get(
     '/',
-    async (
-        req: Request & { auth: { userId: number; role: Role } },
-        res: Response,
-        next: NextFunction,
-    ) => {
+    async (req: Request & { auth: JwtToken }, res: Response, next: NextFunction) => {
         try {
-            const { userId, role } = req.auth;
             const timeBlocks = await timeBlockService.getAllTimeBlocks();
             res.status(200).json(timeBlocks);
         } catch (error) {

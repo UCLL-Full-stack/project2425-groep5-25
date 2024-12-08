@@ -85,7 +85,7 @@
  */
 import express, { NextFunction, Request, Response } from 'express';
 import { projectService } from '../service/project.service';
-import { ProjectInput, Role } from '../types';
+import { JwtToken, ProjectInput } from '../types';
 
 const projectRouter = express.Router();
 
@@ -111,13 +111,8 @@ const projectRouter = express.Router();
  */
 projectRouter.get(
     '/',
-    async (
-        req: Request & { auth: { userId: number; role: Role } },
-        res: Response,
-        next: NextFunction,
-    ) => {
+    async (req: Request & { auth: JwtToken }, res: Response, next: NextFunction) => {
         try {
-            const { userId, role } = req.auth;
             const projects = await projectService.getAllProjects();
             res.status(200).json(projects);
         } catch (error) {
@@ -152,13 +147,8 @@ projectRouter.get(
  */
 projectRouter.post(
     '/',
-    async (
-        req: Request & { auth: { userId: number; role: Role } },
-        res: Response,
-        next: NextFunction,
-    ) => {
+    async (req: Request & { auth: JwtToken }, res: Response, next: NextFunction) => {
         try {
-            const { userId, role } = req.auth;
             const projectInput = <ProjectInput>req.body;
             const result = await projectService.createProject(projectInput);
             res.status(201).json(result);
@@ -206,15 +196,9 @@ projectRouter.post(
  */
 projectRouter.put(
     '/add-users',
-    async (
-        req: Request & { auth: { userId: number; role: Role } },
-        res: Response,
-        next: NextFunction,
-    ) => {
+    async (req: Request & { auth: JwtToken }, res: Response, next: NextFunction) => {
         try {
-            const { userId, role } = req.auth;
             const projectInput = <ProjectInput>req.body;
-            // we need id and userIds here
             const result = await projectService.addUsersToProject(projectInput);
             res.status(200).json(result);
         } catch (error) {

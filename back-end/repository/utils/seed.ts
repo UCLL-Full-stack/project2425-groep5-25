@@ -24,7 +24,7 @@ const main = async () => {
                     lastName: casual.last_name,
                     email: casual.email,
                     passWord: casual.password,
-                    role: casual.random_element(['admin', 'student', 'lecturer', 'guest']) as Role,
+                    role: casual.random_element(['admin', 'user', 'hr']) as Role,
                 },
             }),
         ),
@@ -118,26 +118,30 @@ const main = async () => {
         workdays.map((userWorkdays) =>
             Promise.all(
                 userWorkdays.map((workday) => {
-                    const timeBlockPromises = Array.from({ length: casual.integer(1, 3) }).map(() =>
-                        prisma.timeBlock.create({
-                            data: {
-                                startTime: new Date(
-                                    casual.date('YYYY-MM-DD') + ' ' + casual.time('HH:mm:ss'),
-                                ).toISOString(),
-                                endTime: new Date(
-                                    casual.date('YYYY-MM-DD') + ' ' + casual.time('HH:mm:ss'),
-                                ).toISOString(),
-                                projectId: projects[casual.integer(0, projects.length - 1)].id, // Random project association
-                                workDayId: workday.id,
-                            },
-                        }),
+                    const timeBlockPromises = Array.from({ length: casual.integer(1, 3) }).map(
+                        () => {
+                            const startDateTime = new Date(
+                                casual.date('YYYY-MM-DD') + ' ' + casual.time('HH:mm:ss'),
+                            );
+
+                            const endDateTime = new Date(startDateTime);
+                            endDateTime.setHours(startDateTime.getHours() + casual.integer(1, 4));
+
+                            return prisma.timeBlock.create({
+                                data: {
+                                    startTime: startDateTime.toISOString(),
+                                    endTime: endDateTime.toISOString(),
+                                    projectId: projects[casual.integer(0, projects.length - 1)].id, // Random project association
+                                    workDayId: workday.id,
+                                },
+                            });
+                        },
                     );
                     return Promise.all(timeBlockPromises);
                 }),
             ),
         ),
     );
-    console.log('TimeBlocks created successfully!');
 
     console.log('Database seeded successfully!');
 };

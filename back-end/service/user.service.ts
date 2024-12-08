@@ -73,9 +73,10 @@ const userAuthenticate = async (userInput: UserInput): Promise<AuthenticationRes
     if (!isValidPassword) throw new Error('Invalid credentials.');
 
     return {
+        userId: user.getId(),
         token: generateJwtToken({ userId: user.getId(), role: user.getRole() }),
-        username: user.getUserName(),
-        fullname: `${user.getFirstName()} ${user.getLastName()}`,
+        userName: user.getUserName(),
+        fullName: `${user.getFirstName()} ${user.getLastName()}`,
         role: user.getRole(),
     };
 };
