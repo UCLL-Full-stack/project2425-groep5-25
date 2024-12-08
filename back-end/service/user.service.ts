@@ -69,7 +69,7 @@ const userSignUp = async (userInput: UserInput): Promise<User> => {
 };
 
 const userAuthenticate = async (userInput: UserInput): Promise<AuthenticationResponse> => {
-    const { userName, passWord, role } = userInput;
+    const { userName, passWord } = userInput;
     const user = await getUserByUserName({ userName });
 
     const isValidPassword = await bcrypt.compare(passWord, user.getPassWord());
@@ -79,7 +79,7 @@ const userAuthenticate = async (userInput: UserInput): Promise<AuthenticationRes
         token: generateJwtToken({ userName, role: user.getRole() }),
         username: user.getUserName(),
         fullname: `${user.getFirstName()} ${user.getLastName()}`,
-        role,
+        role: user.getRole(),
     };
 };
 

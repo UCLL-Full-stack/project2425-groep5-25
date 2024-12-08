@@ -33,3 +33,12 @@ export type ProjectToUserInput = {
     projectId?: number;
     userIds?: number[];
 };
+export type UserInput = {
+    id?: number | null;
+    userName?: string | null;
+    firstName?: string | null;
+    lastName?: string | null;
+    email?: string | null;
+    role?: String | null;
+    passWord?: string | null;
+};
