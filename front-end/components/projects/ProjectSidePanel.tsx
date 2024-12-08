@@ -48,9 +48,8 @@ const ProjectSidePanel: React.FC<Props> = ({
         return null;
     };
 
-    const createProject = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setErrorLabelMessage(undefined);
+    const validate = (): boolean => {
+        let valid = true;
 
         const nameError = validateName(name);
         const colorError = validateColor(color);
@@ -61,6 +60,17 @@ const ProjectSidePanel: React.FC<Props> = ({
                 label: 'Validation Error',
                 message: nameError || colorError || userError || '',
             });
+            return false;
+        }
+
+        return valid;
+    };
+
+    const createProject = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setErrorLabelMessage(undefined);
+
+        if (!validate()) {
             return;
         }
 
