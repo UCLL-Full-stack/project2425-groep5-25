@@ -50,12 +50,7 @@ const SignUp: React.FC = () => {
     return (
         <div className="container mx-auto max-w-md p-4">
             <h2 className="text-2xl font-semibold text-center mb-4">Sign Up</h2>
-            {error && (
-                <div className="bg-red-100 text-red-700 border border-red-400 p-4 rounded mb-4">
-                    <p>{error.message}</p>
-                </div>
-            )}
-            <LoginSignup type="signup" onSubmit={handleSignUpSubmit} />
+            <LoginSignup isSignUp onSubmit={handleSignUpSubmit} />
         </div>
     );
 };

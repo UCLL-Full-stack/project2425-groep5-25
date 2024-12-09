@@ -1,109 +1,128 @@
 import InputField from '@components/Selects/InputField';
-import { UserInput } from '@types';
+import ErrorMessage from '@components/shared/ErrorMessage';
+import { ErrorLabelMessage, UserInput } from '@types';
 import React, { useState } from 'react';
 
-interface LoginSignupProps {
-    type: 'login' | 'signup';
-    onSubmit: (data: UserInput) => void;
-}
+type Props = {
+    isSignUp: boolean;
+    onSubmit: (data: UserInput, validate: boolean) => void;
+};
 
-const LoginSignup: React.FC<LoginSignupProps> = ({ type, onSubmit }) => {
-    const [name, setName] = useState<string | null>('');
-    const [password, setPassword] = useState<string | null>('');
+const UserSignupLoginForm: React.FC<Props> = ({ isSignUp, onSubmit }: Props) => {
+    const [userName, setUserName] = useState<string | null>('');
+    const [passWord, setPassWord] = useState<string | null>('');
     const [email, setEmail] = useState<string | null>('');
     const [firstName, setFirstName] = useState<string | null>('');
     const [lastName, setLastName] = useState<string | null>('');
     const [role, setRole] = useState<string | null>('');
+    const [errorLabelMessage, setErrorLabelMessage] = useState<ErrorLabelMessage>();
 
-    const [errors, setErrors] = useState<{ [key: string]: string | null }>({});
+    const validateUserName = (userName: string | null) => {
+        if (!userName || userName?.trim().length < 6)
+            return 'Username must be at least 6 characters long';
+        return null;
+    };
 
-    const clearErrors = () => {
-        setErrors({});
+    const validatePassWord = (passWord: string | null) => {
+        if (!passWord || passWord?.trim().length < 6)
+            return 'PassWord must be at least 6 characters long';
+        return null;
     };
 
     const validate = (): boolean => {
         let valid = true;
-        const newErrors: { [key: string]: string | null } = {};
 
-        if (!name?.trim()) {
-            newErrors.name = 'Username is required';
-            valid = false;
-        }
-        if (!password?.trim()) {
-            newErrors.password = 'Password is required';
-            valid = false;
-        }
+        // Als je het als boolean wilt behouden, doe maar zo. Zal het ook toespassen in sidepanel.
+        const userNameError = validateUserName(userName);
+        const passWordError = validatePassWord(passWord);
 
-        if (type === 'signup') {
-            if (!email?.trim()) {
-                newErrors.email = 'Email is required';
-                valid = false;
-            }
-            if (!firstName?.trim()) {
-                newErrors.firstName = 'First name is required';
-                valid = false;
-            }
-            if (!lastName?.trim()) {
-                newErrors.lastName = 'Last name is required';
-                valid = false;
-            }
-            if (!role?.trim()) {
-                newErrors.role = 'Role is required';
-                valid = false;
-            }
+        if (userNameError || passWordError) {
+            setErrorLabelMessage({
+                label: 'Validation Error',
+                message: userNameError || passWordError || '',
+            });
+            return false;
         }
 
-        setErrors(newErrors);
+        if (isSignUp) {
+            //     if (!email?.trim()) {
+            //         newErrors.email = 'Email is required';
+            //         valid = false;
+            //     }
+            //     if (!firstName?.trim()) {
+            //         newErrors.firstName = 'First name is required';
+            //         valid = false;
+            //     }
+            //     if (!lastName?.trim()) {
+            //         newErrors.lastName = 'Last name is required';
+            //         valid = false;
+            //     }
+            //     if (!role?.trim()) {
+            //         newErrors.role = 'Role is required';
+            //         valid = false;
+            //     }
+            //
+            // if (emailError || firstNameError) {
+            //     setErrorLabelMessage({
+            //         label: 'Validation Error',
+            //         message: emailError || firstNameError || '',
+            //     });
+            //     return false;
+            // }
+        }
+
         return valid;
     };
 
-    const handleSubmit = (event: React.FormEvent) => {
-        event.preventDefault();
-
-        clearErrors();
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        setErrorLabelMessage(undefined);
 
         if (!validate()) {
             return;
         }
 
-        const data: UserInput = {
-            userName: name,
-            passWord: password,
+        const userData: UserInput = {
+            userName,
+            passWord,
             email,
             firstName,
             lastName,
             role,
         };
 
-        onSubmit(data);
+        onSubmit(userData, validate());
     };
 
     return (
         <>
-            <h3 className="px-0">{type === 'login' ? 'Login' : 'Sign Up'}</h3>
+            {/* Zet dit allemaan in 1 div */}
+            <h3 className="px-0">{isSignUp ? 'Sign Up' : 'Login'}</h3>
 
             <form onSubmit={handleSubmit}>
                 <InputField
                     type="text"
                     label="Username"
-                    value={name}
-                    onChange={setName}
+                    value={userName}
+                    onChange={setUserName}
+                    validate={validateUserName}
                     placeholder="Enter your username"
-                    required={true}
-                    validate={(value) => (!value ? 'Username is required' : null)}
+                    required // das default true als je geen value aan geeft
+                    // required={true} == required
+                    // Moet enkel false assigned aan bools.
                 />
 
                 <InputField
                     type="password"
                     label="Password"
-                    value={password}
-                    onChange={setPassword}
+                    value={passWord}
+                    onChange={setPassWord}
+                    validate={validatePassWord}
                     placeholder="Enter your password"
-                    required={true}
-                    validate={(value) => (!value ? 'Password is required' : null)}
+                    required // same here
                 />
 
-                {type === 'signup' && (
+                {isSignUp && (
                     <>
                         <InputField
                             type="email"
@@ -147,14 +166,19 @@ const LoginSignup: React.FC<LoginSignupProps> = ({ type, onSubmit }) => {
                     </>
                 )}
 
+                {/*
+                    Check een classname, we hebben ergens well een generic button class.
+                */}
                 <button
                     type="submit"
                     className="text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mt-4">
-                    {type === 'login' ? 'Login' : 'Sign Up'}
+                    {isSignUp ? 'Sign Up' : 'Login'}
                 </button>
+
+                {errorLabelMessage && <ErrorMessage errorLabelMessage={errorLabelMessage} />}
             </form>
         </>
     );
 };
 
-export default LoginSignup;
+export default UserSignupLoginForm;
