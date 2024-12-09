@@ -16,6 +16,7 @@ const Login: React.FC = () => {
 
             if (!response.ok) {
                 setError({ message: json.message, label: 'error' });
+                console.log(error);
                 return;
             }
 
@@ -46,9 +47,7 @@ const Login: React.FC = () => {
             <h2 className="text-2xl font-semibold text-center mb-4">Login</h2>
             {error && (
                 <div
-                    className={`p-2 mb-4 text-white ${
-                        error.label === 'error' ? 'bg-red-500' : 'bg-green-500'
-                    }`}>
+                    className={`text-${error.label === 'error' ? 'red' : 'green'}-500 text-center mb-4`}>
                     {error.message}
                 </div>
             )}

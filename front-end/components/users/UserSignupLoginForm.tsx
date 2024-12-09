@@ -92,7 +92,6 @@ const LoginSignup: React.FC<LoginSignupProps> = ({ type, onSubmit }) => {
                     required={true}
                     validate={(value) => (!value ? 'Username is required' : null)}
                 />
-                {errors.name && <div className="text-red-800">{errors.name}</div>}
 
                 <InputField
                     type="password"
@@ -103,7 +102,6 @@ const LoginSignup: React.FC<LoginSignupProps> = ({ type, onSubmit }) => {
                     required={true}
                     validate={(value) => (!value ? 'Password is required' : null)}
                 />
-                {errors.password && <div className="text-red-800">{errors.password}</div>}
 
                 {type === 'signup' && (
                     <>
@@ -116,7 +114,6 @@ const LoginSignup: React.FC<LoginSignupProps> = ({ type, onSubmit }) => {
                             required={true}
                             validate={(value) => (!value ? 'Email is required' : null)}
                         />
-                        {errors.email && <div className="text-red-800">{errors.email}</div>}
 
                         <InputField
                             type="text"
@@ -127,7 +124,6 @@ const LoginSignup: React.FC<LoginSignupProps> = ({ type, onSubmit }) => {
                             required={true}
                             validate={(value) => (!value ? 'First name is required' : null)}
                         />
-                        {errors.firstName && <div className="text-red-800">{errors.firstName}</div>}
 
                         <InputField
                             type="text"
@@ -138,7 +134,6 @@ const LoginSignup: React.FC<LoginSignupProps> = ({ type, onSubmit }) => {
                             required={true}
                             validate={(value) => (!value ? 'Last name is required' : null)}
                         />
-                        {errors.lastName && <div className="text-red-800">{errors.lastName}</div>}
 
                         <InputField
                             type="text"
@@ -149,7 +144,6 @@ const LoginSignup: React.FC<LoginSignupProps> = ({ type, onSubmit }) => {
                             required={true}
                             validate={(value) => (!value ? 'Role is required' : null)}
                         />
-                        {errors.role && <div className="text-red-800">{errors.role}</div>}
                     </>
                 )}
 
