@@ -5,22 +5,14 @@ import ErrorMessage from '@components/shared/ErrorMessage';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { projectService } from '@services/projectService';
-import { userService } from '@services/userService';
 import styles from '@styles/ProjectSidePanel.module.css';
-import {
-    Color,
-    ErrorLabelMessage,
-    IdName,
-    ProjectInput,
-    ProjectOutput,
-    ProjectToUserInput,
-} from '@types';
+import { Color, ErrorLabelMessage, IdName, ProjectInput } from '@types';
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 
 type Props = {
     userIdNames: Array<IdName>;
-    addProject: (project: ProjectOutput) => void;
+    addProject: (project: ProjectInput) => void;
     onProjectCreated: () => void;
     onClose: () => void;
 };
@@ -83,7 +75,7 @@ const ProjectSidePanel: React.FC<Props> = ({
         }
 
         try {
-            const projectFormData: ProjectInput = { name: name!, color: color! };
+            const projectFormData: ProjectInput = { name: name!, color: color!, userIds };
             const [projectResponse] = await Promise.all([
                 projectService.createProject(projectFormData),
             ]);
@@ -94,27 +86,8 @@ const ProjectSidePanel: React.FC<Props> = ({
                     projectJson.message || 'An error occurred while creating the project.',
                 );
 
-            if (showUserSelector && userIds.length > 0) {
-                const userFormData: ProjectToUserInput = {
-                    projectId: projectJson.id,
-                    userIds,
-                };
-                const [userResponse] = await Promise.all([userService.enrollProject(userFormData)]);
-                const [userJson] = await Promise.all([userResponse.json()]);
-
-                if (!userResponse.ok)
-                    throw new Error(
-                        userJson.message ||
-                            'An error occurred while enrolling users in the project.',
-                    );
-            }
-
             onProjectCreated();
-            toast.success(
-                `Project ${
-                    showUserSelector && userIds.length > 0 ? 'with users' : ''
-                } was created successfully!`,
-            );
+            toast.success(`Project was created successfully!`);
             onClose();
 
             addProject({

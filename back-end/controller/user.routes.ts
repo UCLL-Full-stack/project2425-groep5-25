@@ -1,82 +1,108 @@
-import express, { NextFunction, Request, Response } from 'express';
-import { userService } from '../service/user.service';
-import { ProjectToUserInput, UserInput } from '../types';
-
 /**
  * @swagger
- *   components:
- *    schemas:
- *      AuthenticationResponse:
- *          type: object
- *          properties:
- *            message:
- *              type: string
- *              description: Authentication response.
- *            token:
- *              type: string
- *              description: JWT access token.
- *            userName:
- *              type: string
- *              description: User name.
- *            fullname:
- *             type: string
- *             description: Full name.
- *      AuthenticationRequest:
- *          type: object
- *          properties:
- *            userName:
- *              type: string
- *              description: User name.
- *            password:
- *              type: string
- *              description: User password.
- *      User:
- *          type: object
- *          properties:
- *            id:
- *              type: number
- *              format: int64
- *            userName:
- *              type: string
- *              description: User name.
- *            password:
- *              type: string
- *              description: User password.
- *            firstName:
- *              type: string
- *              description: First name.
- *            lastName:
- *              type: string
- *              description: Last name.
- *            email:
- *              type: string
- *              description: E-mail.
- *            role:
- *               $ref: '#/components/schemas/Role'
- *      UserInput:
- *          type: object
- *          properties:
- *            userName:
- *              type: string
- *              description: User name.
- *            passWord:
- *              type: string
- *              description: User passWord.
- *            firstName:
- *              type: string
- *              description: First name.
- *            lastName:
- *              type: string
- *              description: Last name.
- *            email:
- *              type: string
- *              description: E-mail.
- *            role:
- *               $ref: '#/components/schemas/Role'
- *      Role:
- *          type: string
- *          enum: [student, lecturer, admin, guest]
+ * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
+ *   schemas:
+ *     User:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: number
+ *           format: int64
+ *         userName:
+ *           type: string
+ *           description: The username of the user.
+ *         firstName:
+ *           type: string
+ *           description: The first name of the user.
+ *         lastName:
+ *           type: string
+ *           description: The last name of the user.
+ *         email:
+ *           type: string
+ *           description: The email address of the user.
+ *         role:
+ *           type: string
+ *           description: The role of the user in the system.
+ *           enum: [student, lecturer, admin, guest]
+ *     UserInput:
+ *       type: object
+ *       required:
+ *         - userName
+ *         - passWord
+ *         - email
+ *         - firstName
+ *         - lastName
+ *         - role
+ *       properties:
+ *         userName:
+ *           type: string
+ *           description: The username chosen by the user.
+ *         passWord:
+ *           type: string
+ *           description: The password chosen by the user.
+ *         firstName:
+ *           type: string
+ *           description: The first name of the user.
+ *         lastName:
+ *           type: string
+ *           description: The last name of the user.
+ *         email:
+ *           type: string
+ *           description: The email address of the user.
+ *         role:
+ *           type: string
+ *           description: The role of the user (e.g., student, lecturer, admin, guest).
+ *           enum: [student, lecturer, admin, guest]
+ *     AuthenticationRequest:
+ *       type: object
+ *       properties:
+ *         userName:
+ *           type: string
+ *           description: The username of the user.
+ *         passWord:
+ *           type: string
+ *           description: The password of the user.
+ *     AuthenticationResponse:
+ *       type: object
+ *       properties:
+ *         message:
+ *           type: string
+ *           description: The response message.
+ *         token:
+ *           type: string
+ *           description: The JWT token for authentication.
+ *         userName:
+ *           type: string
+ *           description: The username of the authenticated user.
+ *         fullname:
+ *           type: string
+ *           description: The full name of the authenticated user.
+ *     IdName:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: number
+ *           format: int64
+ *           description: Unique identifier for the user.
+ *         name:
+ *           type: string
+ *           description: The concatenated full name of the user.
+ *   responses:
+ *     UnauthorizedError:
+ *       description: Unauthorized access due to missing or invalid token.
+ *     NotFoundError:
+ *       description: The requested resource was not found.
+ *     ValidationError:
+ *       description: Invalid input or data format.
  */
+import express, { NextFunction, Request, Response } from 'express';
+import { userService } from '../service/user.service';
+import { UserInput } from '../types';
 
 const userRouter = express.Router();
 
@@ -86,6 +112,8 @@ const userRouter = express.Router();
  *   get:
  *     summary: Get all users with id and name only
  *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []  # Adding security for Bearer token
  *     responses:
  *       200:
  *         description: List of users with id and name only
@@ -95,8 +123,6 @@ const userRouter = express.Router();
  *               type: array
  *               items:
  *                 $ref: '#/components/schemas/IdName'
- *       500:
- *         description: Internal server error
  */
 userRouter.get('/id-name', async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -125,12 +151,7 @@ userRouter.get('/id-name', async (req: Request, res: Response, next: NextFunctio
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   description: Success message.
- *                   example: User created successfully.
+ *               $ref: '#/components/schemas/User'
  */
 userRouter.post('/signup', async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -191,59 +212,6 @@ userRouter.post('/login', async (req: Request, res: Response, next: NextFunction
         const userInput = <UserInput>req.body;
         const response = await userService.userAuthenticate(userInput);
         res.status(200).json({ message: 'Authenticated Successfully', ...response });
-    } catch (error) {
-        next(error);
-    }
-});
-
-/**
- * @swagger
- * /users/enroll-project:
- *   post:
- *     summary: Enroll multiple users in a project
- *     tags: [Users]
- *     security:
- *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               userIds:
- *                 type: array
- *                 items:
- *                   type: number
- *                 description: List of user IDs to enroll in the project
- *                 example: [1, 2, 3]
- *               projectId:
- *                 type: number
- *                 description: The ID of the project to enroll the users in
- *                 example: 101
- *             required:
- *               - userIds
- *               - projectId
- *     responses:
- *       200:
- *         description: Users successfully enrolled in the project
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 message:
- *                   type: string
- *                   example: "Users successfully enrolled in the project."
- */
-userRouter.post('/enroll-projects', async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const projectToUserInput = <ProjectToUserInput>req.body;
-        const response = await userService.addProjectToUsers(projectToUserInput);
-        res.status(200).json(response);
     } catch (error) {
         next(error);
     }

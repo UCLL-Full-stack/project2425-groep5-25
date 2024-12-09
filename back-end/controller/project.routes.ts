@@ -18,7 +18,7 @@
  *           description: The name of the project.
  *         color:
  *           type: string
- *           description: The color of the project. Should be one of the Color enum values.
+ *           description: The color of the project.
  *           enum: [ "#FF0000", "#00FF00", "#0000FF", "#FFFF00", "#FFA500", "#800080", "#000000", "#FFFFFF" ]
  *         userIds:
  *           type: array
@@ -38,27 +38,54 @@
  *         users:
  *           type: array
  *           items:
- *             type: object
- *             properties:
- *               id:
- *                 type: number
- *                 format: int64
- *               username:
- *                 type: string
- *               firstName:
- *                 type: string
- *               lastName:
- *                 type: string
- *               email:
- *                 type: string
- *               role:
- *                 type: string
- *
+ *             $ref: '#/components/schemas/User'
+ *         createdDate:
+ *           type: string
+ *           format: date-time
+ *         updatedDate:
+ *           type: string
+ *           format: date-time
+ *     ProjectUpdateInput:
+ *       type: object
+ *       properties:
+ *         userIds:
+ *           type: array
+ *           items:
+ *             type: integer
+ *           description: List of user IDs to add to the project.
+ *     Project:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: number
+ *           format: int64
+ *         name:
+ *           type: string
+ *           description: The name of the project.
+ *         color:
+ *           type: string
+ *           description: The color of the project.
+ *         users:
+ *           type: array
+ *           items:
+ *             $ref: '#/components/schemas/User'
+ *         createdDate:
+ *           type: string
+ *           format: date-time
+ *         updatedDate:
+ *           type: string
+ *           format: date-time
+ *   responses:
+ *     UnauthorizedError:
+ *       description: Unauthorized access due to missing or invalid token.
+ *     NotFoundError:
+ *       description: The requested resource was not found.
+ *     ValidationError:
+ *       description: Invalid input or data format.
  */
-
 import express, { NextFunction, Request, Response } from 'express';
 import { projectService } from '../service/project.service';
-import { ProjectInput } from '../types';
+import { ProjectInput, Role } from '../types';
 
 const projectRouter = express.Router();
 
@@ -66,37 +93,89 @@ const projectRouter = express.Router();
  * @swagger
  * /projects:
  *   get:
- *     summary: Retrieve a list of all projects
- *     tags: [Projects]
+ *     summary: Get all projects
+ *     description: Retrieve a list of all projects.
+ *     tags:
+ *       - Projects
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: A list of projects
+ *         description: A list of projects.
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
  *                 $ref: '#/components/schemas/ProjectDto'
- *       500:
- *         description: Error occurred while retrieving projects
  */
-projectRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const projects = await projectService.getAllProjects();
-        res.status(200).json(projects);
-    } catch (error) {
-        next(error);
-    }
-});
+projectRouter.get(
+    '/',
+    async (
+        req: Request & { auth: { userId: number; role: Role } },
+        res: Response,
+        next: NextFunction,
+    ) => {
+        try {
+            const { userId, role } = req.auth;
+            const projects = await projectService.getAllProjects();
+            res.status(200).json(projects);
+        } catch (error) {
+            next(error);
+        }
+    },
+);
 
 /**
  * @swagger
  * /projects:
  *   post:
  *     summary: Create a new project
- *     tags: [Projects]
+ *     description: Create a new project by providing project details such as name, color, and associated user IDs.
+ *     tags:
+ *       - Projects
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/ProjectInput'
+ *     responses:
+ *       201:
+ *         description: The project was successfully created.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ProjectDto'
+ */
+projectRouter.post(
+    '/',
+    async (
+        req: Request & { auth: { userId: number; role: Role } },
+        res: Response,
+        next: NextFunction,
+    ) => {
+        try {
+            const { userId, role } = req.auth;
+            const projectInput = <ProjectInput>req.body;
+            const result = await projectService.createProject(projectInput);
+            res.status(201).json(result);
+        } catch (error) {
+            next(error);
+        }
+    },
+);
+
+/**
+ * @swagger
+ * /projects/add-users:
+ *   put:
+ *     summary: Add users to a project
+ *     description: Add a list of user IDs to an existing project. Ensure that the project exists before adding users.
+ *     tags:
+ *       - Projects
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -106,46 +185,42 @@ projectRouter.get('/', async (req: Request, res: Response, next: NextFunction) =
  *           schema:
  *             type: object
  *             properties:
- *               name:
- *                 type: string
- *                 description: Name of the project
- *                 example: "Project Alpha"
- *               color:
- *                 type: string
- *                 description: Color associated with the project
- *                 example: "Blue"
+ *               id:
+ *                 type: number
+ *                 description: The ID of the project.
+ *               userIds:
+ *                 type: array
+ *                 items:
+ *                   type: number
+ *                 description: A list of user IDs to be added to the project.
  *             required:
- *               - name
- *               - color
+ *               - id
+ *               - userIds
  *     responses:
- *       201:
- *         description: Project created successfully
+ *       200:
+ *         description: Users were successfully added to the project.
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 id:
- *                   type: number
- *                   description: The auto-generated ID of the project
- *                   example: 1
- *                 name:
- *                   type: string
- *                   description: Name of the project
- *                   example: "Project Alpha"
- *                 color:
- *                   type: string
- *                   description: Color associated with the project
- *                   example: "Blue"
+ *               $ref: '#/components/schemas/ProjectDto'
  */
-projectRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const projectInput = <ProjectInput>req.body;
-        const result = await projectService.createProject(projectInput);
-        res.status(201).json(result);
-    } catch (error) {
-        next(error);
-    }
-});
+projectRouter.put(
+    '/add-users',
+    async (
+        req: Request & { auth: { userId: number; role: Role } },
+        res: Response,
+        next: NextFunction,
+    ) => {
+        try {
+            const { userId, role } = req.auth;
+            const projectInput = <ProjectInput>req.body;
+            // we need id and userIds here
+            const result = await projectService.addUsersToProject(projectInput);
+            res.status(200).json(result);
+        } catch (error) {
+            next(error);
+        }
+    },
+);
 
 export { projectRouter };

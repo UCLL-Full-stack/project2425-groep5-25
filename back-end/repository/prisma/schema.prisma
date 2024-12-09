@@ -1,92 +1,92 @@
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
 }
 
 model WorkSchedule {
-  // ModelBase
-  id                  Int           @id @default(autoincrement())
-  createdDate         DateTime?     @default(now())
-  updatedDate         DateTime?     @updatedAt
+    // ModelBase
+    id                  Int             @id @default(autoincrement())
+    createdDate         DateTime?       @default(now())
+    updatedDate         DateTime?       @updatedAt
 
-  mondayHours         Float
-  tuesdayHours        Float
-  wednesdayHours      Float
-  thursdayHours       Float
-  fridayHours         Float
-  saturdayHours       Float
-  sundayHours         Float
+    mondayHours         Float
+    tuesdayHours        Float
+    wednesdayHours      Float
+    thursdayHours       Float
+    fridayHours         Float
+    saturdayHours       Float
+    sundayHours         Float
 
-  // Relations
-  user                User?
+    // Relations
+    userId              Int             @unique
+    user                User            @relation(fields: [userId], references: [id])
 }
 
 model User {
-  // ModelBase
-  id                  Int             @id @default(autoincrement())
-  createdDate         DateTime?       @default(now())
-  updatedDate         DateTime?       @updatedAt
+    // ModelBase
+    id                  Int             @id @default(autoincrement())
+    createdDate         DateTime?       @default(now())
+    updatedDate         DateTime?       @updatedAt
 
-  userName            String          @unique
-  firstName           String
-  lastName            String
-  email               String          @unique
-  passWord            String
-  role                String
+    userName            String          @unique
+    firstName           String
+    lastName            String
+    email               String          @unique
+    passWord            String
+    role                String
 
-  // Relations
-  workScheduleId      Int             @unique
-  workSchedule        WorkSchedule    @relation(fields: [workScheduleId], references: [id])
-  projects            Project[]       @relation("UserProjects")
-  workDays            Workday[]
+    // Relations
+    workSchedule        WorkSchedule?   
+    projects            Project[]       @relation("UserProjects")
+    workDays            Workday[]
 }
 
 model Project {
-  // ModelBase
-  id                  Int           @id @default(autoincrement())
-  createdDate         DateTime?     @default(now())
-  updatedDate         DateTime?     @updatedAt
+    // ModelBase
+    id                  Int             @id @default(autoincrement())
+    createdDate         DateTime?       @default(now())
+    updatedDate         DateTime?       @updatedAt
 
-  name                String
-  color               String
+    name                String
+    color               String
 
-  // Relations
-  users               User[]        @relation("UserProjects")
-  timeBlocks          TimeBlock[]
+    // Relations
+    users               User[]          @relation("UserProjects")
+    timeBlocks          TimeBlock[]
 }
 
 model Workday {
-  // ModelBase
-  id                  Int           @id @default(autoincrement())
-  createdDate         DateTime?     @default(now())
-  updatedDate         DateTime?     @updatedAt
+    // ModelBase
+    id                  Int             @id @default(autoincrement())
+    createdDate         DateTime?       @default(now())
+    updatedDate         DateTime?       @updatedAt
 
-  expectedHours       Float
-  achievedHours       Float?
-  date                DateTime
+    expectedHours       Float
+    achievedHours       Float?
+    date                DateTime
 
-  // Relations
-  userId              Int          
-  user                User          @relation(fields: [userId], references: [id])
-  timeBlocks          TimeBlock[]
+    // Relations
+    userId              Int          
+    user                User            @relation(fields: [userId], references: [id])
+    timeBlocks          TimeBlock[]
 }
 
 model TimeBlock {
-  // ModelBase
-  id                  Int           @id @default(autoincrement())
-  createdDate         DateTime?     @default(now())
-  updatedDate         DateTime?     @updatedAt
+    // ModelBase
+    id                  Int             @id @default(autoincrement())
+    createdDate         DateTime?       @default(now())
+    updatedDate         DateTime?       @updatedAt
 
-  startTime           DateTime
-  endTime             DateTime?
+    startTime           DateTime
+    endTime             DateTime?
 
-  // Relations
-  projectId           Int          
-  project             Project       @relation(fields: [projectId], references: [id])
-  workDayId           Int          
-  workDay             Workday       @relation(fields: [workDayId], references: [id])
+    // Relations
+    projectId           Int          
+    project             Project         @relation(fields: [projectId], references: [id])
+    workDayId           Int          
+    workDay             Workday         @relation(fields: [workDayId], references: [id])
 }

@@ -18,6 +18,15 @@ const publicApiPort = processEnv.getApiPort();
 const publicFrontEndPort = processEnv.getFrontEndPort();
 
 app.use(
+    expressjwt({
+        secret: processEnv.getJwtSecret(),
+        algorithms: ['HS256'],
+    }).unless({
+        path: ['/api-docs', /^\/api-docs\/.*/, '/users/signup', '/users/login', '/status'],
+    }),
+);
+
+app.use(
     cors({
         origin: `http://localhost:${publicFrontEndPort}`,
     }),
@@ -32,23 +41,6 @@ app.use('/timeblocks', timeBlockRouter);
 app.get('/status', (req, res) => {
     res.json({ message: 'Time Tracker API Running...' });
 });
-
-app.use(
-    expressjwt({
-        secret: processEnv.getJwtSecret(),
-        algorithms: ['HS256'],
-    }).unless({
-        path: [
-            '/api-docs',
-            /^\/api-docs\/.*/,
-            /^\/users\/.*/,
-            /^\/projects\/.*/,
-            '/users/signup',
-            '/users/login',
-            '/status',
-        ],
-    }),
-);
 
 const swaggerOpts = {
     definition: {
