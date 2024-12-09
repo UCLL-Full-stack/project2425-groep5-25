@@ -1,17 +1,14 @@
 import styles from '@styles/TimeBlock.module.css';
-import { TimeBlockOutput } from 'types/output';
-
+import { TimeBlockOutput } from '@types';
+import { calculateDuration, formatTime } from 'utils/Date.utils';
 import { hexToRgba } from 'utils/optionFormatters';
-import { calculateDuration, formatTime } from 'utils/TimeBlock.utils';
 
 type props = {
     timeBlock: TimeBlockOutput;
 };
 
 const TimeBlock: React.FC<props> = ({ timeBlock }) => {
-    if (!timeBlock.endTime) {
-        return null;
-    }
+    if (!timeBlock.endTime) return null;
 
     return (
         <>

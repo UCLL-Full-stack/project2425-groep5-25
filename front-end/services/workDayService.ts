@@ -6,9 +6,7 @@ const getWorkWeekByDates = async (start: string, end: string) => {
         headers: {
             'Content-Type': 'application/json',
             Authorization:
-                'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjI0Mywicm9sZSI6InVzZXIiLCJpYXQiOjE3MzM3NjExNjMsImV4cCI6MTczMzc4OTk2MywiaXNzIjoidGltZVRyYWNrZXJfYXBwIn0.cvwbZ_AGmTkgy8KsXHrzVnWCLtgDjWx2dZE0e68RCxQ',
-            //  +
-            // localStorage.getItem('token'),
+                'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJociIsImlhdCI6MTczMzc3NTkwOSwiZXhwIjoxNzMzODA0NzA5LCJpc3MiOiJ0aW1lVHJhY2tlcl9hcHAifQ.z-RULsN1R4ALSfo5cMerwn3p1E92p9K9n5gHoIXa6GQ', //+ localStorage.getItem('token'),
         },
     });
 };
