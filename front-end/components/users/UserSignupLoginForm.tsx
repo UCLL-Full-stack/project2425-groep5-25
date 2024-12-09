@@ -1,5 +1,6 @@
 import InputField from '@components/Selects/InputField';
 import ErrorMessage from '@components/shared/ErrorMessage';
+import styles from '@styles/home.module.css';
 import { ErrorLabelMessage, UserInput } from '@types';
 import React, { useState } from 'react';
 
@@ -9,12 +10,12 @@ type Props = {
 };
 
 const UserSignupLoginForm: React.FC<Props> = ({ isSignUp, onSubmit }: Props) => {
-    const [userName, setUserName] = useState<string | null>('');
-    const [passWord, setPassWord] = useState<string | null>('');
-    const [email, setEmail] = useState<string | null>('');
-    const [firstName, setFirstName] = useState<string | null>('');
-    const [lastName, setLastName] = useState<string | null>('');
-    const [role, setRole] = useState<string | null>('');
+    const [userName, setUserName] = useState<string | null>(null);
+    const [passWord, setPassWord] = useState<string | null>(null);
+    const [email, setEmail] = useState<string | null>(null);
+    const [firstName, setFirstName] = useState<string | null>(null);
+    const [lastName, setLastName] = useState<string | null>(null);
+    const [role, setRole] = useState<string | null>(null);
     const [errorLabelMessage, setErrorLabelMessage] = useState<ErrorLabelMessage>();
 
     const validateUserName = (userName: string | null) => {
@@ -28,11 +29,49 @@ const UserSignupLoginForm: React.FC<Props> = ({ isSignUp, onSubmit }: Props) => 
             return 'PassWord must be at least 6 characters long';
         return null;
     };
+    const validateEmail = (email: string | null) => {
+        if (!email?.trim()) {
+            return 'Email is required';
+        }
+        return null;
+    };
+    const validateFirstName = (firstName: string | null) => {
+        if (!firstName?.trim()) {
+            return 'First Name is required';
+        }
+        if (firstName[0] != firstName[0].toUpperCase()) {
+            return 'First Name needs to start with a capital letter';
+        }
+        if (firstName.trim().length < 2) {
+            return 'First Name needs to be at least 2 letters';
+        }
+        return null;
+    };
+    const validateLastName = (lastName: string | null) => {
+        if (!lastName?.trim()) {
+            return 'Last Name is required';
+        }
+        if (lastName[0] != lastName[0].toUpperCase()) {
+            return 'Last Name needs to start with a capital letter';
+        }
+        if (lastName.trim().length < 2) {
+            return 'Last Name needs to be at least 2 letters';
+        }
+        return null;
+    };
+    const validateRole = (role: string | null) => {
+        if (!role?.trim()) {
+            return 'Role is required';
+        }
+        if (role.trim().length < 2) {
+            return 'Role needs to be at least 2 letters';
+        }
+        return null;
+    };
 
     const validate = (): boolean => {
         let valid = true;
 
-        // Als je het als boolean wilt behouden, doe maar zo. Zal het ook toespassen in sidepanel.
         const userNameError = validateUserName(userName);
         const passWordError = validatePassWord(passWord);
 
@@ -45,30 +84,18 @@ const UserSignupLoginForm: React.FC<Props> = ({ isSignUp, onSubmit }: Props) => 
         }
 
         if (isSignUp) {
-            //     if (!email?.trim()) {
-            //         newErrors.email = 'Email is required';
-            //         valid = false;
-            //     }
-            //     if (!firstName?.trim()) {
-            //         newErrors.firstName = 'First name is required';
-            //         valid = false;
-            //     }
-            //     if (!lastName?.trim()) {
-            //         newErrors.lastName = 'Last name is required';
-            //         valid = false;
-            //     }
-            //     if (!role?.trim()) {
-            //         newErrors.role = 'Role is required';
-            //         valid = false;
-            //     }
-            //
-            // if (emailError || firstNameError) {
-            //     setErrorLabelMessage({
-            //         label: 'Validation Error',
-            //         message: emailError || firstNameError || '',
-            //     });
-            //     return false;
-            // }
+            const emailError = validateEmail(email);
+            const firstNameError = validateFirstName(firstName);
+            const lastNameError = validateLastName(lastName);
+            const roleError = validateRole(role);
+
+            if (emailError || firstNameError || lastNameError || roleError) {
+                setErrorLabelMessage({
+                    label: 'Validation Error',
+                    message: emailError || firstNameError || lastNameError || roleError || '',
+                });
+                return false;
+            }
         }
 
         return valid;
@@ -83,20 +110,19 @@ const UserSignupLoginForm: React.FC<Props> = ({ isSignUp, onSubmit }: Props) => 
         }
 
         const userData: UserInput = {
-            userName,
-            passWord,
-            email,
-            firstName,
-            lastName,
-            role,
+            userName: userName!,
+            passWord: passWord!,
+            email: email!,
+            firstName: firstName!,
+            lastName: lastName!,
+            role: role!,
         };
 
         onSubmit(userData, validate());
     };
 
     return (
-        <>
-            {/* Zet dit allemaan in 1 div */}
+        <div className={styles.main}>
             <h3 className="px-0">{isSignUp ? 'Sign Up' : 'Login'}</h3>
 
             <form onSubmit={handleSubmit}>
@@ -131,7 +157,7 @@ const UserSignupLoginForm: React.FC<Props> = ({ isSignUp, onSubmit }: Props) => 
                             onChange={setEmail}
                             placeholder="Enter your email"
                             required={true}
-                            validate={(value) => (!value ? 'Email is required' : null)}
+                            validate={validateEmail}
                         />
 
                         <InputField
@@ -140,8 +166,8 @@ const UserSignupLoginForm: React.FC<Props> = ({ isSignUp, onSubmit }: Props) => 
                             value={firstName}
                             onChange={setFirstName}
                             placeholder="Enter your first name"
-                            required={true}
-                            validate={(value) => (!value ? 'First name is required' : null)}
+                            required
+                            validate={validateFirstName}
                         />
 
                         <InputField
@@ -150,8 +176,8 @@ const UserSignupLoginForm: React.FC<Props> = ({ isSignUp, onSubmit }: Props) => 
                             value={lastName}
                             onChange={setLastName}
                             placeholder="Enter your last name"
-                            required={true}
-                            validate={(value) => (!value ? 'Last name is required' : null)}
+                            required
+                            validate={validateLastName}
                         />
 
                         <InputField
@@ -160,24 +186,19 @@ const UserSignupLoginForm: React.FC<Props> = ({ isSignUp, onSubmit }: Props) => 
                             value={role}
                             onChange={setRole}
                             placeholder="Enter your role (e.g., Admin, User)"
-                            required={true}
-                            validate={(value) => (!value ? 'Role is required' : null)}
+                            required
+                            validate={validateRole}
                         />
                     </>
                 )}
 
-                {/*
-                    Check een classname, we hebben ergens well een generic button class.
-                */}
-                <button
-                    type="submit"
-                    className="text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mt-4">
+                <button type="submit" className={styles.button}>
                     {isSignUp ? 'Sign Up' : 'Login'}
                 </button>
 
                 {errorLabelMessage && <ErrorMessage errorLabelMessage={errorLabelMessage} />}
             </form>
-        </>
+        </div>
     );
 };
 

@@ -35,10 +35,10 @@ export type ProjectToUserInput = {
 };
 export type UserInput = {
     id?: number | null;
-    userName?: string | null;
-    firstName?: string | null;
-    lastName?: string | null;
-    email?: string | null;
-    role?: String | null;
-    passWord?: string | null;
+    userName?: string;
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+    role?: string;
+    passWord?: string;
 };

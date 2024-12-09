@@ -1,3 +1,4 @@
+import ErrorMessage from '@components/shared/ErrorMessage';
 import LoginSignup from '@components/users/UserSignupLoginForm';
 import { userService } from '@services/userService';
 import { ErrorLabelMessage, UserInput } from '@types';
@@ -5,9 +6,10 @@ import router from 'next/router';
 import React, { useState } from 'react';
 
 const SignUp: React.FC = () => {
-    const [error, setError] = useState<ErrorLabelMessage | null>(null);
+    const [errorLabelMessage, setErrorLabelMessage] = useState<ErrorLabelMessage>();
     const handleSignUpSubmit = async (data: UserInput) => {
         console.log('Sign-up data submitted:', data);
+        setErrorLabelMessage(undefined);
         try {
             const formData: UserInput = {
                 userName: data.userName,
@@ -18,29 +20,33 @@ const SignUp: React.FC = () => {
                 role: data.role,
             };
             const [response] = await Promise.all([userService.signupUser(formData)]);
-            const [json] = await Promise.all([response.json()]);
+            const [userJson] = await Promise.all([response.json()]);
 
             if (!response.ok) {
-                setError({ message: json.message, label: 'error' });
+                setErrorLabelMessage({ message: userJson.message, label: 'Backend Error' });
+                setTimeout(() => {
+                    setErrorLabelMessage(undefined);
+                }, 2000);
                 return;
             }
 
             localStorage.setItem(
                 'loggedInUser',
                 JSON.stringify({
-                    token: json.token,
-                    fullname: json.fullname,
-                    username: json.username,
-                    role: json.role,
+                    token: userJson.token,
+                    fullname: userJson.fullname,
+                    username: userJson.username,
+                    role: userJson.role,
                 }),
             );
+            localStorage.setItem('token', userJson.token);
 
             setTimeout(() => {
                 router.push('/login');
             }, 2000);
         } catch (error) {
             console.error('Login error:', error);
-            setError({
+            setErrorLabelMessage({
                 message: 'An unexpected error occurred. Please try again.',
                 label: 'error',
             });
@@ -49,8 +55,8 @@ const SignUp: React.FC = () => {
 
     return (
         <div className="container mx-auto max-w-md p-4">
-            <h2 className="text-2xl font-semibold text-center mb-4">Sign Up</h2>
             <LoginSignup isSignUp onSubmit={handleSignUpSubmit} />
+            {errorLabelMessage && <ErrorMessage errorLabelMessage={errorLabelMessage} />}
         </div>
     );
 };
