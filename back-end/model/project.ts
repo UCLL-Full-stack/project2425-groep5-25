@@ -45,16 +45,20 @@ export class Project extends ModelBase {
     }
 
     validate(project: { name: string; color: Color; users?: User[] }) {
-        if (!project.name?.trim()) throw new Error('Project name is required');
-        if (!project.color?.trim()) throw new Error('Project color is required');
+        if (!project.name?.trim()) throw new Error('Project validation: Project name is required');
+
+        if (!project.color?.trim())
+            throw new Error('Project validation: Project color is required');
 
         if (project.name?.trim().length < 6)
-            throw new Error('Project name must be at least 6 characters long');
+            throw new Error('Project validation: Project name must be at least 6 characters long');
 
         if (project.users) {
             for (const user of project.users) {
                 if (!user.getId()) {
-                    throw new Error(`User with ID ${user.getId()} does not exist`);
+                    throw new Error(
+                        `Project validation: User with ID ${user.getId()} does not exist`,
+                    );
                 }
             }
         }

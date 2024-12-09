@@ -6,13 +6,13 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { projectService } from '@services/projectService';
 import styles from '@styles/ProjectSidePanel.module.css';
-import { Color, ErrorLabelMessage, IdName, ProjectInput } from '@types';
+import { Color, ErrorLabelMessage, IdName, ProjectInput, ProjectOutput } from '@types';
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 
 type Props = {
     userIdNames: Array<IdName>;
-    addProject: (project: ProjectInput) => void;
+    addProject: (project: ProjectOutput) => void;
     onProjectCreated: () => void;
     onClose: () => void;
 };

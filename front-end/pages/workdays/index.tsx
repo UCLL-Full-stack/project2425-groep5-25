@@ -1,7 +1,39 @@
+import WeekPaginator from '@components/paginator/WeekPaginator';
+import Workday from '@components/workWeek/WorkDay';
+import { workDayService } from '@services/workDayService';
 import styles from '@styles/home.module.css';
+import { WorkDayOutput } from '@types';
 import Head from 'next/head';
+import { useEffect, useState } from 'react';
+import { getStartAndEndOfWeek } from 'utils/Date.utils';
 
 const Home: React.FC = () => {
+    const [workDays, setWorkDays] = useState<WorkDayOutput[]>([]);
+    const [currentWeekStart, setCurrentWeekStart] = useState<string>('');
+    const [currentWeekEnd, setCurrentWeekEnd] = useState<string>('');
+
+    const getWorkWeekByDates = async (start: string, end: string) => {
+        const [response] = await Promise.all([workDayService.getWorkWeekByDates(start, end)]);
+        const [workDays] = await Promise.all([response.json()]);
+        setWorkDays(workDays);
+    };
+
+    const updateWeek = (start: string, end: string) => {
+        setCurrentWeekStart(start);
+        setCurrentWeekEnd(end);
+        getWorkWeekByDates(start, end);
+    };
+
+    const resetToCurrentWeek = () => {
+        const today = new Date();
+        const { start, end } = getStartAndEndOfWeek(today);
+        updateWeek(start, end);
+    };
+
+    useEffect(() => {
+        resetToCurrentWeek();
+    }, []);
+
     return (
         <>
             <Head>
@@ -11,9 +43,26 @@ const Home: React.FC = () => {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <main className={styles.main}>
-                <span>
-                    <h1>Workdays!</h1>
-                </span>
+                <h1>Workdays</h1>
+
+                <div className="d-flex gap-3 flex-column">
+                    <WeekPaginator
+                        currentWeekStart={currentWeekStart}
+                        currentWeekEnd={currentWeekEnd}
+                        updateWeek={updateWeek}
+                        resetToCurrentWeek={resetToCurrentWeek}
+                    />
+
+                    <div className="d-flex gap-3">
+                        {workDays.length > 0 ? (
+                            workDays.map((workday) => (
+                                <Workday key={workday.id} workday={workday} />
+                            ))
+                        ) : (
+                            <p>No workdays available for this week</p>
+                        )}
+                    </div>
+                </div>
             </main>
         </>
     );

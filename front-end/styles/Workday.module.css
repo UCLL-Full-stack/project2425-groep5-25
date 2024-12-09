@@ -1,0 +1,25 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: fit-content;
+    padding: 0.5rem;
+    border: 1px solid black;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    border: 2px solid #dcdfe4;
+    border-radius: 0.5rem;
+}
+
+.informationContainer {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.25rem 0.5rem;
+    border-bottom: 1px solid #dcdfe4;
+}
+
+.timeBlocksContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}

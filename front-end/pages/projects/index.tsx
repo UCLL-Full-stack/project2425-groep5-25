@@ -3,7 +3,7 @@ import ProjectSidePanel from '@components/projects/ProjectSidePanel';
 import { projectService } from '@services/projectService';
 import { userService } from '@services/userService';
 import styles from '@styles/home.module.css';
-import { IdName, ProjectInput, ProjectOutput } from '@types';
+import { IdName, ProjectOutput } from '@types';
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
 
@@ -24,7 +24,7 @@ const Home: React.FC = () => {
         setProjects(projects);
     };
 
-    const addProject = (project: ProjectInput) => {
+    const addProject = (project: ProjectOutput) => {
         setProjects((x) => [...x, project]);
     };
 
