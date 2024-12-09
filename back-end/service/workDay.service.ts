@@ -22,12 +22,14 @@ const getWorkWeekByDates = async ({
         throw new Error(
             'Invalid start date format. Please use a valid date string (e.g., YYYY-MM-DD).',
         );
+    startDate.setHours(0, 0, 0, 0);
 
     const endDate = new Date(end);
     if (isNaN(endDate.getTime()))
         throw new Error(
             'Invalid end date format. Please use a valid date string (e.g., YYYY-MM-DD).',
         );
+    endDate.setHours(23, 59, 59, 999);
 
     if (startDate > endDate) throw new Error('Start date cannot be after end date');
 

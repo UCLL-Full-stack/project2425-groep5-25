@@ -48,12 +48,12 @@ export class TimeBlock extends ModelBase {
     }
 
     validate(timeBlock: { startTime: Date; endTime?: Date; project: Project }) {
-        if (!timeBlock.startTime) throw new Error('Start time is required');
-        if (!timeBlock.project) throw new Error('Project is required');
+        if (!timeBlock.startTime) throw new Error('TimeBlock validation: Start time is required');
+        if (!timeBlock.project) throw new Error('TimeBlock validation: Project is required');
 
         if (timeBlock.endTime !== undefined) {
             if (timeBlock.startTime > timeBlock.endTime) {
-                throw new Error('Start date cannot be after end date');
+                throw new Error('TimeBlock validation: Start date cannot be after end date');
             }
         }
     }

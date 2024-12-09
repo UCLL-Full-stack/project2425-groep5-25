@@ -29,14 +29,16 @@ const getWorkWeekByDates = async ({
     try {
         const workDaysPrisma = await database.workday.findMany({
             where: {
-                user: { id: userId },
-                date: { lte: startDate, gte: endDate },
+                userId,
+                date: { gte: startDate, lte: endDate },
             },
             include: {
                 user: true,
                 timeBlocks: { include: { project: { include: { users: true } } } },
             },
         });
+
+        workDaysPrisma.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
         return workDaysPrisma.map((workDay) => WorkDay.from(workDay));
     } catch (error) {

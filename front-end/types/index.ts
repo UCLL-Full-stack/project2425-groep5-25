@@ -1,25 +1,7 @@
-export type ProjectOutput = {
-    id?: number;
-    name?: string;
-    color?: String;
-    users?: UserOutput[];
-};
-
-export type UserOutput = {
-    id?: number;
-    firstName?: string;
-    lastName?: string;
-    fullName?: string;
-    email?: string;
-    userName?: string;
-    passWord?: string;
-    role?: string;
-};
-
 export type ProjectInput = {
     id?: number;
     name?: string;
-    color?: String;
+    color?: string;
     userIds?: number[];
 };
 
