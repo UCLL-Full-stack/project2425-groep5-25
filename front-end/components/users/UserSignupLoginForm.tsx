@@ -1,4 +1,4 @@
-import InputField from '@components/selects/InputField';
+import InputField from '@components/selectss/InputField';
 import ErrorMessage from '@components/shared/ErrorMessage';
 import styles from '@styles/home.module.css';
 import { ErrorLabelMessage, UserInput } from '@types';
