@@ -4,12 +4,15 @@ import { userService } from '@services/userService';
 import { ErrorLabelMessage, UserInput } from '@types';
 import router from 'next/router';
 import React, { useState } from 'react';
+import { toast } from 'react-toastify';
 
 const SignUp: React.FC = () => {
     const [errorLabelMessage, setErrorLabelMessage] = useState<ErrorLabelMessage>();
-    const handleSignUpSubmit = async (data: UserInput) => {
-        console.log('Sign-up data submitted:', data);
+
+    const handleSignUp = async (data: UserInput) => {
+        if (!data) return;
         setErrorLabelMessage(undefined);
+
         try {
             const formData: UserInput = {
                 userName: data.userName,
@@ -18,14 +21,14 @@ const SignUp: React.FC = () => {
                 lastName: data.lastName,
                 email: data.email,
             };
-            const [response] = await Promise.all([userService.signupUser(formData)]);
-            const [userJson] = await Promise.all([response.json()]);
+            const [userResponse] = await Promise.all([userService.signupUser(formData)]);
+            const [userJson] = await Promise.all([userResponse.json()]);
 
-            if (!response.ok) {
-                setErrorLabelMessage({ message: userJson.message, label: 'Backend Error' });
-                setTimeout(() => {
-                    setErrorLabelMessage(undefined);
-                }, 2000);
+            if (!userResponse.ok) {
+                setErrorLabelMessage({
+                    label: 'Backend Error',
+                    message: userJson.message || 'An error occurred while logging in.',
+                });
                 return;
             }
 
@@ -33,15 +36,20 @@ const SignUp: React.FC = () => {
                 'loggedInUser',
                 JSON.stringify({
                     token: userJson.token,
-                    fullname: userJson.fullname,
-                    username: userJson.username,
+                    fullname: userJson.fullName,
+                    username: userJson.userName,
                     role: userJson.role,
                 }),
             );
+
             localStorage.setItem('token', userJson.token);
 
+            toast.success(
+                `You successfully created an account! You are now logged in! Redirecting you...`,
+            );
+
             setTimeout(() => {
-                router.push('/login');
+                router.push('/');
             }, 2000);
         } catch (error) {
             console.error('Login error:', error);
@@ -53,10 +61,16 @@ const SignUp: React.FC = () => {
     };
 
     return (
-        <div className="container mx-auto max-w-md p-4">
-            <LoginSignup isSignUp onSubmit={handleSignUpSubmit} />
-            {errorLabelMessage && <ErrorMessage errorLabelMessage={errorLabelMessage} />}
-        </div>
+        <>
+            <div className="container mx-auto max-w-md p-4">
+                <LoginSignup
+                    isSignUp
+                    onSubmit={handleSignUp}
+                    clearParentErrors={() => setErrorLabelMessage(undefined)}
+                />
+                {errorLabelMessage && <ErrorMessage errorLabelMessage={errorLabelMessage} />}
+            </div>
+        </>
     );
 };
 

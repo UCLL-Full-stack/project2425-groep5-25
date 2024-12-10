@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt';
 import { User } from '../model/user';
 import { userDb } from '../repository/user.db';
 import { generateJwtToken } from '../repository/utils/jwt';
-import { AuthenticationResponse, IdName, UserInput } from '../types';
+import { AuthenticationResponse, IdName, Role, UserInput } from '../types';
 import { projectService } from './project.service';
 import { workScheduleService } from './workSchedule.service';
 
@@ -42,8 +42,8 @@ const getUsersByIds = async ({ userIds }: { userIds: number[] }): Promise<User[]
     return users;
 };
 
-const userSignUp = async (userInput: UserInput): Promise<User> => {
-    const { userName, passWord, firstName, lastName, email, role } = userInput;
+const userSignUp = async (userInput: UserInput): Promise<AuthenticationResponse> => {
+    const { userName, passWord, firstName, lastName, email } = userInput;
 
     const existingUser = await userDb.getUserByUserName({ userName });
     if (existingUser) throw new Error(`User with username <${userName}> already exists.`);
@@ -56,13 +56,19 @@ const userSignUp = async (userInput: UserInput): Promise<User> => {
         lastName,
         email,
         passWord: hashedPassword,
-        role,
+        role: 'user' as Role,
     });
 
     const createdUser = await userDb.createUser(newUser);
     await workScheduleService.createDefaultWorkSchedule(createdUser);
     await projectService.addUsersToDefaultProject({ userIds: [createdUser.getId()] });
-    return createdUser;
+    return {
+        userId: createdUser.getId(),
+        token: generateJwtToken({ userId: createdUser.getId(), role: createdUser.getRole() }),
+        userName: createdUser.getUserName(),
+        fullName: `${createdUser.getFirstName()} ${createdUser.getLastName()}`,
+        role: createdUser.getRole(),
+    };
 };
 
 const userAuthenticate = async (userInput: UserInput): Promise<AuthenticationResponse> => {

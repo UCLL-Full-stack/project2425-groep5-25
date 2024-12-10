@@ -9,31 +9,20 @@ import { toast } from 'react-toastify';
 const Login: React.FC = () => {
     const [errorLabelMessage, setErrorLabelMessage] = useState<ErrorLabelMessage>();
 
-    const handleLogin = async (data: UserInput, validate: boolean) => {
-        setErrorLabelMessage(undefined); //setError momenteel geeft geen updated value mee wss omdat het async is functie is vraag ?
-        if (!validate) {
-            console.log(errorLabelMessage?.message);
-
-            return;
-        }
+    const handleLogin = async (data: UserInput) => {
+        if (!data) return;
+        setErrorLabelMessage(undefined);
 
         try {
-            setErrorLabelMessage(undefined);
-
             const formData: UserInput = { userName: data.userName, passWord: data.passWord };
             const [userResponse] = await Promise.all([userService.loginUser(formData)]);
             const [userJson] = await Promise.all([userResponse.json()]);
 
             if (!userResponse.ok) {
-                // Show backend error and clear it after 3 seconds
                 setErrorLabelMessage({
                     label: 'Backend Error',
                     message: userJson.message || 'An error occurred while logging in.',
                 });
-
-                setTimeout(() => {
-                    setErrorLabelMessage(undefined);
-                }, 2000);
                 return;
             }
 
@@ -41,8 +30,8 @@ const Login: React.FC = () => {
                 'loggedInUser',
                 JSON.stringify({
                     token: userJson.token,
-                    fullname: userJson.fullname,
-                    username: userJson.username,
+                    fullname: userJson.fullName,
+                    username: userJson.userName,
                     role: userJson.role,
                 }),
             );
@@ -65,11 +54,16 @@ const Login: React.FC = () => {
     };
 
     return (
-        // Fix css, geen titel meer nodig, je hebt in component al gedefinieerd. Anders doe 1 weg == DONE
-        <div className="container mx-auto max-w-md p-4">
-            <LoginSignup isSignUp={false} onSubmit={handleLogin} />
-            {errorLabelMessage && <ErrorMessage errorLabelMessage={errorLabelMessage} />}
-        </div>
+        <>
+            <div className="container mx-auto max-w-md p-4">
+                <LoginSignup
+                    isSignUp={false}
+                    onSubmit={handleLogin}
+                    clearParentErrors={() => setErrorLabelMessage(undefined)}
+                />
+                {errorLabelMessage && <ErrorMessage errorLabelMessage={errorLabelMessage} />}
+            </div>
+        </>
     );
 };
 

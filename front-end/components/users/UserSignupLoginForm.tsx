@@ -6,17 +6,44 @@ import React, { useState } from 'react';
 
 type Props = {
     isSignUp: boolean;
-    onSubmit: (data: UserInput, validate: boolean) => void;
+    onSubmit: (data: UserInput) => void;
+    clearParentErrors: () => void;
 };
 
-const UserSignupLoginForm: React.FC<Props> = ({ isSignUp, onSubmit }: Props) => {
+const UserSignupLoginForm: React.FC<Props> = ({ isSignUp, onSubmit, clearParentErrors }: Props) => {
     const [userName, setUserName] = useState<string | null>(null);
     const [passWord, setPassWord] = useState<string | null>(null);
     const [email, setEmail] = useState<string | null>(null);
     const [firstName, setFirstName] = useState<string | null>(null);
     const [lastName, setLastName] = useState<string | null>(null);
-    const [role, setRole] = useState<string | null>(null);
     const [errorLabelMessage, setErrorLabelMessage] = useState<ErrorLabelMessage>();
+
+    const validateFirstName = (firstName: string | null) => {
+        if (!firstName?.trim() || firstName?.trim().length < 2)
+            return 'First name needs to be at least 2 letters';
+        if (firstName[0] !== firstName[0].toUpperCase())
+            return 'First name needs to start with a capital letter';
+        if (!/^[\p{L}]+$/u.test(firstName))
+            return 'First name can only contain letters (including accented characters)';
+        return null;
+    };
+
+    const validateLastName = (lastName: string | null) => {
+        if (!lastName?.trim() || lastName?.trim().length < 2)
+            return 'Last name needs to be at least 2 letters';
+        if (lastName[0] !== lastName[0].toUpperCase())
+            return 'Last name needs to start with a capital letter';
+        if (!/^[\p{L}]+$/u.test(lastName))
+            return 'Last name can only contain letters (including accented characters)';
+        return null;
+    };
+
+    const validateEmail = (email: string | null) => {
+        if (!email?.trim()) return 'Email is required';
+        if (!email.includes('@')) return 'Email must contain "@" symbol';
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return 'Email format is invalid';
+        return null;
+    };
 
     const validateUserName = (userName: string | null) => {
         if (!userName?.trim() || userName?.trim().length < 6)
@@ -37,33 +64,22 @@ const UserSignupLoginForm: React.FC<Props> = ({ isSignUp, onSubmit }: Props) => 
         return null;
     };
 
-    const validateEmail = (email: string | null) => {
-        if (!email?.trim()) return 'Email is required';
-        if (!email.includes('@')) return 'Email must contain "@" symbol';
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return 'Email format is invalid';
-        return null;
-    };
-
-    const validateFirstName = (firstName: string | null) => {
-        if (!firstName?.trim() || firstName?.trim().length < 2)
-            return 'First Name needs to be at least 2 letters';
-        if (firstName[0] !== firstName[0].toUpperCase())
-            return 'First Name needs to start with a capital letter';
-        if (!/^[a-zA-Z]+$/.test(firstName)) return 'First Name can only contain letters';
-        return null;
-    };
-
-    const validateLastName = (lastName: string | null) => {
-        if (!lastName?.trim() || lastName?.trim().length < 2)
-            return 'Last Name needs to be at least 2 letters';
-        if (lastName[0] !== lastName[0].toUpperCase())
-            return 'Last Name needs to start with a capital letter';
-        if (!/^[a-zA-Z]+$/.test(lastName)) return 'Last Name can only contain letters';
-        return null;
-    };
-
     const validate = (): boolean => {
         let valid = true;
+
+        if (isSignUp) {
+            const firstNameError = validateFirstName(firstName);
+            const lastNameError = validateLastName(lastName);
+            const emailError = validateEmail(email);
+
+            if (firstNameError || lastNameError || emailError) {
+                setErrorLabelMessage({
+                    label: 'Validation Error',
+                    message: firstNameError || lastNameError || emailError || '',
+                });
+                valid = false;
+            }
+        }
 
         const userNameError = validateUserName(userName);
         const passWordError = validatePassWord(passWord);
@@ -73,49 +89,36 @@ const UserSignupLoginForm: React.FC<Props> = ({ isSignUp, onSubmit }: Props) => 
                 label: 'Validation Error',
                 message: userNameError || passWordError || '',
             });
-            return false;
-        }
-
-        if (isSignUp) {
-            const emailError = validateEmail(email);
-            const firstNameError = validateFirstName(firstName);
-            const lastNameError = validateLastName(lastName);
-
-            if (emailError || firstNameError || lastNameError) {
-                setErrorLabelMessage({
-                    label: 'Validation Error',
-                    message: emailError || firstNameError || lastNameError || '',
-                });
-                return false;
-            }
+            valid = false;
         }
 
         return valid;
     };
 
+    const clearAllErrors = () => {
+        clearParentErrors();
+        setErrorLabelMessage(undefined);
+    };
+
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        setErrorLabelMessage(undefined);
+        clearAllErrors();
 
         if (!validate()) {
             return;
         }
 
-        let userData: UserInput = {
+        const userData: UserInput = {
             userName: userName!,
             passWord: passWord!,
-        };
-
-        if (isSignUp) {
-            userData = {
-                ...userData,
+            ...(isSignUp && {
                 email: email!,
                 firstName: firstName!,
                 lastName: lastName!,
-            };
-        }
+            }),
+        };
 
-        onSubmit(userData, validate());
+        onSubmit(userData);
     };
 
     return (
@@ -123,38 +126,8 @@ const UserSignupLoginForm: React.FC<Props> = ({ isSignUp, onSubmit }: Props) => 
             <h3 className="px-0">{isSignUp ? 'Sign Up' : 'Login'}</h3>
 
             <form onSubmit={handleSubmit}>
-                <InputField
-                    type="text"
-                    label="Username"
-                    value={userName}
-                    onChange={setUserName}
-                    validate={validateUserName}
-                    placeholder="Enter your username"
-                    required
-                />
-
-                <InputField
-                    type="password"
-                    label="Password"
-                    value={passWord}
-                    onChange={setPassWord}
-                    validate={validatePassWord}
-                    placeholder="Enter your password"
-                    required
-                />
-
                 {isSignUp && (
                     <>
-                        <InputField
-                            type="email"
-                            label="Email"
-                            value={email}
-                            onChange={setEmail}
-                            validate={validateEmail}
-                            placeholder="Enter your email"
-                            required={true}
-                        />
-
                         <InputField
                             type="text"
                             label="First Name"
@@ -174,8 +147,38 @@ const UserSignupLoginForm: React.FC<Props> = ({ isSignUp, onSubmit }: Props) => 
                             placeholder="Enter your last name"
                             required
                         />
+
+                        <InputField
+                            type="email"
+                            label="Email"
+                            value={email}
+                            onChange={setEmail}
+                            validate={validateEmail}
+                            placeholder="Enter your email"
+                            required
+                        />
                     </>
                 )}
+
+                <InputField
+                    type="text"
+                    label="Username"
+                    value={userName}
+                    onChange={setUserName}
+                    validate={validateUserName}
+                    placeholder="Enter your username"
+                    required
+                />
+
+                <InputField
+                    type="password"
+                    label="Password"
+                    value={passWord}
+                    onChange={setPassWord}
+                    validate={validatePassWord}
+                    placeholder="Enter your password"
+                    required
+                />
 
                 <button type="submit" className={styles.button}>
                     {isSignUp ? 'Sign Up' : 'Login'}
