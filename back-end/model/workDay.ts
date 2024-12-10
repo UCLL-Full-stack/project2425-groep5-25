@@ -70,28 +70,28 @@ export class WorkDay extends ModelBase {
         user: User;
         timeBlocks?: TimeBlock[];
     }) {
-        if (!workDay.date) throw new Error('Date is required');
-        if (workDay.date > new Date()) throw new Error('Date cannot be in the future');
+        if (!workDay.date) throw new Error('WorkDay validation: Date is required');
+
+        if (workDay.date > new Date())
+            throw new Error('WorkDay validation: Date cannot be in the future');
 
         if (workDay.expectedHours < 0)
-            throw new Error('Expected hours must be a non-negative number');
+            throw new Error('WorkDay validation: Expected hours must be a non-negative number');
 
-        if (!workDay.user || !workDay.user.getId()) {
-            throw new Error('User must be valid');
-        }
+        if (!workDay.user || !workDay.user.getId())
+            throw new Error('WorkDay validation: User must be valid');
 
         if (workDay.achievedHours !== undefined) {
             if (workDay.achievedHours < 0) {
-                throw new Error('Achieved hours must be a non-negative number');
-            }
-            if (workDay.achievedHours > workDay.expectedHours) {
-                throw new Error('Achieved hours cannot exceed expected hours');
+                throw new Error('WorkDay validation: Achieved hours must be a non-negative number');
             }
         }
 
         if (workDay.timeBlocks) {
             for (const timeBlock of workDay.timeBlocks) {
-                if (!timeBlock || !timeBlock.getId()) throw new Error('Time block must be valid');
+                if (!timeBlock || !timeBlock.getId()) {
+                    throw new Error('WorkDay validation: Time block must be valid');
+                }
             }
         }
     }

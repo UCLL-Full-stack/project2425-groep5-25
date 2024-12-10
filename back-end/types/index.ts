@@ -1,4 +1,4 @@
-type Role = 'admin' | 'student' | 'lecturer' | 'guest';
+type Role = 'admin' | 'user' | 'hr';
 
 enum Color {
     Red = '#FF0000',
@@ -12,7 +12,7 @@ enum Color {
 
 type IdName = {
     id?: number;
-    name: string;
+    name?: string;
 };
 
 type UserInput = {
@@ -26,17 +26,18 @@ type UserInput = {
 };
 
 type AuthenticationResponse = {
-    token: string;
-    username: string;
-    fullname: string;
-    role: Role;
+    userId?: number;
+    token?: string;
+    userName?: string;
+    fullName?: string;
+    role?: Role;
 };
 
 type ProjectInput = {
     id?: number;
     name?: string;
     color?: Color;
-    userIds: number[];
+    userIds?: number[];
 };
 
 type ProjectToUserInput = {
@@ -44,16 +45,16 @@ type ProjectToUserInput = {
     userIds?: number[];
 };
 
-type GenerateJwtTokenInput = {
-    userId: number;
-    role: Role;
+type JwtToken = {
+    userId?: number;
+    role?: Role;
 };
 
 export {
     AuthenticationResponse,
     Color,
-    GenerateJwtTokenInput,
     IdName,
+    JwtToken,
     ProjectInput,
     ProjectToUserInput,
     Role,

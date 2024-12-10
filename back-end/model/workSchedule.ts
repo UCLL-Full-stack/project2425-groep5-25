@@ -89,23 +89,34 @@ export class WorkSchedule extends ModelBase {
         user: User;
     }) {
         if (workSchedule.mondayHours < 0)
-            throw new Error('Monday hours must be a non-negative number');
-        if (workSchedule.tuesdayHours < 0)
-            throw new Error('Tuesday hours must be a non-negative number');
-        if (workSchedule.wednesdayHours < 0)
-            throw new Error('Wednesday hours must be a non-negative number');
-        if (workSchedule.thursdayHours < 0)
-            throw new Error('Thursday hours must be a non-negative number');
-        if (workSchedule.fridayHours < 0)
-            throw new Error('Friday hours must be a non-negative number');
-        if (workSchedule.saturdayHours < 0)
-            throw new Error('Saturday hours must be a non-negative number');
-        if (workSchedule.sundayHours < 0)
-            throw new Error('Sunday hours must be a non-negative number');
+            throw new Error('WorkSchedule validation: Monday hours must be a non-negative number');
 
-        if (!workSchedule.user || !workSchedule.user.getId()) {
-            throw new Error('User must be valid');
-        }
+        if (workSchedule.tuesdayHours < 0)
+            throw new Error('WorkSchedule validation: Tuesday hours must be a non-negative number');
+
+        if (workSchedule.wednesdayHours < 0)
+            throw new Error(
+                'WorkSchedule validation: Wednesday hours must be a non-negative number',
+            );
+
+        if (workSchedule.thursdayHours < 0)
+            throw new Error(
+                'WorkSchedule validation: Thursday hours must be a non-negative number',
+            );
+
+        if (workSchedule.fridayHours < 0)
+            throw new Error('WorkSchedule validation: Friday hours must be a non-negative number');
+
+        if (workSchedule.saturdayHours < 0)
+            throw new Error(
+                'WorkSchedule validation: Saturday hours must be a non-negative number',
+            );
+
+        if (workSchedule.sundayHours < 0)
+            throw new Error('WorkSchedule validation: Sunday hours must be a non-negative number');
+
+        if (!workSchedule.user || !workSchedule.user.getId())
+            throw new Error('WorkSchedule validation: User must be valid');
 
         const totalHours =
             workSchedule.mondayHours +
@@ -116,7 +127,10 @@ export class WorkSchedule extends ModelBase {
             workSchedule.saturdayHours +
             workSchedule.sundayHours;
 
-        if (totalHours > 40) throw new Error('Total work hours cannot exceed 40 hours per week');
+        if (totalHours > 40)
+            throw new Error(
+                'WorkSchedule validation: Total work hours cannot exceed 40 hours per week',
+            );
     }
 
     equals(workSchedule: WorkSchedule): boolean {

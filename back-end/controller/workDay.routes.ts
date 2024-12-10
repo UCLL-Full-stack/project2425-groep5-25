@@ -45,7 +45,7 @@
  */
 import express, { NextFunction, Request, Response } from 'express';
 import { workDayService } from '../service/workDay.service';
-import { Role } from '../types';
+import { JwtToken } from '../types';
 
 const workDayRouter = express.Router();
 
@@ -67,14 +67,58 @@ const workDayRouter = express.Router();
  */
 workDayRouter.get(
     '',
-    async (
-        req: Request & { auth: { userId: number; role: Role } },
-        res: Response,
-        next: NextFunction,
-    ) => {
+    async (req: Request & { auth: JwtToken }, res: Response, next: NextFunction) => {
         try {
-            const { userId, role } = req.auth;
             const workDays = await workDayService.getAllWorkDays();
+            res.status(200).json(workDays);
+        } catch (error) {
+            next(error);
+        }
+    },
+);
+
+/**
+ * @swagger
+ * /workdays/{start}/{end}:
+ *   get:
+ *     summary: Retrieve work days within a specific date range
+ *     description: Retrieves work days for a user within the given date range, identified by start and end dates.
+ *     tags: [WorkDays]
+ *     security:
+ *       - bearerAuth: []  # Enabling Bearer Token authentication
+ *     parameters:
+ *       - name: start
+ *         in: path
+ *         required: true
+ *         description: Start date for the work days query (e.g., YYYY-MM-DD).
+ *         schema:
+ *           type: string
+ *           format: date
+ *       - name: end
+ *         in: path
+ *         required: true
+ *         description: End date for the work days query (e.g., YYYY-MM-DD).
+ *         schema:
+ *           type: string
+ *           format: date
+ *     responses:
+ *       200:
+ *         description: A list of work days within the specified date range.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/WorkDayResponse'
+ */
+workDayRouter.get(
+    '/:start/:end',
+    async (req: Request & { auth: JwtToken }, res: Response, next: NextFunction) => {
+        try {
+            const { start, end } = req.params;
+            const workDays = await workDayService.getWorkWeekByDates({
+                start,
+                end,
+                auth: req.auth,
+            });
             res.status(200).json(workDays);
         } catch (error) {
             next(error);

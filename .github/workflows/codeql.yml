@@ -33,6 +33,7 @@ jobs:
       if: matrix.build-mode == 'manual'
       run: |
         cd front-end
+        rm -rf node_modules/.cache
         npm install
         npm run build
 
@@ -40,5 +41,6 @@ jobs:
       if: matrix.build-mode == 'manual'
       run: |
         cd back-end
+        rm -rf node_modules/.cache
         npm install
         npm run build

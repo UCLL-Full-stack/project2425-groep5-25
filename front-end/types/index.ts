@@ -1,7 +1,7 @@
 export type ProjectInput = {
     id?: number;
     name?: string;
-    color?: String;
+    color?: string;
     userIds?: number[];
 };
 
