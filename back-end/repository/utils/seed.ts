@@ -18,15 +18,18 @@ const main = async () => {
     // Step 2: Generate Users First (Without Work Schedule)
     const users = await Promise.all(
         Array.from({ length: 20 }).map(async () => {
-            const username = casual.username;
-            const password = await bcrypt.hash(username + '123', 12);
+            const firstName = casual.first_name;
+            const lastName = casual.last_name;
+            const username = firstName + '_' + lastName;
+            const password = await bcrypt.hash('@' + username + '123', 12);
+            const email = firstName.toLowerCase() + '.' + lastName.toLowerCase() + '@gmail.com';
 
             return prisma.user.create({
                 data: {
                     userName: username,
-                    firstName: casual.first_name,
-                    lastName: casual.last_name,
-                    email: casual.email,
+                    firstName: firstName,
+                    lastName: lastName,
+                    email: email,
                     passWord: password,
                     role: casual.random_element(['admin', 'user', 'hr']) as Role,
                 },

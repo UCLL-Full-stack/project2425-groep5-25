@@ -30,14 +30,16 @@ const ProjectSidePanel: React.FC<Props> = ({
     const [errorLabelMessage, setErrorLabelMessage] = useState<ErrorLabelMessage>();
 
     const validateName = (name: string | null) => {
-        if (!name || name?.trim().length < 6)
-            return 'Project name must be at least 6 characters long';
+        if (!name?.trim()) return 'Project name is required';
+        if (name.trim().length < 6) return 'Project name must be at least 6 characters long';
+        if (!/^[a-zA-Z0-9 ]+$/.test(name))
+            return 'Project name can only contain letters, numbers, and spaces';
         return null;
     };
 
     const validateColor = (color: Color | null) => {
-        if (!color || !Object.values(Color).includes(color))
-            return 'Please select a valid project color.';
+        if (!color?.trim()) return 'Project color is required';
+        if (!Object.values(Color).includes(color)) return 'Please select a valid project color';
         return null;
     };
 

@@ -46,12 +46,17 @@ export class Project extends ModelBase {
 
     validate(project: { name: string; color: Color; users?: User[] }) {
         if (!project.name?.trim()) throw new Error('Project validation: Project name is required');
-
-        if (!project.color?.trim())
-            throw new Error('Project validation: Project color is required');
-
         if (project.name?.trim().length < 6)
             throw new Error('Project validation: Project name must be at least 6 characters long');
+        if (!/^[a-zA-Z0-9 ]+$/.test(project.name)) {
+            throw new Error(
+                'Project validation: Project name can only contain letters, numbers, and spaces',
+            );
+        }
+
+        if (!project.color) throw new Error('Project validation: Project color is required');
+        if (!Object.values(Color).includes(project.color))
+            throw new Error('Project validation: Please select a valid project color.');
 
         if (project.users) {
             for (const user of project.users) {
