@@ -1,6 +1,6 @@
-import ColorSelectField from '@components/selectss/ColorSelectField';
-import InputField from '@components/selectss/InputField';
-import UserSelectField from '@components/selectss/UserSelectField';
+import ColorSelectField from '@components/selects/ColorSelectField';
+import InputField from '@components/selects/InputField';
+import UserSelectField from '@components/selects/UserSelectField';
 import ErrorMessage from '@components/shared/ErrorMessage';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
