@@ -19,8 +19,8 @@ const UserSignupLoginForm: React.FC<Props> = ({ isSignUp, onSubmit, clearParentE
     const [errorLabelMessage, setErrorLabelMessage] = useState<ErrorLabelMessage>();
 
     const validateFirstName = (firstName: string | null) => {
-        if (!firstName?.trim() || firstName?.trim().length < 2)
-            return 'First name needs to be at least 2 letters';
+        if (!firstName?.trim()) return 'First name is required';
+        if (firstName.trim().length < 2) return 'First name needs to be at least 2 letters';
         if (firstName[0] !== firstName[0].toUpperCase())
             return 'First name needs to start with a capital letter';
         if (!/^[\p{L}]+$/u.test(firstName))
@@ -29,8 +29,8 @@ const UserSignupLoginForm: React.FC<Props> = ({ isSignUp, onSubmit, clearParentE
     };
 
     const validateLastName = (lastName: string | null) => {
-        if (!lastName?.trim() || lastName?.trim().length < 2)
-            return 'Last name needs to be at least 2 letters';
+        if (!lastName?.trim()) return 'Last name is required';
+        if (lastName.trim().length < 2) return 'Last name needs to be at least 2 letters';
         if (lastName[0] !== lastName[0].toUpperCase())
             return 'Last name needs to start with a capital letter';
         if (!/^[\p{L}]+$/u.test(lastName))
@@ -46,16 +46,16 @@ const UserSignupLoginForm: React.FC<Props> = ({ isSignUp, onSubmit, clearParentE
     };
 
     const validateUserName = (userName: string | null) => {
-        if (!userName?.trim() || userName?.trim().length < 6)
-            return 'Username must be at least 6 characters long';
+        if (!userName?.trim()) return 'Username is required';
+        if (userName.trim().length < 6) return 'Username must be at least 6 characters long';
         if (!/^[a-zA-Z0-9_]+$/.test(userName))
             return 'Username can only contain letters, numbers, and underscores';
         return null;
     };
 
     const validatePassWord = (passWord: string | null) => {
-        if (!passWord?.trim() || passWord?.trim().length < 6)
-            return 'Password must be at least 6 characters long';
+        if (!passWord?.trim()) return 'Password is required';
+        if (passWord.trim().length < 6) return 'Password must be at least 6 characters long';
         if (!/[A-Z]/.test(passWord)) return 'Password must contain at least one uppercase letter';
         if (!/[a-z]/.test(passWord)) return 'Password must contain at least one lowercase letter';
         if (!/[0-9]/.test(passWord)) return 'Password must contain at least one number';

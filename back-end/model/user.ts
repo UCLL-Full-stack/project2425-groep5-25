@@ -69,10 +69,53 @@ export class User extends ModelBase {
         role: Role;
     }) {
         if (!user.userName?.trim()) throw new Error('User validation: Username is required');
+        if (user.userName?.trim().length < 6)
+            throw new Error('User validation: Username must be at least 6 characters long');
+        if (!/^[a-zA-Z0-9_]+$/.test(user.userName))
+            throw new Error(
+                'User validation: Username can only contain letters, numbers, and underscores',
+            );
+
         if (!user.firstName?.trim()) throw new Error('User validation: First name is required');
+        if (user.firstName.trim().length < 2)
+            throw new Error('User validation: First name needs to be at least 2 letters');
+        if (user.firstName[0] !== user.firstName[0].toUpperCase())
+            throw new Error('User validation: First name needs to start with a capital letter');
+        if (!/^[\p{L}]+$/u.test(user.firstName))
+            throw new Error(
+                'User validation: First name can only contain letters (including accented characters)',
+            );
+
         if (!user.lastName?.trim()) throw new Error('User validation: Last name is required');
+        if (user.lastName.trim().length < 2)
+            throw new Error('User validation: Last name needs to be at least 2 letters');
+        if (user.lastName[0] !== user.lastName[0].toUpperCase())
+            throw new Error('User validation: Last name needs to start with a capital letter');
+        if (!/^[\p{L}]+$/u.test(user.lastName))
+            throw new Error(
+                'User validation: Last name can only contain letters (including accented characters)',
+            );
+
         if (!user.email?.trim()) throw new Error('User validation: Email is required');
+        if (!user.email.includes('@'))
+            throw new Error('User validation: Email must contain "@" symbol');
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(user.email))
+            throw new Error('User validation: Email format is invalid');
+
         if (!user.passWord?.trim()) throw new Error('User validation: Password is required');
+        if (user.passWord?.trim().length < 6)
+            throw new Error('User validation: Password must be at least 6 characters long');
+        if (!/[A-Z]/.test(user.passWord))
+            throw new Error('User validation: Password must contain at least one uppercase letter');
+        if (!/[a-z]/.test(user.passWord))
+            throw new Error('User validation: Password must contain at least one lowercase letter');
+        if (!/[0-9]/.test(user.passWord))
+            throw new Error('User validation: Password must contain at least one number');
+        if (!/[@$!%*?&#]/.test(user.passWord))
+            throw new Error(
+                'User validation: Password must contain at least one special character (@, $, !, %, *, ?, & or #)',
+            );
+
         if (!user.role) throw new Error('User validation: Role is required');
     }
 
