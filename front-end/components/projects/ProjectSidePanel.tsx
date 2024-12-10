@@ -1,18 +1,18 @@
-import ColorSelectField from '@components/Selects/ColorSelectField';
-import InputField from '@components/Selects/InputField';
-import UserSelectField from '@components/Selects/UserSelectField';
+import ColorSelectField from '@components/selects/ColorSelectField';
+import InputField from '@components/selects/InputField';
+import UserSelectField from '@components/selects/UserSelectField';
 import ErrorMessage from '@components/shared/ErrorMessage';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { projectService } from '@services/projectService';
 import styles from '@styles/ProjectSidePanel.module.css';
-import { Color, ErrorLabelMessage, IdName, ProjectInput } from '@types';
+import { Color, ErrorLabelMessage, IdName, ProjectInput, ProjectOutput } from '@types';
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 
 type Props = {
     userIdNames: Array<IdName>;
-    addProject: (project: ProjectInput) => void;
+    addProject: (project: ProjectOutput) => void;
     onProjectCreated: () => void;
     onClose: () => void;
 };
@@ -30,13 +30,15 @@ const ProjectSidePanel: React.FC<Props> = ({
     const [errorLabelMessage, setErrorLabelMessage] = useState<ErrorLabelMessage>();
 
     const validateName = (name: string | null) => {
-        if (!name || name?.trim().length < 6)
+        if (!name?.trim() || name?.trim().length < 6)
             return 'Project name must be at least 6 characters long';
+        if (!/^[a-zA-Z0-9 ]+$/.test(name))
+            return 'Project name can only contain letters, numbers, and spaces';
         return null;
     };
 
     const validateColor = (color: Color | null) => {
-        if (!color || !Object.values(Color).includes(color))
+        if (!color?.trim() || !Object.values(Color).includes(color))
             return 'Please select a valid project color.';
         return null;
     };

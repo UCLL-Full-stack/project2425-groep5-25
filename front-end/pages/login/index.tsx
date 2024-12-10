@@ -46,26 +46,14 @@ const Login: React.FC = () => {
                     role: userJson.role,
                 }),
             );
+
             localStorage.setItem('token', userJson.token);
 
-            // Steek token in een local storage appart ook, want we gebruiken die zo! == DONE
-            // const getAllUsersIdName = async () => {
-            //     return await fetch(processEnv.getApiUrl() + `/users/id-name`, {
-            //         method: 'GET',
-            //         headers: {
-            //             'Content-Type': 'application/json',
-            //             Authorization: 'Bearer ' + localStorage.getItem('token'),
-            //         },
-            //     });
-            // };
+            toast.success(`You successfully logged in! Redirecting you...`);
 
             setTimeout(() => {
                 router.push('/');
             }, 2000);
-
-            // Je redirect na 2s. Maar je toont geen succes message ofzo.== DONE
-            // Maar een succes message. Bvb:
-            toast.success(`User was authenticated successfully!`);
         } catch (error) {
             if (error instanceof Error) {
                 setErrorLabelMessage({

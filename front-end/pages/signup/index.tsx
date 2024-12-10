@@ -17,7 +17,6 @@ const SignUp: React.FC = () => {
                 firstName: data.firstName,
                 lastName: data.lastName,
                 email: data.email,
-                role: data.role,
             };
             const [response] = await Promise.all([userService.signupUser(formData)]);
             const [userJson] = await Promise.all([response.json()]);

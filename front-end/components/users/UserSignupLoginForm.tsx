@@ -1,4 +1,4 @@
-import InputField from '@components/Selects/InputField';
+import InputField from '@components/selects/InputField';
 import ErrorMessage from '@components/shared/ErrorMessage';
 import styles from '@styles/home.module.css';
 import { ErrorLabelMessage, UserInput } from '@types';
@@ -19,53 +19,46 @@ const UserSignupLoginForm: React.FC<Props> = ({ isSignUp, onSubmit }: Props) => 
     const [errorLabelMessage, setErrorLabelMessage] = useState<ErrorLabelMessage>();
 
     const validateUserName = (userName: string | null) => {
-        if (!userName || userName?.trim().length < 6)
+        if (!userName?.trim() || userName?.trim().length < 6)
             return 'Username must be at least 6 characters long';
+        if (!/^[a-zA-Z0-9_]+$/.test(userName))
+            return 'Username can only contain letters, numbers, and underscores';
         return null;
     };
 
     const validatePassWord = (passWord: string | null) => {
-        if (!passWord || passWord?.trim().length < 6)
-            return 'PassWord must be at least 6 characters long';
+        if (!passWord?.trim() || passWord?.trim().length < 6)
+            return 'Password must be at least 6 characters long';
+        if (!/[A-Z]/.test(passWord)) return 'Password must contain at least one uppercase letter';
+        if (!/[a-z]/.test(passWord)) return 'Password must contain at least one lowercase letter';
+        if (!/[0-9]/.test(passWord)) return 'Password must contain at least one number';
+        if (!/[@$!%*?&#]/.test(passWord))
+            return 'Password must contain at least one special character (@, $, !, %, *, ?, & or #)';
         return null;
     };
+
     const validateEmail = (email: string | null) => {
-        if (!email?.trim()) {
-            return 'Email is required';
-        }
+        if (!email?.trim()) return 'Email is required';
+        if (!email.includes('@')) return 'Email must contain "@" symbol';
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return 'Email format is invalid';
         return null;
     };
+
     const validateFirstName = (firstName: string | null) => {
-        if (!firstName?.trim()) {
-            return 'First Name is required';
-        }
-        if (firstName[0] != firstName[0].toUpperCase()) {
-            return 'First Name needs to start with a capital letter';
-        }
-        if (firstName.trim().length < 2) {
+        if (!firstName?.trim() || firstName?.trim().length < 2)
             return 'First Name needs to be at least 2 letters';
-        }
+        if (firstName[0] !== firstName[0].toUpperCase())
+            return 'First Name needs to start with a capital letter';
+        if (!/^[a-zA-Z]+$/.test(firstName)) return 'First Name can only contain letters';
         return null;
     };
+
     const validateLastName = (lastName: string | null) => {
-        if (!lastName?.trim()) {
-            return 'Last Name is required';
-        }
-        if (lastName[0] != lastName[0].toUpperCase()) {
-            return 'Last Name needs to start with a capital letter';
-        }
-        if (lastName.trim().length < 2) {
+        if (!lastName?.trim() || lastName?.trim().length < 2)
             return 'Last Name needs to be at least 2 letters';
-        }
-        return null;
-    };
-    const validateRole = (role: string | null) => {
-        if (!role?.trim()) {
-            return 'Role is required';
-        }
-        if (role.trim().length < 2) {
-            return 'Role needs to be at least 2 letters';
-        }
+        if (lastName[0] !== lastName[0].toUpperCase())
+            return 'Last Name needs to start with a capital letter';
+        if (!/^[a-zA-Z]+$/.test(lastName)) return 'Last Name can only contain letters';
         return null;
     };
 
@@ -87,12 +80,11 @@ const UserSignupLoginForm: React.FC<Props> = ({ isSignUp, onSubmit }: Props) => 
             const emailError = validateEmail(email);
             const firstNameError = validateFirstName(firstName);
             const lastNameError = validateLastName(lastName);
-            const roleError = validateRole(role);
 
-            if (emailError || firstNameError || lastNameError || roleError) {
+            if (emailError || firstNameError || lastNameError) {
                 setErrorLabelMessage({
                     label: 'Validation Error',
-                    message: emailError || firstNameError || lastNameError || roleError || '',
+                    message: emailError || firstNameError || lastNameError || '',
                 });
                 return false;
             }
@@ -109,14 +101,19 @@ const UserSignupLoginForm: React.FC<Props> = ({ isSignUp, onSubmit }: Props) => 
             return;
         }
 
-        const userData: UserInput = {
+        let userData: UserInput = {
             userName: userName!,
             passWord: passWord!,
-            email: email!,
-            firstName: firstName!,
-            lastName: lastName!,
-            role: role!,
         };
+
+        if (isSignUp) {
+            userData = {
+                ...userData,
+                email: email!,
+                firstName: firstName!,
+                lastName: lastName!,
+            };
+        }
 
         onSubmit(userData, validate());
     };
@@ -133,9 +130,7 @@ const UserSignupLoginForm: React.FC<Props> = ({ isSignUp, onSubmit }: Props) => 
                     onChange={setUserName}
                     validate={validateUserName}
                     placeholder="Enter your username"
-                    required // das default true als je geen value aan geeft
-                    // required={true} == required
-                    // Moet enkel false assigned aan bools.
+                    required
                 />
 
                 <InputField
@@ -145,7 +140,7 @@ const UserSignupLoginForm: React.FC<Props> = ({ isSignUp, onSubmit }: Props) => 
                     onChange={setPassWord}
                     validate={validatePassWord}
                     placeholder="Enter your password"
-                    required // same here
+                    required
                 />
 
                 {isSignUp && (
@@ -155,9 +150,9 @@ const UserSignupLoginForm: React.FC<Props> = ({ isSignUp, onSubmit }: Props) => 
                             label="Email"
                             value={email}
                             onChange={setEmail}
+                            validate={validateEmail}
                             placeholder="Enter your email"
                             required={true}
-                            validate={validateEmail}
                         />
 
                         <InputField
@@ -165,9 +160,9 @@ const UserSignupLoginForm: React.FC<Props> = ({ isSignUp, onSubmit }: Props) => 
                             label="First Name"
                             value={firstName}
                             onChange={setFirstName}
+                            validate={validateFirstName}
                             placeholder="Enter your first name"
                             required
-                            validate={validateFirstName}
                         />
 
                         <InputField
@@ -175,19 +170,9 @@ const UserSignupLoginForm: React.FC<Props> = ({ isSignUp, onSubmit }: Props) => 
                             label="Last Name"
                             value={lastName}
                             onChange={setLastName}
+                            validate={validateLastName}
                             placeholder="Enter your last name"
                             required
-                            validate={validateLastName}
-                        />
-
-                        <InputField
-                            type="text"
-                            label="Role"
-                            value={role}
-                            onChange={setRole}
-                            placeholder="Enter your role (e.g., Admin, User)"
-                            required
-                            validate={validateRole}
                         />
                     </>
                 )}
