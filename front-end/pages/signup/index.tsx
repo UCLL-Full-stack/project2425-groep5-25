@@ -50,7 +50,7 @@ const SignUp: React.FC = () => {
 
             setTimeout(() => {
                 router.push('/');
-            }, 2000);
+            }, 3000);
         } catch (error) {
             console.error('Login error:', error);
             setErrorLabelMessage({

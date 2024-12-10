@@ -1,4 +1,4 @@
-import { ProjectToUserInput, UserInput } from '@types';
+import { UserInput } from '@types';
 import { processEnv } from 'env/env';
 
 const getAllUsersIdName = async () => {
@@ -11,15 +11,6 @@ const getAllUsersIdName = async () => {
     });
 };
 
-const enrollProject = async (formData: ProjectToUserInput) => {
-    return await fetch(processEnv.getApiUrl() + `/users/enroll-projects`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-    });
-};
 const loginUser = (user: UserInput) => {
     return fetch(processEnv.getApiUrl() + '/users/login', {
         method: 'POST',
@@ -29,6 +20,7 @@ const loginUser = (user: UserInput) => {
         body: JSON.stringify(user),
     });
 };
+
 const signupUser = (user: UserInput) => {
     return fetch(processEnv.getApiUrl() + '/users/signup', {
         method: 'POST',
@@ -39,4 +31,4 @@ const signupUser = (user: UserInput) => {
     });
 };
 
-export const userService = { loginUser, getAllUsersIdName, enrollProject, signupUser };
+export const userService = { loginUser, getAllUsersIdName, signupUser };

@@ -42,7 +42,7 @@ const Login: React.FC = () => {
 
             setTimeout(() => {
                 router.push('/');
-            }, 2000);
+            }, 3000);
         } catch (error) {
             if (error instanceof Error) {
                 setErrorLabelMessage({
