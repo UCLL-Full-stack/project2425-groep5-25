@@ -1,8 +1,21 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { toast } from 'react-toastify';
 
 const Header: React.FC = () => {
     const router = useRouter();
+
+    const handleLogout = () => {
+        localStorage.clear();
+
+        toast.success(`You are being logged out! Redirecting you...`);
+
+        setTimeout(() => {
+            router.push('/login');
+        }, 3000);
+    };
+
+    const isLoggedIn = typeof window !== 'undefined' && localStorage.getItem('token');
 
     return (
         <header className="d-flex justify-content-between p-3 border-bottom bg-dark bg-gradient">
@@ -28,20 +41,30 @@ const Header: React.FC = () => {
                     }`}>
                     Workdays
                 </Link>
-                <Link
-                    href="/login"
-                    className={`nav-link px-4 fs-5 text-white ${
-                        router.pathname === '/login' ? 'border-bottom' : ''
-                    }`}>
-                    Login
-                </Link>
-                <Link
-                    href="/signup"
-                    className={`nav-link px-4 fs-5 text-white ${
-                        router.pathname === '/signup' ? 'border-bottom' : ''
-                    }`}>
-                    Signup
-                </Link>
+                {isLoggedIn ? (
+                    <a
+                        onClick={handleLogout}
+                        className="btn btn-link nav-link px-4 fs-5 text-white text-decoration-none">
+                        Logout
+                    </a>
+                ) : (
+                    <>
+                        <Link
+                            href="/login"
+                            className={`nav-link px-4 fs-5 text-white ${
+                                router.pathname === '/login' ? 'border-bottom' : ''
+                            }`}>
+                            Login
+                        </Link>
+                        <Link
+                            href="/signup"
+                            className={`nav-link px-4 fs-5 text-white ${
+                                router.pathname === '/signup' ? 'border-bottom' : ''
+                            }`}>
+                            Signup
+                        </Link>
+                    </>
+                )}
             </nav>
             <Link
                 className="fs-2 d-flex justify-content-center text-white-50 text-decoration-none"
