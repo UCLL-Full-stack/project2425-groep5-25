@@ -43,9 +43,11 @@ const Header: React.FC = () => {
                     Signup
                 </Link>
             </nav>
-            <a className="fs-2 d-flex justify-content-center text-white-50 text-decoration-none">
+            <Link
+                className="fs-2 d-flex justify-content-center text-white-50 text-decoration-none"
+                href="/">
                 Time Tracker
-            </a>
+            </Link>
         </header>
     );
 };

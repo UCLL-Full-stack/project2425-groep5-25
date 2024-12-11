@@ -37,8 +37,8 @@ const Home: React.FC = () => {
     return (
         <>
             <Head>
-                <title>Time Tracker</title>
-                <meta name="description" content="Time tracker application" />
+                <title>Workdays</title>
+                <meta name="description" content="Time tracker workdays" />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
