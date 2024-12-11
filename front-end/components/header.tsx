@@ -43,8 +43,9 @@ const Header: React.FC = () => {
                 </Link>
                 {isLoggedIn ? (
                     <a
+                        role="button"
                         onClick={handleLogout}
-                        className="nav-link px-4 fs-5 text-white cursor-pointer">
+                        className="nav-link px-4 fs-5 text-white">
                         Logout
                     </a>
                 ) : (

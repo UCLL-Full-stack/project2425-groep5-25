@@ -3,6 +3,7 @@ import cors from 'cors';
 import * as dotenv from 'dotenv';
 import express, { NextFunction, Request, Response } from 'express';
 import { expressjwt } from 'express-jwt';
+import helmet from 'helmet';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { projectRouter } from './controller/project.routes';
@@ -12,8 +13,17 @@ import { workDayRouter } from './controller/workDay.routes';
 import { processEnv } from './env/env';
 
 const app = express();
-dotenv.config();
+app.use(helmet());
 
+app.use(
+    helmet.contentSecurityPolicy({
+        directives: {
+            connectSrc: ["'self'", 'https://api.ucll.be'],
+        },
+    }),
+);
+
+dotenv.config();
 const publicApiPort = processEnv.getApiPort();
 const publicFrontEndPort = processEnv.getFrontEndPort();
 
