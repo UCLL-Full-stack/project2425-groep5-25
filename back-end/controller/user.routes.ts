@@ -128,14 +128,6 @@ userRouter.get(
     '/id-name',
     async (req: Request & { auth: JwtToken }, res: Response, next: NextFunction) => {
         try {
-            const { role } = req.auth; // Assuming userRole is in the JWT token
-
-            if (role !== 'admin') {
-                return res.status(403).json({
-                    message: 'Forbidden: You do not have permission to access this resource.',
-                });
-            }
-
             const users = await userService.getAllUsersIdName();
             res.status(200).json(users);
         } catch (error) {
