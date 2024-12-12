@@ -37,8 +37,6 @@ const Login: React.FC = () => {
                 }),
             );
 
-            localStorage.setItem('token', userJson.token);
-
             toast.success(`You successfully logged in! Redirecting you...`);
 
             setTimeout(() => {

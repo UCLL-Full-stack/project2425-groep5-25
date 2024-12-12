@@ -1,12 +1,13 @@
 import { UserInput } from '@types';
 import { processEnv } from 'env/env';
+import { getToken } from 'utils/authUtils';
 
 const getAllUsersIdName = async () => {
-    return await fetch(processEnv.getApiUrl() + `/users/id-name`, {
+    return fetch(processEnv.getApiUrl() + `/users/id-name`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            Authorization: 'Bearer ' + localStorage.getItem('token'),
+            Authorization: 'Bearer ' + getToken(),
         },
     });
 };

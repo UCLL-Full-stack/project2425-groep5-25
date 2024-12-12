@@ -1,7 +1,7 @@
 import styles from '@styles/TimeBlock.module.css';
 import { TimeBlockOutput } from '@types';
-import { calculateDuration, formatTime } from 'utils/Date.utils';
-import { hexToRgba } from 'utils/optionFormatters';
+import { hexToRgba } from 'utils/colorUtils';
+import { calculateDuration, formatTime } from 'utils/dateTimeUtils';
 
 type props = {
     timeBlock: TimeBlockOutput;

@@ -5,7 +5,7 @@ import styles from '@styles/home.module.css';
 import { WorkDayOutput } from '@types';
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
-import { getStartAndEndOfWeek } from 'utils/Date.utils';
+import { getStartAndEndOfWeek } from 'utils/dateTimeUtils';
 
 const Home: React.FC = () => {
     const [workDays, setWorkDays] = useState<WorkDayOutput[]>([]);

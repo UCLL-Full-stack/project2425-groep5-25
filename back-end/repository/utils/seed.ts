@@ -17,7 +17,7 @@ const main = async () => {
 
     // Step 2: Generate Users First (Without Work Schedule)
     const users = await Promise.all(
-        Array.from({ length: 20 }).map(async () => {
+        Array.from({ length: 100 }).map(async () => {
             const firstName = casual.first_name;
             const lastName = casual.last_name;
             const username = firstName + '_' + lastName;

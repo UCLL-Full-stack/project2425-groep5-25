@@ -1,6 +1,6 @@
 import { ProjectOutput } from '@types';
 import React from 'react';
-import { formatOptionLabel, getColorName } from 'utils/optionFormatters';
+import { formatOptionLabel, getColorName } from 'utils/colorUtils';
 
 type Props = {
     projects: Array<ProjectOutput>;

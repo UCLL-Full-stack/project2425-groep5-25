@@ -2,7 +2,7 @@ import styles from '@styles/InputField.module.css';
 import { Color } from '@types';
 import React, { useState } from 'react';
 import Select from 'react-select';
-import { formatOptionLabel } from 'utils/optionFormatters';
+import { formatOptionLabel } from 'utils/colorUtils';
 
 type Props = {
     label: string;

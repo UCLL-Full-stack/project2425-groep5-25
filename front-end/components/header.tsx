@@ -1,9 +1,11 @@
+import userTokenInfo from 'hooks/userTokenInfo';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
 
 const Header: React.FC = () => {
     const router = useRouter();
+    const { userRole, userName, userFullName, userToken } = userTokenInfo();
 
     const handleLogout = () => {
         localStorage.clear();
@@ -14,8 +16,6 @@ const Header: React.FC = () => {
             router.push('/login');
         }, 3000);
     };
-
-    const isLoggedIn = typeof window !== 'undefined' && localStorage.getItem('token');
 
     return (
         <header className="d-flex justify-content-between p-3 border-bottom bg-dark bg-gradient">
@@ -41,7 +41,7 @@ const Header: React.FC = () => {
                     }`}>
                     Workdays
                 </Link>
-                {isLoggedIn ? (
+                {userRole ? (
                     <a
                         role="button"
                         onClick={handleLogout}

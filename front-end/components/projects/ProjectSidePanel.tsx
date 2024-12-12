@@ -6,23 +6,17 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { projectService } from '@services/projectService';
 import styles from '@styles/ProjectSidePanel.module.css';
-import { Color, ErrorLabelMessage, IdName, ProjectInput, ProjectOutput } from '@types';
+import { Color, ErrorLabelMessage, IdName, ProjectInput } from '@types';
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 
 type Props = {
     userIdNames: Array<IdName>;
-    addProject: (project: ProjectOutput) => void;
     onProjectCreated: () => void;
     onClose: () => void;
 };
 
-const ProjectSidePanel: React.FC<Props> = ({
-    userIdNames,
-    addProject,
-    onProjectCreated,
-    onClose,
-}: Props) => {
+const ProjectSidePanel: React.FC<Props> = ({ userIdNames, onProjectCreated, onClose }: Props) => {
     const [name, setName] = useState<string | null>(null);
     const [color, setColor] = useState<Color | null>(null);
     const [userIds, setUserIds] = useState<number[]>([]);
@@ -91,12 +85,6 @@ const ProjectSidePanel: React.FC<Props> = ({
             onProjectCreated();
             toast.success(`Project was created successfully!`);
             onClose();
-
-            addProject({
-                id: projectJson.id,
-                name: projectJson.name,
-                color: projectJson.color,
-            });
         } catch (error) {
             if (error instanceof Error) {
                 setErrorLabelMessage({
