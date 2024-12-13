@@ -3,35 +3,41 @@ import ProjectSidePanel from '@components/projects/ProjectSidePanel';
 import { projectService } from '@services/projectService';
 import { userService } from '@services/userService';
 import styles from '@styles/home.module.css';
-import { IdName, ProjectOutput } from '@types';
+import userTokenInfo from 'hooks/userTokenInfo';
 import Head from 'next/head';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import useSWR, { mutate } from 'swr';
+import useInterval from 'use-interval';
+import { handleResponse } from 'utils/responseUtils';
 
 const Home: React.FC = () => {
-    const [userIdNames, setUserIdNames] = useState<IdName[]>([]);
-    const [projects, setProjects] = useState<ProjectOutput[]>([]);
+    const { userRole, userName, userFullName, userToken } = userTokenInfo();
     const [isSidePanelOpen, setIsSidePanelOpen] = useState<boolean>(false);
 
-    const getAllUsersIdName = async () => {
-        const [response] = await Promise.all([userService.getAllUsersIdName()]);
-        const [users] = await Promise.all([response.json()]);
-        setUserIdNames(users);
+    const getUsersAndProjects = async () => {
+        try {
+            const [usersResponse, projectsResponse] = await Promise.all([
+                userService.getAllUsersIdName(), // 403 error
+                projectService.getAllProjects(),
+            ]);
+
+            const [users, projects] = await Promise.all([
+                handleResponse(usersResponse),
+                handleResponse(projectsResponse),
+            ]);
+
+            return { users, projects };
+        } catch (error) {
+            console.error('Error fetching data', error);
+            return null;
+        }
     };
 
-    const getAllProjects = async () => {
-        const [response] = await Promise.all([projectService.getAllProjects()]);
-        const [projects] = await Promise.all([response.json()]);
-        setProjects(projects);
-    };
+    const { data, error, isLoading } = useSWR('usersAndProjects', getUsersAndProjects);
 
-    const addProject = (project: ProjectOutput) => {
-        setProjects((x) => [...x, project]);
-    };
-
-    useEffect(() => {
-        getAllUsersIdName();
-        getAllProjects();
-    }, []);
+    useInterval(() => {
+        mutate('usersAndProjects', getUsersAndProjects());
+    }, 1000);
 
     return (
         <>
@@ -48,25 +54,28 @@ const Home: React.FC = () => {
                             <h4>Projects</h4>
                         </span>
 
-                        <button
-                            onClick={() => setIsSidePanelOpen(!isSidePanelOpen)}
-                            className={styles.button}>
-                            Add Project
-                        </button>
+                        {data && (
+                            <button
+                                onClick={() => setIsSidePanelOpen(!isSidePanelOpen)}
+                                className={styles.button}>
+                                Add Project
+                            </button>
+                        )}
                     </div>
 
                     <hr />
 
-                    {isSidePanelOpen && (
+                    {isLoading && <p className="text-green-800">Loading the page</p>}
+
+                    {data && <ProjectOverviewTable projects={data.projects} />}
+
+                    {data && isSidePanelOpen && (
                         <ProjectSidePanel
-                            userIdNames={userIdNames}
-                            onClose={() => setIsSidePanelOpen(false)}
-                            addProject={addProject}
-                            onProjectCreated={() => getAllProjects()}
+                            userIdNames={data.users}
+                            onClose={() => setIsSidePanelOpen(!isSidePanelOpen)}
+                            onProjectCreated={getUsersAndProjects}
                         />
                     )}
-
-                    {projects && <ProjectOverviewTable projects={projects} />}
                 </div>
             </main>
         </>

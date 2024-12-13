@@ -1,22 +1,23 @@
 import { ProjectInput } from '@types';
 import { processEnv } from 'env/env';
+import { getToken } from 'utils/authUtils';
 
 const getAllProjects = async () => {
-    return await fetch(processEnv.getApiUrl() + `/projects`, {
+    return fetch(processEnv.getApiUrl() + `/projects`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            Authorization: 'Bearer ' + localStorage.getItem('token'),
+            Authorization: 'Bearer ' + getToken(),
         },
     });
 };
 
 const createProject = async (formData: ProjectInput) => {
-    return await fetch(processEnv.getApiUrl() + `/projects`, {
+    return fetch(processEnv.getApiUrl() + `/projects`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            Authorization: 'Bearer ' + localStorage.getItem('token'),
+            Authorization: 'Bearer ' + getToken(),
         },
         body: JSON.stringify(formData),
     });

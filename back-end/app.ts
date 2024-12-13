@@ -28,19 +28,19 @@ const publicApiPort = processEnv.getApiPort();
 const publicFrontEndPort = processEnv.getFrontEndPort();
 
 app.use(
+    cors({
+        origin: `http://localhost:${publicFrontEndPort}`,
+    }),
+    bodyParser.json(),
+);
+
+app.use(
     expressjwt({
         secret: processEnv.getJwtSecret(),
         algorithms: ['HS256'],
     }).unless({
         path: ['/api-docs', /^\/api-docs\/.*/, '/users/signup', '/users/login', '/status'],
     }),
-);
-
-app.use(
-    cors({
-        origin: `http://localhost:${publicFrontEndPort}`,
-    }),
-    bodyParser.json(),
 );
 
 app.use('/projects', projectRouter);

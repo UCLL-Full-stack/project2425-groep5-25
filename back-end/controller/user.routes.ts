@@ -102,7 +102,7 @@
  */
 import express, { NextFunction, Request, Response } from 'express';
 import { userService } from '../service/user.service';
-import { UserInput } from '../types';
+import { JwtToken, UserInput } from '../types';
 
 const userRouter = express.Router();
 
@@ -124,14 +124,17 @@ const userRouter = express.Router();
  *               items:
  *                 $ref: '#/components/schemas/IdName'
  */
-userRouter.get('/id-name', async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const users = await userService.getAllUsersIdName();
-        res.status(200).json(users);
-    } catch (error) {
-        next(error);
-    }
-});
+userRouter.get(
+    '/id-name',
+    async (req: Request & { auth: JwtToken }, res: Response, next: NextFunction) => {
+        try {
+            const users = await userService.getAllUsersIdName();
+            res.status(200).json(users);
+        } catch (error) {
+            next(error);
+        }
+    },
+);
 
 /**
  * @swagger

@@ -1,7 +1,7 @@
 import styles from '@styles/WeekPaginator.module.css';
 import React from 'react';
 import { FaArrowLeft, FaArrowRight, FaCalendarDay } from 'react-icons/fa'; // Added FaCalendarDay
-import { formatWeekDisplay, getStartAndEndOfWeek } from 'utils/Date.utils';
+import { formatWeekDisplay, getStartAndEndOfWeek } from 'utils/dateTimeUtils';
 
 type Props = {
     currentWeekStart: string;

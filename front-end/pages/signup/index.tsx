@@ -43,8 +43,6 @@ const SignUp: React.FC = () => {
                 }),
             );
 
-            localStorage.setItem('token', userJson.token);
-
             toast.success(
                 `You successfully created an account! You are now logged in! Redirecting you...`,
             );

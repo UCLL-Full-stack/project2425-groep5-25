@@ -1,6 +1,6 @@
 import styles from '@styles/Workday.module.css';
 import { WorkDayOutput } from '@types';
-import { formatDecimalTime, getDateNumber, getDayName } from 'utils/Date.utils';
+import { formatDecimalTime, getDateNumber, getDayName } from 'utils/dateTimeUtils';
 import TimeBlock from './TimeBlock';
 
 type props = {
