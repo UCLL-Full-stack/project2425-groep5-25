@@ -113,7 +113,7 @@ projectRouter.get(
     '/',
     async (req: Request & { auth: JwtToken }, res: Response, next: NextFunction) => {
         try {
-            const projects = await projectService.getAllProjects();
+            const projects = await projectService.getAllProjects({ auth: req.auth });
             res.status(200).json(projects);
         } catch (error) {
             next(error);
@@ -152,55 +152,6 @@ projectRouter.post(
             const projectInput = <ProjectInput>req.body;
             const result = await projectService.createProject(projectInput);
             res.status(201).json(result);
-        } catch (error) {
-            next(error);
-        }
-    },
-);
-
-/**
- * @swagger
- * /projects/add-users:
- *   put:
- *     summary: Add users to a project
- *     description: Add a list of user IDs to an existing project. Ensure that the project exists before adding users.
- *     tags:
- *       - Projects
- *     security:
- *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               id:
- *                 type: number
- *                 description: The ID of the project.
- *               userIds:
- *                 type: array
- *                 items:
- *                   type: number
- *                 description: A list of user IDs to be added to the project.
- *             required:
- *               - id
- *               - userIds
- *     responses:
- *       200:
- *         description: Users were successfully added to the project.
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ProjectDto'
- */
-projectRouter.put(
-    '/add-users',
-    async (req: Request & { auth: JwtToken }, res: Response, next: NextFunction) => {
-        try {
-            const projectInput = <ProjectInput>req.body;
-            const result = await projectService.addUsersToProject(projectInput);
-            res.status(200).json(result);
         } catch (error) {
             next(error);
         }

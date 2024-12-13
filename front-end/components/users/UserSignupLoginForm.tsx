@@ -1,5 +1,5 @@
-import InputField from '@components/selects/InputField';
-import ErrorMessage from '@components/shared/ErrorMessage';
+import ErrorMessage from '@components/layout/ErrorMessage';
+import InputField from '@components/shared/InputField';
 import styles from '@styles/home.module.css';
 import { ErrorLabelMessage, UserInput } from '@types';
 import React, { useState } from 'react';
