@@ -11,7 +11,6 @@ const SignUp: React.FC = () => {
     const [errorLabelMessage, setErrorLabelMessage] = useState<ErrorLabelMessage>();
 
     const handleSignUp = async (data: UserInput) => {
-        if (!data) return;
         setErrorLabelMessage(undefined);
 
         try {
