@@ -44,7 +44,7 @@ const Login: React.FC = () => {
         } catch (error) {
             if (error instanceof Error) {
                 setErrorLabelMessage({
-                    label: 'Validation Error',
+                    label: 'Error',
                     message: error.message,
                 });
             }

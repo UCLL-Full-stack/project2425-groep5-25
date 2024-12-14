@@ -50,11 +50,12 @@ const SignUp: React.FC = () => {
                 router.push('/');
             }, 2750);
         } catch (error) {
-            console.error('Login error:', error);
-            setErrorLabelMessage({
-                message: 'An unexpected error occurred. Please try again.',
-                label: 'error',
-            });
+            if (error instanceof Error) {
+                setErrorLabelMessage({
+                    label: 'Error',
+                    message: error.message,
+                });
+            }
         }
     };
 
