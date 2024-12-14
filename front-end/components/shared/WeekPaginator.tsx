@@ -1,6 +1,5 @@
-import styles from '@styles/WeekPaginator.module.css';
 import React from 'react';
-import { FaArrowLeft, FaArrowRight, FaCalendarDay } from 'react-icons/fa'; // Added FaCalendarDay
+import { FaArrowLeft, FaArrowRight, FaCalendarDay } from 'react-icons/fa';
 import { formatWeekDisplay, getStartAndEndOfWeek } from 'utils/dateTimeUtils';
 
 type Props = {
@@ -32,24 +31,26 @@ const WeekPaginator: React.FC<Props> = ({
 
     return (
         <>
-            <div className={styles.weekNavigation}>
-                <span>{formatWeekDisplay(currentWeekStart, currentWeekEnd)}</span>
+            <div className="flex items-center w-max">
+                <span className="inline-block w-max">
+                    {formatWeekDisplay(currentWeekStart, currentWeekEnd)}
+                </span>
 
-                <div className={styles.weekNavigationContainer}>
+                <div className="flex justify-between gap-2 w-full">
                     <button
-                        className={styles.weekNavigationButton}
+                        className="text-2xl p-2 hover:text-blue-500"
                         onClick={goToPreviousWeek}
                         aria-label="Previous Week">
                         <FaArrowLeft />
                     </button>
                     <button
-                        className={styles.weekNavigationButton}
+                        className="text-2xl p-2 hover:text-blue-500"
                         onClick={resetToCurrentWeek}
                         aria-label="Go to Current Week">
                         <FaCalendarDay />
                     </button>
                     <button
-                        className={styles.weekNavigationButton}
+                        className="text-2xl p-2 hover:text-blue-500"
                         onClick={goToNextWeek}
                         aria-label="Next Week">
                         <FaArrowRight />

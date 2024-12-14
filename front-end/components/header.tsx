@@ -18,61 +18,62 @@ const Header: React.FC = () => {
     };
 
     return (
-        <header className="d-flex justify-content-between p-3 border-bottom bg-dark bg-gradient">
-            <nav className="nav justify-content-center">
+        <>
+            <header className="flex justify-between items-center p-4 border-b bg-gray-800">
+                <nav className="flex space-x-6">
+                    <Link
+                        href="/"
+                        className={`text-white text-lg font-medium ${
+                            router.pathname === '/' ? 'border-b-2 border-white' : ''
+                        }`}>
+                        Home
+                    </Link>
+                    <Link
+                        href="/projects"
+                        className={`text-white text-lg font-medium ${
+                            router.pathname === '/projects' ? 'border-b-2 border-white' : ''
+                        }`}>
+                        Projects
+                    </Link>
+                    <Link
+                        href="/workdays"
+                        className={`text-white text-lg font-medium ${
+                            router.pathname === '/workdays' ? 'border-b-2 border-white' : ''
+                        }`}>
+                        Workdays
+                    </Link>
+                    {userRole ? (
+                        <button
+                            onClick={handleLogout}
+                            className="text-white text-lg font-medium hover:underline">
+                            Logout
+                        </button>
+                    ) : (
+                        <>
+                            <Link
+                                href="/login"
+                                className={`text-white text-lg font-medium ${
+                                    router.pathname === '/login' ? 'border-b-2 border-white' : ''
+                                }`}>
+                                Login
+                            </Link>
+                            <Link
+                                href="/signup"
+                                className={`text-white text-lg font-medium ${
+                                    router.pathname === '/signup' ? 'border-b-2 border-white' : ''
+                                }`}>
+                                Signup
+                            </Link>
+                        </>
+                    )}
+                </nav>
                 <Link
                     href="/"
-                    className={`nav-link px-4 fs-5 text-white ${
-                        router.pathname === '/' ? 'border-bottom' : ''
-                    }`}>
-                    Home
+                    className="text-2xl font-bold text-gray-400 hover:text-white transition duration-300">
+                    Time Tracker
                 </Link>
-                <Link
-                    href="/projects"
-                    className={`nav-link px-4 fs-5 text-white ${
-                        router.pathname === '/projects' ? 'border-bottom' : ''
-                    }`}>
-                    Projects
-                </Link>
-                <Link
-                    href="/workdays"
-                    className={`nav-link px-4 fs-5 text-white ${
-                        router.pathname === '/workdays' ? 'border-bottom' : ''
-                    }`}>
-                    Workdays
-                </Link>
-                {userRole ? (
-                    <a
-                        role="button"
-                        onClick={handleLogout}
-                        className="nav-link px-4 fs-5 text-white">
-                        Logout
-                    </a>
-                ) : (
-                    <>
-                        <Link
-                            href="/login"
-                            className={`nav-link px-4 fs-5 text-white ${
-                                router.pathname === '/login' ? 'border-bottom' : ''
-                            }`}>
-                            Login
-                        </Link>
-                        <Link
-                            href="/signup"
-                            className={`nav-link px-4 fs-5 text-white ${
-                                router.pathname === '/signup' ? 'border-bottom' : ''
-                            }`}>
-                            Signup
-                        </Link>
-                    </>
-                )}
-            </nav>
-            <Link
-                className="fs-2 d-flex justify-content-center text-white-50 text-decoration-none"
-                href="/">
-                Time Tracker
-            </Link>
-        </header>
+            </header>
+        </>
     );
 };
 

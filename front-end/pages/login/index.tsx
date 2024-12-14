@@ -54,14 +54,18 @@ const Login: React.FC = () => {
     return (
         <>
             <MainLayout title="Login" description="Time tracker login">
-                <main className="container mx-auto max-w-md p-4">
-                    <LoginSignup
-                        isSignUp={false}
-                        onSubmit={handleLogin}
-                        clearParentErrors={() => setErrorLabelMessage(undefined)}
-                    />
-                    {errorLabelMessage && <ErrorMessage errorLabelMessage={errorLabelMessage} />}
-                </main>
+                <div className="flex justify-center">
+                    <div className="flex flex-col gap-4 p-2 max-w-md w-full">
+                        <LoginSignup
+                            isSignUp={false}
+                            onSubmit={handleLogin}
+                            clearParentErrors={() => setErrorLabelMessage(undefined)}
+                        />
+                        {errorLabelMessage && (
+                            <ErrorMessage errorLabelMessage={errorLabelMessage} />
+                        )}
+                    </div>
+                </div>
             </MainLayout>
         </>
     );

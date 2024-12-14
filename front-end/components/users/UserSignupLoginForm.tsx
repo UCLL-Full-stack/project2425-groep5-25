@@ -1,6 +1,5 @@
 import ErrorMessage from '@components/layout/ErrorMessage';
 import InputField from '@components/shared/InputField';
-import styles from '@styles/home.module.css';
 import { ErrorLabelMessage, UserInput } from '@types';
 import React, { useState } from 'react';
 
@@ -122,10 +121,8 @@ const UserSignupLoginForm: React.FC<Props> = ({ isSignUp, onSubmit, clearParentE
     };
 
     return (
-        <div className={styles.main}>
-            <h3 className="px-0">{isSignUp ? 'Sign Up' : 'Login'}</h3>
-
-            <form onSubmit={handleSubmit}>
+        <div className="flex justify-center items-center">
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4 p-2 w-full">
                 {isSignUp && (
                     <>
                         <InputField
@@ -180,7 +177,9 @@ const UserSignupLoginForm: React.FC<Props> = ({ isSignUp, onSubmit, clearParentE
                     required
                 />
 
-                <button type="submit" className={styles.button}>
+                <button
+                    type="submit"
+                    className="bg-blue-500 text-white px-6 py-2 rounded-md shadow-md hover:bg-blue-600 transition duration-200">
                     {isSignUp ? 'Sign Up' : 'Login'}
                 </button>
 
