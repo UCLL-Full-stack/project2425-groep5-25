@@ -1,6 +1,16 @@
 {
     "app.title": "Zaman Takip",
     "general.error": "Bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
+    "header": {
+        "home": "Ana Sayfa",
+        "projects": "Projeler",
+        "workdays": "Çalışma Günleri",
+        "logout": "Çıkış Yap",
+        "login": "Giriş Yap",
+        "signup": "Kayıt Ol",
+        "title": "Zaman Takip",
+        "logoutSuccess": "Çıkış yapılıyor! Yönlendiriliyorsunuz..."
+    },
     "login": {
         "title": "Giriş Yap",
         "button": "Giriş Yap",

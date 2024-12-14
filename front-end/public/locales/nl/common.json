@@ -1,6 +1,16 @@
 {
     "app.title": "Tijdregistratie",
     "general.error": "Er is een fout opgetreden. Probeer het later opnieuw.",
+    "header": {
+        "home": "Home",
+        "projects": "Projecten",
+        "workdays": "Werkdagen",
+        "logout": "Uitloggen",
+        "login": "Inloggen",
+        "signup": "Aanmelden",
+        "title": "Tijdregistratie",
+        "logoutSuccess": "Je wordt uitgelogd! Je wordt doorgestuurd..."
+    },
     "login": {
         "title": "Inloggen",
         "button": "Inloggen",

@@ -1,28 +1,39 @@
 import { useRouter } from 'next/router';
+import Select, { SingleValue } from 'react-select';
 
 const Language: React.FC = () => {
     const router = useRouter();
-    const { locale, pathname, asPath, query } = router;
+    const { locale } = router;
 
-    const handleLanguageChange = (event: { target: { value: string } }) => {
-        const newLocale = event.target.value;
-        const { pathname, asPath, query } = router;
-        router.push({ pathname, query }, asPath, { locale: newLocale });
+    const options = [
+        { value: 'en', label: 'English' },
+        { value: 'tr', label: 'Türkçe' },
+        { value: 'nl', label: 'Nederlands' },
+    ];
+    const selectedOption = options.find((option) => option.value === locale) || options[0];
+
+    const handleLanguageChange = (
+        selectedOption: SingleValue<{ value: string; label: string }>,
+    ) => {
+        if (selectedOption) {
+            const newLocale = selectedOption.value;
+            const { pathname, asPath, query } = router;
+            router.push({ pathname, query }, asPath, { locale: newLocale });
+        }
     };
 
     return (
-        <div className="ml-6">
-            <label htmlFor="language" className="text-white"></label>
-            <select
+        <>
+            <Select
                 id="language"
-                className="ml-2 p-1"
-                value={locale}
-                onChange={handleLanguageChange}>
-                <option value="en">English</option>
-                <option value="nl">Nederlands</option>
-                <option value="tr">Türkçe</option>
-            </select>
-        </div>
+                options={options}
+                value={selectedOption || null} // Ensure a fallback value of null
+                onChange={handleLanguageChange}
+                className="text-black"
+                classNamePrefix="react-select"
+                isSearchable={false} // Set to true if you want to allow searching
+            />
+        </>
     );
 };
 

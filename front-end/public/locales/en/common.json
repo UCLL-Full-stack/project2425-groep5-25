@@ -1,6 +1,16 @@
 {
     "app.title": "Time Tracker",
     "general.error": "An error has occurred. Please try again later.",
+    "header": {
+        "home": "Home",
+        "projects": "Projects",
+        "workdays": "Workdays",
+        "logout": "Logout",
+        "login": "Login",
+        "signup": "Signup",
+        "title": "Time Tracker",
+        "logoutSuccess": "You are being logged out! Redirecting you..."
+    },
     "login": {
         "title": "Login",
         "button": "Login",

@@ -4,6 +4,7 @@ import { projectService } from '@services/projectService';
 import { userService } from '@services/userService';
 import styles from '@styles/home.module.css';
 import userTokenInfo from 'hooks/userTokenInfo';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
 import { useState } from 'react';
 import useSWR, { mutate } from 'swr';
@@ -83,3 +84,11 @@ const Home: React.FC = () => {
 };
 
 export default Home;
+export const getServerSideProps = async (context: { locale: any }) => {
+    const { locale } = context;
+    return {
+        props: {
+            ...(await serverSideTranslations(locale ?? 'en', ['common'])),
+        },
+    };
+};

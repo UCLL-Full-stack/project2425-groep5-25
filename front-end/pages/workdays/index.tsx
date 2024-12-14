@@ -3,6 +3,7 @@ import Workday from '@components/workWeek/WorkDay';
 import { workDayService } from '@services/workDayService';
 import styles from '@styles/home.module.css';
 import { WorkDayOutput } from '@types';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
 import { getStartAndEndOfWeek } from 'utils/dateTimeUtils';
@@ -69,3 +70,11 @@ const Home: React.FC = () => {
 };
 
 export default Home;
+export const getServerSideProps = async (context: { locale: any }) => {
+    const { locale } = context;
+    return {
+        props: {
+            ...(await serverSideTranslations(locale ?? 'en', ['common'])),
+        },
+    };
+};
