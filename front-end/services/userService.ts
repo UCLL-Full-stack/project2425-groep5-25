@@ -12,8 +12,8 @@ const getAllUsersIdName = async () => {
     });
 };
 
-const loginUser = (user: UserInput) => {
-    return fetch(processEnv.getApiUrl() + '/users/login', {
+const loginUser = async (user: UserInput) => {
+    return await fetch(processEnv.getApiUrl() + '/users/login', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -22,8 +22,8 @@ const loginUser = (user: UserInput) => {
     });
 };
 
-const signupUser = (user: UserInput) => {
-    return fetch(processEnv.getApiUrl() + '/users/signup', {
+const signupUser = async (user: UserInput) => {
+    return await fetch(processEnv.getApiUrl() + '/users/signup', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

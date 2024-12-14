@@ -5,7 +5,8 @@ import { projectService } from '@services/projectService';
 import { userService } from '@services/userService';
 import userTokenInfo from 'hooks/userTokenInfo';
 import { useState } from 'react';
-import useSWR from 'swr';
+import useSWR, { mutate } from 'swr';
+import useInterval from 'use-interval';
 import { handleResponse } from 'utils/responseUtils';
 
 const Home: React.FC = () => {
@@ -33,10 +34,19 @@ const Home: React.FC = () => {
 
     const { data, isLoading } = useSWR('usersAndProjects', getUsersAndProjects);
 
+    useInterval(() => {
+        mutate('usersAndProjects', getUsersAndProjects());
+    }, 1000);
+
+    const getTitle = () => {
+        if (userRole === 'user') return 'My Projects';
+        return 'Projects';
+    };
+
     return (
         <>
             <MainLayout
-                title="Projects"
+                title={getTitle()}
                 description="Project tracker projects"
                 isLoading={isLoading}
                 titleContent={

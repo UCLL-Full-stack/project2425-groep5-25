@@ -21,6 +21,25 @@ const getAllProjects = async ({ auth }: { auth: JwtToken }): Promise<Project[]> 
     }
 };
 
+const getProjectById = async ({
+    projectId,
+    auth,
+}: {
+    projectId: number;
+    auth: JwtToken;
+}): Promise<Project | null> => {
+    const { userId, role } = auth;
+    const permissions = authorizeRole(role);
+
+    if (permissions.isAdmin || permissions.isHr) {
+        return projectDb.getProjectById({ id: projectId });
+    } else {
+        throw new UnauthorizedError('credentials_required', {
+            message: 'You are not authorized to access this resource.',
+        });
+    }
+};
+
 const createProject = async (projectInput: ProjectInput): Promise<Project> => {
     const { name, color, userIds } = projectInput;
 
@@ -66,4 +85,5 @@ export const projectService = {
     getAllProjects,
     createProject,
     addUsersToDefaultProject,
+    getProjectById,
 };

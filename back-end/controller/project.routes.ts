@@ -158,4 +158,46 @@ projectRouter.post(
     },
 );
 
+/**
+ * @swagger
+ * /projects/{id}:
+ *   get:
+ *     summary: Get a project by ID
+ *     description: Retrieve the details of a specific project by its ID.
+ *     tags:
+ *       - Projects
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *           format: int64
+ *         description: The unique identifier of the project.
+ *     responses:
+ *       200:
+ *         description: The project details.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ProjectDto'
+ */
+projectRouter.get(
+    '/:id',
+    async (req: Request & { auth: JwtToken }, res: Response, next: NextFunction) => {
+        try {
+            const projectId = Number(req.params.id);
+            const project = await projectService.getProjectById({
+                projectId: projectId,
+                auth: req.auth,
+            });
+            res.status(200).json(project);
+        } catch (error) {
+            next(error);
+        }
+    },
+);
+
 export { projectRouter };
