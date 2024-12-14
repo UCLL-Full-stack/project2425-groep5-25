@@ -1,39 +1,21 @@
-import styles from '@styles/home.module.css';
+import MainLayout from '@components/layout/MainLayout';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import Head from 'next/head';
 
 const Home: React.FC = () => {
     const { t } = useTranslation();
     return (
-        <>
-            <Head>
-                <title>{t('app.title')}</title>
-                <meta name="description" content="Time tracker application" />
-                <meta name="viewport" content="width=device-width, initial-scale=1" />
-                <link rel="icon" href="/favicon.ico" />
-            </Head>
-            <main className={styles.main}>
-                <span>
-                    {/* <Image
-            src="/images/Logo-Icon.png"
-            alt="Time Tracker Logo"
-            className={styles.vercelLogo}
-            width={125}
-            height={125}
-            priority
-          /> */}
-                    <h1>Welcome!</h1>
-                </span>
-
-                <div className={styles.description}>
-                    <p>
+        <MainLayout title={t('app.title')} description="Project tracker Home">
+            <div className="flex justify-center w-full py-6">
+                <div className="text-center max-w-3xl w-full">
+                    <p className="text-lg text-gray-700">
                         This will be our main page, in the future, it remains empty for now. We make
-                        use of a of fake database, values or things stored will not be permanent.
+                        use of a fake database, and any values or things stored here will not be
+                        permanent.
                     </p>
                 </div>
-            </main>
-        </>
+            </div>
+        </MainLayout>
     );
 };
 

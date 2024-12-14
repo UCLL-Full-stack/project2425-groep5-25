@@ -1,9 +1,9 @@
-import ErrorMessage from '@components/shared/ErrorMessage';
+import ErrorMessage from '@components/layout/ErrorMessage';
+import MainLayout from '@components/layout/MainLayout';
 import LoginSignup from '@components/users/UserSignupLoginForm';
 import { userService } from '@services/userService';
 import { ErrorLabelMessage, UserInput } from '@types';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import Head from 'next/head';
 import router from 'next/router';
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
@@ -49,32 +49,34 @@ const SignUp: React.FC = () => {
 
             setTimeout(() => {
                 router.push('/');
-            }, 3000);
+            }, 2750);
         } catch (error) {
-            console.error('Login error:', error);
-            setErrorLabelMessage({
-                message: 'An unexpected error occurred. Please try again.',
-                label: 'error',
-            });
+            if (error instanceof Error) {
+                setErrorLabelMessage({
+                    label: 'Error',
+                    message: error.message,
+                });
+            }
         }
     };
 
     return (
         <>
-            <Head>
-                <title>Signup</title>
-                <meta name="description" content="Time tracker signup" />
-                <meta name="viewport" content="width=device-width, initial-scale=1" />
-                <link rel="icon" href="/favicon.ico" />
-            </Head>
-            <div className="container mx-auto max-w-md p-4">
-                <LoginSignup
-                    isSignUp
-                    onSubmit={handleSignUp}
-                    clearParentErrors={() => setErrorLabelMessage(undefined)}
-                />
+            <MainLayout title="Signup" description="Time tracker signup">
                 {errorLabelMessage && <ErrorMessage errorLabelMessage={errorLabelMessage} />}
-            </div>
+                <div className="flex justify-center">
+                    <div className="flex flex-col gap-4 p-2 max-w-md w-full">
+                        <LoginSignup
+                            isSignUp
+                            onSubmit={handleSignUp}
+                            clearParentErrors={() => setErrorLabelMessage(undefined)}
+                        />
+                        {errorLabelMessage && (
+                            <ErrorMessage errorLabelMessage={errorLabelMessage} />
+                        )}
+                    </div>
+                </div>
+            </MainLayout>
         </>
     );
 };

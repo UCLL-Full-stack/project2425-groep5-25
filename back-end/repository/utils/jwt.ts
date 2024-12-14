@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { processEnv } from '../../env/env';
-import { JwtToken } from '../../types';
+import { JwtToken, Role } from '../../types';
 
 const generateJwtToken = ({ userId, role }: JwtToken) => {
     const options = { expiresIn: `${processEnv.getJwtExpiresHours()}h`, issuer: 'timeTracker_app' };
@@ -12,4 +12,17 @@ const generateJwtToken = ({ userId, role }: JwtToken) => {
     }
 };
 
-export { generateJwtToken };
+const authorizeRole = (role: Role) => {
+    switch (role) {
+        case 'admin':
+            return { isAdmin: true };
+        case 'hr':
+            return { isHr: true };
+        case 'user':
+            return { isUser: true };
+        default:
+            return { isUnauthorized: true };
+    }
+};
+
+export { authorizeRole, generateJwtToken };
