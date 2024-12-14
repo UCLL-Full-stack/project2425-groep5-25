@@ -23,6 +23,11 @@ const Header: React.FC = () => {
     return (
         <>
             <header className="flex justify-between items-center p-4 border-b bg-gray-800">
+                <Link
+                    href="/"
+                    className="text-2xl font-bold text-gray-400 hover:text-white transition duration-300">
+                    {t('header.title')}
+                </Link>
                 <nav className="flex space-x-6">
                     <Link
                         href="/"
@@ -69,13 +74,8 @@ const Header: React.FC = () => {
                             </Link>
                         </>
                     )}
-                    <Language />
                 </nav>
-                <Link
-                    href="/"
-                    className="text-2xl font-bold text-gray-400 hover:text-white transition duration-300">
-                    {t('header.title')}
-                </Link>
+                <Language />
             </header>
         </>
     );
