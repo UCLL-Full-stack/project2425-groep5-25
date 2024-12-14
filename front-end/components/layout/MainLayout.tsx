@@ -1,4 +1,4 @@
-import Header from '@components/shared/Headers';
+import Header from '@components/shared/Crackheade';
 import styles from '@styles/MainLayout.module.css';
 import Head from 'next/head';
 import React, { ReactNode, useEffect } from 'react';
