@@ -2,6 +2,7 @@ import ErrorMessage from '@components/shared/ErrorMessage';
 import LoginSignup from '@components/users/UserSignupLoginForm';
 import { userService } from '@services/userService';
 import { ErrorLabelMessage, UserInput } from '@types';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
 import router from 'next/router';
 import React, { useState } from 'react';
@@ -79,3 +80,11 @@ const SignUp: React.FC = () => {
 };
 
 export default SignUp;
+export const getServerSideProps = async (context: { locale: any }) => {
+    const { locale } = context;
+    return {
+        props: {
+            ...(await serverSideTranslations(locale ?? 'en', ['common'])),
+        },
+    };
+};

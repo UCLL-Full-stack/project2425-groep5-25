@@ -2,6 +2,7 @@ import userTokenInfo from 'hooks/userTokenInfo';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
+import Language from './language/Language';
 
 const Header: React.FC = () => {
     const router = useRouter();
@@ -66,6 +67,7 @@ const Header: React.FC = () => {
                         </Link>
                     </>
                 )}
+                <Language></Language>
             </nav>
             <Link
                 className="fs-2 d-flex justify-content-center text-white-50 text-decoration-none"

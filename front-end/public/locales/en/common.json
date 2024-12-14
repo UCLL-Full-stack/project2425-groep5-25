@@ -1,0 +1,67 @@
+{
+    "app.title": "Time Tracker",
+    "general.error": "An error has occurred. Please try again later.",
+    "login": {
+        "title": "Login",
+        "button": "Login",
+        "success": "Login successful. Redirecting to homepage...",
+        "field": {
+            "username": "Username",
+            "password": "Password"
+        },
+        "validate": {
+            "name": "Name is required",
+            "password": "Password is required",
+            "username": {
+                "placeholder": "Enter your username"
+            }
+        }
+    },
+    "signup": {
+        "title": "Sign Up",
+        "button": "Sign Up",
+        "field": {
+            "firstName": "First Name",
+            "lastName": "Last Name",
+            "email": "Email",
+            "username": "Username",
+            "password": "Password"
+        },
+        "validate": {
+            "firstName": {
+                "required": "First name is required",
+                "minLength": "First name needs to be at least 2 letters",
+                "capital": "First name needs to start with a capital letter",
+                "lettersOnly": "First name can only contain letters (including accented characters)",
+                "placeholder": "Enter your first name"
+            },
+            "lastName": {
+                "required": "Last name is required",
+                "minLength": "Last name needs to be at least 2 letters",
+                "capital": "Last name needs to start with a capital letter",
+                "lettersOnly": "Last name can only contain letters (including accented characters)",
+                "placeholder": "Enter your last name"
+            },
+            "email": {
+                "required": "Email is required",
+                "format": "Email format is invalid",
+                "placeholder": "Enter your email address"
+            },
+            "username": {
+                "required": "Username is required",
+                "minLength": "Username must be at least 6 characters long",
+                "format": "Username can only contain letters, numbers, and underscores",
+                "placeholder": "Choose a username"
+            },
+            "password": {
+                "required": "Password is required",
+                "minLength": "Password must be at least 6 characters long",
+                "uppercase": "Password must contain at least one uppercase letter",
+                "lowercase": "Password must contain at least one lowercase letter",
+                "number": "Password must contain at least one number",
+                "special": "Password must contain at least one special character (@, $, !, %, *, ?, & or #)",
+                "placeholder": "Choose a password"
+            }
+        }
+    }
+}

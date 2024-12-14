@@ -1,0 +1,67 @@
+{
+    "app.title": "Tijdregistratie",
+    "general.error": "Er is een fout opgetreden. Probeer het later opnieuw.",
+    "login": {
+        "title": "Inloggen",
+        "button": "Inloggen",
+        "success": "Inloggen geslaagd. Wordt doorgestuurd naar de homepage...",
+        "field": {
+            "username": "Gebruikersnaam",
+            "password": "Wachtwoord"
+        },
+        "validate": {
+            "name": "Naam is verplicht",
+            "password": "Wachtwoord is verplicht",
+            "username": {
+                "placeholder": "Voer je gebruikersnaam in"
+            }
+        }
+    },
+    "signup": {
+        "title": "Aanmelden",
+        "button": "Aanmelden",
+        "field": {
+            "firstName": "Voornaam",
+            "lastName": "Achternaam",
+            "email": "E-mail",
+            "username": "Gebruikersnaam",
+            "password": "Wachtwoord"
+        },
+        "validate": {
+            "firstName": {
+                "required": "Voornaam is verplicht",
+                "minLength": "Voornaam moet minimaal 2 letters bevatten",
+                "capital": "Voornaam moet beginnen met een hoofdletter",
+                "lettersOnly": "Voornaam mag alleen letters bevatten (inclusief accenttekens)",
+                "placeholder": "Voer je voornaam in"
+            },
+            "lastName": {
+                "required": "Achternaam is verplicht",
+                "minLength": "Achternaam moet minimaal 2 letters bevatten",
+                "capital": "Achternaam moet beginnen met een hoofdletter",
+                "lettersOnly": "Achternaam mag alleen letters bevatten (inclusief accenttekens)",
+                "placeholder": "Voer je achternaam in"
+            },
+            "email": {
+                "required": "E-mail is verplicht",
+                "format": "E-mailformaat is ongeldig",
+                "placeholder": "Voer je e-mailadres in"
+            },
+            "username": {
+                "required": "Gebruikersnaam is verplicht",
+                "minLength": "Gebruikersnaam moet minimaal 6 tekens bevatten",
+                "format": "Gebruikersnaam mag alleen letters, cijfers en underscores bevatten",
+                "placeholder": "Kies een gebruikersnaam"
+            },
+            "password": {
+                "required": "Wachtwoord is verplicht",
+                "minLength": "Wachtwoord moet minimaal 6 tekens bevatten",
+                "uppercase": "Wachtwoord moet ten minste één hoofdletter bevatten",
+                "lowercase": "Wachtwoord moet ten minste één kleine letter bevatten",
+                "number": "Wachtwoord moet ten minste één cijfer bevatten",
+                "special": "Wachtwoord moet ten minste één speciaal teken bevatten (@, $, !, %, *, ?, & of #)",
+                "placeholder": "Kies een wachtwoord"
+            }
+        }
+    }
+}

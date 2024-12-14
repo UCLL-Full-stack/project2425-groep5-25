@@ -1,12 +1,13 @@
 import Header from '@components/header';
 import '@styles/globals.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { appWithTranslation } from 'next-i18next';
 import type { AppProps } from 'next/app';
 import { useEffect } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-export default function App({ Component, pageProps }: AppProps) {
+function App({ Component, pageProps }: AppProps) {
     useEffect(() => {
         const authErrorToast = sessionStorage.getItem('authError');
         if (authErrorToast) {
@@ -33,3 +34,4 @@ export default function App({ Component, pageProps }: AppProps) {
         </>
     );
 }
+export default appWithTranslation(App);
