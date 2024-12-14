@@ -1,7 +1,7 @@
-import ColorSelectField from '@components/selects/ColorSelectField';
-import InputField from '@components/selects/InputField';
-import UserSelectField from '@components/selects/UserSelectField';
-import ErrorMessage from '@components/shared/ErrorMessage';
+import ErrorMessage from '@components/layout/ErrorMessage';
+import ColorSelectField from '@components/shared/ColorSelectField';
+import InputField from '@components/shared/InputField';
+import UserSelectField from '@components/shared/UserSelectField';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { projectService } from '@services/projectService';

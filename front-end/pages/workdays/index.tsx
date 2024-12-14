@@ -1,9 +1,9 @@
-import WeekPaginator from '@components/paginator/WeekPaginator';
+import MainLayout from '@components/layout/MainLayout';
+import WeekPaginator from '@components/shared/WeekPaginator';
 import Workday from '@components/workWeek/WorkDay';
 import { workDayService } from '@services/workDayService';
 import styles from '@styles/home.module.css';
 import { WorkDayOutput } from '@types';
-import Head from 'next/head';
 import { useEffect, useState } from 'react';
 import { getStartAndEndOfWeek } from 'utils/dateTimeUtils';
 
@@ -36,34 +36,30 @@ const Home: React.FC = () => {
 
     return (
         <>
-            <Head>
-                <title>Workdays</title>
-                <meta name="description" content="Time tracker workdays" />
-                <meta name="viewport" content="width=device-width, initial-scale=1" />
-                <link rel="icon" href="/favicon.ico" />
-            </Head>
-            <main className={styles.main}>
-                <h1>Workdays</h1>
+            <MainLayout title="Workdays" description="Time tracker workdays">
+                <main className={styles.main}>
+                    <h1>Workdays</h1>
 
-                <div className="d-flex gap-3 flex-column">
-                    <WeekPaginator
-                        currentWeekStart={currentWeekStart}
-                        currentWeekEnd={currentWeekEnd}
-                        updateWeek={updateWeek}
-                        resetToCurrentWeek={resetToCurrentWeek}
-                    />
+                    <div className="d-flex gap-3 flex-column">
+                        <WeekPaginator
+                            currentWeekStart={currentWeekStart}
+                            currentWeekEnd={currentWeekEnd}
+                            updateWeek={updateWeek}
+                            resetToCurrentWeek={resetToCurrentWeek}
+                        />
 
-                    <div className="d-flex gap-3">
-                        {workDays.length > 0 ? (
-                            workDays.map((workday) => (
-                                <Workday key={workday.id} workday={workday} />
-                            ))
-                        ) : (
-                            <p>No workdays available for this week</p>
-                        )}
+                        <div className="d-flex gap-3">
+                            {workDays.length > 0 ? (
+                                workDays.map((workday) => (
+                                    <Workday key={workday.id} workday={workday} />
+                                ))
+                            ) : (
+                                <p>No workdays available for this week</p>
+                            )}
+                        </div>
                     </div>
-                </div>
-            </main>
+                </main>
+            </MainLayout>
         </>
     );
 };
