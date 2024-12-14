@@ -10,7 +10,6 @@ const Language: React.FC = () => {
         { value: 'tr', label: 'Türkçe' },
         { value: 'nl', label: 'Nederlands' },
     ];
-    const selectedOption = options.find((option) => option.value === locale) || options[0];
 
     const handleLanguageChange = (
         selectedOption: SingleValue<{ value: string; label: string }>,
@@ -27,11 +26,10 @@ const Language: React.FC = () => {
             <Select
                 id="language"
                 options={options}
-                value={selectedOption || null} // Ensure a fallback value of null
+                value={options.find((option) => option.value === locale) || options[0]}
                 onChange={handleLanguageChange}
                 className="text-black"
-                classNamePrefix="react-select"
-                isSearchable={false} // Set to true if you want to allow searching
+                isSearchable={false}
             />
         </>
     );

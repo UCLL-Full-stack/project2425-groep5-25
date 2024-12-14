@@ -72,7 +72,6 @@ const Login: React.FC = () => {
     );
 };
 
-export default Login;
 export const getServerSideProps = async (context: { locale: any }) => {
     const { locale } = context;
     return {
@@ -81,3 +80,5 @@ export const getServerSideProps = async (context: { locale: any }) => {
         },
     };
 };
+
+export default Login;

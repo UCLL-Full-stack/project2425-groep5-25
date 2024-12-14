@@ -4,6 +4,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 const Home: React.FC = () => {
     const { t } = useTranslation();
+
     return (
         <MainLayout title={t('app.title')} description="Project tracker Home">
             <div className="flex justify-center w-full py-6">
@@ -19,7 +20,6 @@ const Home: React.FC = () => {
     );
 };
 
-export default Home;
 export const getServerSideProps = async (context: { locale: any }) => {
     const { locale } = context;
     return {
@@ -28,3 +28,5 @@ export const getServerSideProps = async (context: { locale: any }) => {
         },
     };
 };
+
+export default Home;

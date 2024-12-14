@@ -119,7 +119,6 @@ const UserSignupLoginForm: React.FC<Props> = ({ isSignUp, onSubmit, clearParentE
 
     return (
         <div className="flex justify-center items-center">
-            <h3 className="px-0">{isSignUp ? t('signup.title') : t('login.title')}</h3>
             <form onSubmit={handleSubmit} className="flex flex-col gap-4 p-2 w-full">
                 {isSignUp && (
                     <>

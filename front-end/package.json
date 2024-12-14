@@ -24,9 +24,9 @@
         "react-toastify": "^10.0.6",
         "swr": "^2.2.0",
         "use-interval": "^1.4.0",
-        "i18next": "^23.7.6",
-        "next-i18next": "^15.0.0",
-        "react-i18next": "^13.4.1"
+        "i18next": "^23.16.8",
+        "next-i18next": "^15.4.0",
+        "react-i18next": "^13.5.0"
     },
     "devDependencies": {
         "@types/node": "18.15.0",

@@ -85,7 +85,6 @@ const Home: React.FC = () => {
     );
 };
 
-export default Home;
 export const getServerSideProps = async (context: { locale: any }) => {
     const { locale } = context;
     return {
@@ -94,3 +93,5 @@ export const getServerSideProps = async (context: { locale: any }) => {
         },
     };
 };
+
+export default Home;

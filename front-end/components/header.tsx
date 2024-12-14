@@ -69,7 +69,7 @@ const Header: React.FC = () => {
                             </Link>
                         </>
                     )}
-                    <Language></Language>
+                    <Language />
                 </nav>
                 <Link
                     href="/"
