@@ -1,55 +1,155 @@
-import { ProjectOutput } from '@types';
+import ErrorMessage from '@components/layout/ErrorMessage';
+import ColorSelectField from '@components/shared/ColorSelectField';
+import InputField from '@components/shared/InputField';
+import UserSelectField from '@components/shared/UserSelectField';
+import { Color, ErrorLabelMessage, IdName, ProjectInput, ProjectOutput } from '@types';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { getColorEnumFromHex } from 'utils/colorUtils';
 
 type Props = {
+    userIdNames: Array<IdName>;
     project: ProjectOutput;
+    onSubmit: (data: ProjectInput) => void;
+    clearParentErrors: () => void;
 };
 
-const ProjectDetails: React.FC<Props> = ({ project }: Props) => {
+const ProjectDetails: React.FC<Props> = ({
+    userIdNames,
+    project,
+    onSubmit,
+    clearParentErrors,
+}: Props) => {
+    const { t } = useTranslation();
+    const [name, setName] = useState<string | null>(null);
+    const [color, setColor] = useState<Color | null>(null);
+    const [userIds, setUserIds] = useState<number[]>([]);
+    const [showUserSelector, setShowUserSelector] = useState<boolean>(false);
+    const [errorLabelMessage, setErrorLabelMessage] = useState<ErrorLabelMessage>();
+
+    const validateName = (name: string | null) => {
+        if (!name?.trim()) return t('components.projectDetails.validate.name.required');
+        if (name.trim().length < 6) return t('components.projectDetails.validate.name.minLength');
+        if (!/^[a-zA-Z0-9 ]+$/.test(name))
+            return t('components.projectDetails.validate.name.invalid');
+        return null;
+    };
+
+    const validateColor = (color: Color | null) => {
+        if (!color?.trim()) return t('components.projectDetails.validate.color.required');
+        if (!Object.values(Color).includes(color))
+            return t('components.projectDetails.validate.color.invalid');
+        return null;
+    };
+
+    const validateUserSelection = (value: number[]) => {
+        const uniqueUserIds = new Set(value);
+        if (uniqueUserIds.size !== value.length)
+            return t('components.projectDetails.validate.users.unique');
+        return null;
+    };
+
+    const validate = (): boolean => {
+        let valid = true;
+
+        const nameError = validateName(name);
+        const colorError = validateColor(color);
+
+        if (nameError || colorError) {
+            setErrorLabelMessage({
+                label: t('error.unexpectedErrorLabel'),
+                message: nameError || colorError || t('error.unexpectedErrorMessage'),
+            });
+            return false;
+        }
+
+        return valid;
+    };
+
+    const clearAllErrors = () => {
+        clearParentErrors();
+        setErrorLabelMessage(undefined);
+    };
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        clearAllErrors();
+
+        if (!validate()) {
+            return;
+        }
+
+        const projectData: ProjectInput = {
+            id: project.id,
+            name: name!,
+            color: color!,
+            userIds,
+        };
+
+        onSubmit(projectData);
+    };
+
+    useEffect(() => {
+        setName(project.name);
+        setColor(getColorEnumFromHex(project.color));
+        setUserIds(project.users?.map((user) => user.id ?? 0) || []);
+    }, [project]);
+
     return (
         <>
-            {' '}
-            <div className="max-w-lg mx-auto p-6 bg-white rounded-lg shadow-md border border-gray-200">
-                <h2 className="text-2xl font-bold mb-4" style={{ color: project.color }}>
-                    {project.name}
-                </h2>
-                {project.id !== undefined && (
-                    <p className="text-gray-600 mb-2">
-                        <strong>Project ID:</strong> {project.id}
-                    </p>
-                )}
-                <p className="text-gray-600 mb-4">
-                    <strong>Color:</strong>{' '}
-                    <span
-                        className="inline-block w-4 h-4 rounded-full"
-                        style={{ backgroundColor: project.color }}></span>
-                </p>
-                <div>
-                    <h3 className="text-xl font-semibold mb-2">Users</h3>
-                    {project.users && project.users.length > 0 ? (
-                        <ul className="space-y-2">
-                            {project.users.map((user) => (
-                                <li
-                                    key={user.id}
-                                    className="p-3 bg-gray-50 rounded-md shadow-sm border border-gray-200">
-                                    <p className="text-gray-700">
-                                        <strong>Name:</strong> {user.firstName} {user.lastName}
-                                    </p>
-                                    <p className="text-gray-600">
-                                        <strong>Email:</strong> {user.email}
-                                    </p>
-                                    <p className="text-gray-600">
-                                        <strong>Username:</strong> {user.userName}
-                                    </p>
-                                    <p className="text-gray-600">
-                                        <strong>Role:</strong> {user.role}
-                                    </p>
-                                </li>
-                            ))}
-                        </ul>
-                    ) : (
-                        <p className="text-gray-600">No users associated with this project.</p>
-                    )}
+            <div className="max-w-3xl mx-auto p-8 bg-white rounded-xl border shadow-md border-gray-300">
+                <div className="text-center">
+                    <h6 className="text-xl font-semibold text-gray-700 mb-6">
+                        {t('components.projectDetails.title')}
+                    </h6>
                 </div>
+                <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+                    <InputField
+                        type="text"
+                        label={t('components.projectDetails.labels.name')}
+                        value={name}
+                        onChange={setName}
+                        validate={validateName}
+                        placeholder={t('components.projectDetails.placeholders.name')}
+                        required
+                    />
+
+                    <ColorSelectField
+                        label={t('components.projectDetails.labels.color')}
+                        value={color}
+                        onChange={setColor}
+                        validate={validateColor}
+                        placeholder={t('components.projectDetails.placeholders.color')}
+                        required
+                    />
+
+                    {!showUserSelector ? (
+                        <button
+                            type="button"
+                            className="bg-blue-500 text-white px-6 py-2 rounded-md shadow-md hover:bg-blue-600 transition duration-200"
+                            onClick={() => setShowUserSelector(true)}>
+                            {t('components.projectSidePanel.buttons.addUsers')}
+                        </button>
+                    ) : (
+                        <UserSelectField
+                            label={t('components.projectDetails.labels.users')}
+                            userIdNames={userIdNames}
+                            value={userIds}
+                            onChange={setUserIds}
+                            validate={validateUserSelection}
+                            placeholder={t('components.projectDetails.placeholders.users')}
+                            required={false}
+                        />
+                    )}
+
+                    <button
+                        type="submit"
+                        className="bg-blue-500 text-white px-6 py-2 rounded-md shadow-md hover:bg-blue-600 transition duration-200">
+                        {t('components.projectDetails.buttons.updateProject')}
+                    </button>
+
+                    {errorLabelMessage && <ErrorMessage errorLabelMessage={errorLabelMessage} />}
+                </form>
             </div>
         </>
     );

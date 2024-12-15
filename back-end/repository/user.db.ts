@@ -3,7 +3,7 @@ import database from './utils/database';
 
 const getAllUsers = async (): Promise<User[]> => {
     try {
-        const usersPrisma = await database.user.findMany();
+        const usersPrisma = await database.user.findMany({ orderBy: { id: 'asc' } });
         return usersPrisma.map((user) => User.from(user));
     } catch (error) {
         console.error(error);

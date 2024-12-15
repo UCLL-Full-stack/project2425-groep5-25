@@ -7,6 +7,7 @@ const getAllProjects = async (): Promise<Project[]> => {
             include: {
                 users: true,
             },
+            orderBy: { id: 'asc' },
         });
 
         return projectsPrisma.map((project) => Project.from(project));
@@ -57,6 +58,7 @@ const getProjectsByUserId = async ({ userId }: { userId: number }): Promise<Proj
             include: {
                 users: true,
             },
+            orderBy: { id: 'asc' },
         });
 
         return projectsPrisma.map((project) => Project.from(project));
@@ -94,7 +96,7 @@ const addUsersToProject = async (project: Project): Promise<Project> => {
             where: { id: project.getId() },
             data: {
                 users: {
-                    connect: project.getUsers().map((user) => ({ id: user.getId() })),
+                    set: project.getUsers().map((user) => ({ id: user.getId() })),
                 },
             },
             include: {
@@ -109,6 +111,45 @@ const addUsersToProject = async (project: Project): Promise<Project> => {
     }
 };
 
+const updateProject = async (project: Project): Promise<Project> => {
+    try {
+        const projectPrisma = await database.project.update({
+            where: { id: project.getId() },
+            data: {
+                name: project.getName(),
+                color: project.getColor(),
+                users: {
+                    set: project.getUsers().map((user) => ({ id: user.getId() })),
+                },
+            },
+            include: {
+                users: true,
+            },
+        });
+
+        return Project.from(projectPrisma);
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. Unable to add users to the project.');
+    }
+};
+
+const deleteProject = async (project: Project): Promise<Project> => {
+    try {
+        const deletedProject = await database.project.delete({
+            where: { id: project.getId() },
+            include: {
+                users: true,
+            },
+        });
+
+        return Project.from(deletedProject);
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. Unable to delete the project.');
+    }
+};
+
 export const projectDb = {
     getAllProjects,
     getProjectByName,
@@ -116,4 +157,6 @@ export const projectDb = {
     getProjectsByUserId,
     createProject,
     addUsersToProject,
+    updateProject,
+    deleteProject,
 };

@@ -22,12 +22,10 @@ const ColorSelectField: React.FC<Props> = ({
     required,
 }: Props) => {
     const [error, setError] = useState<string | null>(null);
-    const options = Object.entries(Color)
-        .filter(([label, hex]) => hex !== Color.Gray)
-        .map(([label, hex]) => ({
-            value: hex,
-            label,
-        }));
+    const options = Object.entries(Color).map(([label, hex]) => ({
+        value: hex,
+        label,
+    }));
 
     const validation = (newValue: Color | null) => {
         if (newValue !== null && validate) {

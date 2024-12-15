@@ -75,10 +75,8 @@ const ProjectSidePanel: React.FC<Props> = ({ userIdNames, onProjectCreated, onCl
         }
 
         try {
-            const projectFormData: ProjectInput = { name: name!, color: color!, userIds };
-            const [projectResponse] = await Promise.all([
-                projectService.createProject(projectFormData),
-            ]);
+            const formData: ProjectInput = { name: name!, color: color!, userIds };
+            const [projectResponse] = await Promise.all([projectService.createProject(formData)]);
             const [projectJson] = await Promise.all([projectResponse.json()]);
 
             if (!projectResponse.ok)
@@ -101,7 +99,7 @@ const ProjectSidePanel: React.FC<Props> = ({ userIdNames, onProjectCreated, onCl
         <>
             <div className={styles['side-panel']}>
                 <div className={styles['title-container']}>
-                    <h6>{t('projectSidePanelComponent.titel')}</h6>
+                    <h6>{t('components.projectSidePanel.title')}</h6>
                     <button onClick={onClose} className={styles.closeButton}>
                         <FontAwesomeIcon icon={faTimes} />
                     </button>
@@ -129,7 +127,7 @@ const ProjectSidePanel: React.FC<Props> = ({ userIdNames, onProjectCreated, onCl
                     {!showUserSelector ? (
                         <button
                             type="button"
-                            className={styles.button}
+                            className="bg-blue-500 text-white px-6 py-2 rounded-md shadow-md hover:bg-blue-600 transition duration-200"
                             onClick={() => setShowUserSelector(true)}>
                             {t('components.projectSidePanel.buttons.addUsers')}
                         </button>
@@ -145,7 +143,9 @@ const ProjectSidePanel: React.FC<Props> = ({ userIdNames, onProjectCreated, onCl
                         />
                     )}
 
-                    <button type="submit" className={styles.button}>
+                    <button
+                        type="submit"
+                        className="bg-blue-500 text-white px-6 py-2 rounded-md shadow-md hover:bg-blue-600 transition duration-200">
                         {t('components.projectSidePanel.buttons.createProject')}
                     </button>
 
