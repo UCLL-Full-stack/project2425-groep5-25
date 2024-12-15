@@ -11,6 +11,7 @@ import { toast } from 'react-toastify';
 
 const SignUp: React.FC = () => {
     const { t } = useTranslation();
+
     const [errorLabelMessage, setErrorLabelMessage] = useState<ErrorLabelMessage>();
 
     const handleSignUp = async (data: UserInput) => {
@@ -81,11 +82,12 @@ const SignUp: React.FC = () => {
     );
 };
 
-export const getServerSideProps = async (context: { locale: any }) => {
+export const getServerSideProps = async (context) => {
     const { locale } = context;
+
     return {
         props: {
-            ...(await serverSideTranslations(locale ?? 'en', ['common'])),
+            ...(await serverSideTranslations(locale ?? 'nl', ['common'])),
         },
     };
 };

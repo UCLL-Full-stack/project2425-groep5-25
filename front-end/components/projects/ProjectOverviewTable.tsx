@@ -9,6 +9,7 @@ type Props = {
 
 const ProjectOverviewTable: React.FC<Props> = ({ projects }: Props) => {
     const { t } = useTranslation();
+
     return (
         <>
             {projects && (

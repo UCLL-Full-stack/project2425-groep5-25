@@ -13,6 +13,7 @@ import { handleResponse } from 'utils/responseUtils';
 const Home: React.FC = () => {
     const { t } = useTranslation();
     const { userRole, userName, userFullName, userToken } = userTokenInfo();
+
     const [isSidePanelOpen, setIsSidePanelOpen] = useState<boolean>(false);
 
     const getUsersAndProjects = async () => {
@@ -69,11 +70,12 @@ const Home: React.FC = () => {
     );
 };
 
-export const getServerSideProps = async (context: { locale: any }) => {
+export const getServerSideProps = async (context) => {
     const { locale } = context;
+
     return {
         props: {
-            ...(await serverSideTranslations(locale ?? 'en', ['common'])),
+            ...(await serverSideTranslations(locale ?? 'nl', ['common'])),
         },
     };
 };

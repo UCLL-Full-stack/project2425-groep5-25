@@ -16,11 +16,12 @@ const Home: React.FC = () => {
     );
 };
 
-export const getServerSideProps = async (context: { locale: any }) => {
+export const getServerSideProps = async (context) => {
     const { locale } = context;
+
     return {
         props: {
-            ...(await serverSideTranslations(locale ?? 'en', ['common'])),
+            ...(await serverSideTranslations(locale ?? 'nl', ['common'])),
         },
     };
 };

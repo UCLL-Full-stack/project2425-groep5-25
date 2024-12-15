@@ -17,6 +17,7 @@ const WeekPaginator: React.FC<Props> = ({
     resetToCurrentWeek,
 }: Props) => {
     const { t } = useTranslation();
+
     const goToPreviousWeek = () => {
         const currentDate = new Date(currentWeekStart);
         currentDate.setDate(currentDate.getDate() - 7);

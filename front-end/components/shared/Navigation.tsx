@@ -6,8 +6,8 @@ import { toast } from 'react-toastify';
 import Language from '../language/Language';
 
 const Header: React.FC = () => {
-    const { t } = useTranslation();
     const router = useRouter();
+    const { t } = useTranslation();
     const { userRole, userName, userFullName, userToken } = userTokenInfo();
 
     const handleLogout = () => {
@@ -23,11 +23,19 @@ const Header: React.FC = () => {
     return (
         <>
             <header className="flex justify-between items-center p-4 border-b bg-gray-800">
-                <Link
-                    href="/"
-                    className="text-2xl font-bold text-gray-400 hover:text-white transition duration-300">
-                    {t('header.title')}
-                </Link>
+                <div className="flex items-center space-x-2">
+                    <Link
+                        href="/"
+                        className="text-2xl font-bold text-gray-400 hover:text-white transition duration-300">
+                        {t('header.title')}
+                    </Link>
+                    {userRole && (
+                        <span className="text-white text-lg font-medium">
+                            ({userRole === 'admin' ? 'Admin' : userRole === 'hr' ? 'HR' : ''})
+                        </span>
+                    )}
+                </div>
+
                 <nav className="flex space-x-6">
                     <Link
                         href="/"
@@ -51,19 +59,11 @@ const Header: React.FC = () => {
                         {t('header.workdays')}
                     </Link>
                     {userRole ? (
-                        <>
-                            {userRole === 'admin' && (
-                                <span className="text-white text-lg font-medium">Admin</span>
-                            )}
-                            {userRole === 'hr' && (
-                                <span className="text-white text-lg font-medium">Hr</span>
-                            )}
-                            <button
-                                onClick={handleLogout}
-                                className="text-white text-lg font-medium hover:underline">
-                                {t('header.logout')}
-                            </button>
-                        </>
+                        <button
+                            onClick={handleLogout}
+                            className="text-white text-lg font-medium hover:underline">
+                            {t('header.logout')}
+                        </button>
                     ) : (
                         <>
                             <Link
