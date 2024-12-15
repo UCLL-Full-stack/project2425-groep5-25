@@ -54,6 +54,7 @@ const ColorSelectField: React.FC<Props> = ({
                         placeholder={placeholder}
                         onChange={handleChange}
                         formatOptionLabel={formatOptionLabel}
+                        isSearchable={false}
                         className={`${error ? styles.error : ''}`}
                     />
                     {error && <span className={styles.errorMessage}>{error}</span>}
