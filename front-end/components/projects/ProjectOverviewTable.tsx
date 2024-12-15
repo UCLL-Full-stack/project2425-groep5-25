@@ -1,6 +1,7 @@
 import { ProjectOutput } from '@types';
 import { useRouter } from 'next/router';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { formatOptionLabel, getColorName } from 'utils/colorUtils';
 
@@ -10,6 +11,7 @@ type Props = {
 
 const ProjectOverviewTable: React.FC<Props> = ({ projects }: Props) => {
     const router = useRouter();
+    const { t } = useTranslation();
 
     const confirmNavigation = (projectId: number | undefined) => {
         if (!projectId) return;
@@ -46,22 +48,22 @@ const ProjectOverviewTable: React.FC<Props> = ({ projects }: Props) => {
                             <th
                                 scope="col"
                                 className="px-4 py-2 text-left text-sm font-semibold text-gray-700 border-b">
-                                Id
+                                {t('components.projectOverviewTable.labels.id')}
                             </th>
                             <th
                                 scope="col"
                                 className="px-4 py-2 text-left text-sm font-semibold text-gray-700 border-b">
-                                Color
+                                {t('components.projectOverviewTable.labels.color')}
                             </th>
                             <th
                                 scope="col"
                                 className="px-4 py-2 text-left text-sm font-semibold text-gray-700 border-b">
-                                Name
+                                {t('components.projectOverviewTable.labels.name')}
                             </th>
                             <th
                                 scope="col"
                                 className="px-4 py-2 text-left text-sm font-semibold text-gray-700 border-b">
-                                Aantal Gebruikers
+                                {t('components.projectOverviewTable.labels.userCount')}
                             </th>
                         </tr>
                     </thead>

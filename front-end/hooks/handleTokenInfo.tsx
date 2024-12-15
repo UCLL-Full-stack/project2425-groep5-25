@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { getFullName, getRole, getToken, getUserName } from 'utils/authUtils';
 
-const userTokenInfo = () => {
+const handleTokenInfo = () => {
     const [userRole, setUserRole] = useState<string | null>(null);
     const [userName, setUsername] = useState<string | null>(null);
     const [userFullName, setUserFullName] = useState<string | null>(null);
@@ -22,4 +22,4 @@ const userTokenInfo = () => {
     };
 };
 
-export default userTokenInfo;
+export default handleTokenInfo;
