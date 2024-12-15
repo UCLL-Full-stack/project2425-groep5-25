@@ -51,11 +51,19 @@ const Header: React.FC = () => {
                         {t('header.workdays')}
                     </Link>
                     {userRole ? (
-                        <button
-                            onClick={handleLogout}
-                            className="text-white text-lg font-medium hover:underline">
-                            {t('header.logout')}
-                        </button>
+                        <>
+                            {userRole === 'admin' && (
+                                <span className="text-white text-lg font-medium">Admin</span>
+                            )}
+                            {userRole === 'hr' && (
+                                <span className="text-white text-lg font-medium">Hr</span>
+                            )}
+                            <button
+                                onClick={handleLogout}
+                                className="text-white text-lg font-medium hover:underline">
+                                {t('header.logout')}
+                            </button>
+                        </>
                     ) : (
                         <>
                             <Link
