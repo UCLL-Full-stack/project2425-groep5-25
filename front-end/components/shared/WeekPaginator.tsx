@@ -1,3 +1,4 @@
+import { useTranslation } from 'next-i18next';
 import React from 'react';
 import { FaArrowLeft, FaArrowRight, FaCalendarDay } from 'react-icons/fa';
 import { formatWeekDisplay, getStartAndEndOfWeek } from 'utils/dateTimeUtils';
@@ -15,6 +16,8 @@ const WeekPaginator: React.FC<Props> = ({
     updateWeek,
     resetToCurrentWeek,
 }: Props) => {
+    const { t } = useTranslation();
+
     const goToPreviousWeek = () => {
         const currentDate = new Date(currentWeekStart);
         currentDate.setDate(currentDate.getDate() - 7);
@@ -40,19 +43,19 @@ const WeekPaginator: React.FC<Props> = ({
                     <button
                         className="text-2xl p-2 hover:text-blue-500"
                         onClick={goToPreviousWeek}
-                        aria-label="Previous Week">
+                        aria-label={t('components.weekPaginator.labels.previousWeek')}>
                         <FaArrowLeft />
                     </button>
                     <button
                         className="text-2xl p-2 hover:text-blue-500"
                         onClick={resetToCurrentWeek}
-                        aria-label="Go to Current Week">
+                        aria-label={t('components.weekPaginator.labels.goToCurrentWeek')}>
                         <FaCalendarDay />
                     </button>
                     <button
                         className="text-2xl p-2 hover:text-blue-500"
                         onClick={goToNextWeek}
-                        aria-label="Next Week">
+                        aria-label={t('components.weekPaginator.labels.nextWeek')}>
                         <FaArrowRight />
                     </button>
                 </div>

@@ -1,16 +1,19 @@
-import userTokenInfo from 'hooks/userTokenInfo';
+import handleTokenInfo from 'hooks/handleTokenInfo';
+import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
+import Language from '../language/Language';
 
 const Header: React.FC = () => {
     const router = useRouter();
-    const { userRole, userName, userFullName, userToken } = userTokenInfo();
+    const { t } = useTranslation();
+    const { userRole, userName, userFullName, userToken } = handleTokenInfo();
 
     const handleLogout = () => {
         localStorage.clear();
 
-        toast.success(`You are being logged out! Redirecting you...`);
+        toast.success(t('header.logoutSuccess'));
 
         setTimeout(() => {
             router.push('/login');
@@ -20,33 +23,46 @@ const Header: React.FC = () => {
     return (
         <>
             <header className="flex justify-between items-center p-4 border-b bg-gray-800">
+                <div className="flex items-center space-x-2">
+                    <Link
+                        href="/"
+                        className="text-2xl font-bold text-gray-400 hover:text-white transition duration-300">
+                        {t('appName')}
+                    </Link>
+                    {userRole && (
+                        <span className="text-white text-lg font-medium">
+                            ({userRole === 'admin' ? 'Admin' : userRole === 'hr' ? 'HR' : ''})
+                        </span>
+                    )}
+                </div>
+
                 <nav className="flex space-x-6">
                     <Link
                         href="/"
                         className={`text-white text-lg font-medium ${
                             router.pathname === '/' ? 'border-b-2 border-white' : ''
                         }`}>
-                        Home
+                        {t('components.navigation.home')}
                     </Link>
                     <Link
                         href="/projects"
                         className={`text-white text-lg font-medium ${
                             router.pathname === '/projects' ? 'border-b-2 border-white' : ''
                         }`}>
-                        Projects
+                        {t('components.navigation.projects')}
                     </Link>
                     <Link
                         href="/workdays"
                         className={`text-white text-lg font-medium ${
                             router.pathname === '/workdays' ? 'border-b-2 border-white' : ''
                         }`}>
-                        Workdays
+                        {t('components.navigation.workDays')}
                     </Link>
                     {userRole ? (
                         <button
                             onClick={handleLogout}
                             className="text-white text-lg font-medium hover:underline">
-                            Logout
+                            {t('components.navigation.logout')}
                         </button>
                     ) : (
                         <>
@@ -55,23 +71,19 @@ const Header: React.FC = () => {
                                 className={`text-white text-lg font-medium ${
                                     router.pathname === '/login' ? 'border-b-2 border-white' : ''
                                 }`}>
-                                Login
+                                {t('components.navigation.login')}
                             </Link>
                             <Link
                                 href="/signup"
                                 className={`text-white text-lg font-medium ${
                                     router.pathname === '/signup' ? 'border-b-2 border-white' : ''
                                 }`}>
-                                Signup
+                                {t('components.navigation.signUp')}
                             </Link>
                         </>
                     )}
                 </nav>
-                <Link
-                    href="/"
-                    className="text-2xl font-bold text-gray-400 hover:text-white transition duration-300">
-                    Time Tracker
-                </Link>
+                <Language />
             </header>
         </>
     );

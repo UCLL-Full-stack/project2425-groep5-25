@@ -3,11 +3,16 @@ import MainLayout from '@components/layout/MainLayout';
 import LoginSignup from '@components/users/UserSignupLoginForm';
 import { userService } from '@services/userService';
 import { ErrorLabelMessage, UserInput } from '@types';
+import handleTokenInfo from 'hooks/handleTokenInfo';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import router from 'next/router';
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 
 const Login: React.FC = () => {
+    const { t } = useTranslation();
+    const { userRole, userName, userFullName, userToken } = handleTokenInfo();
     const [errorLabelMessage, setErrorLabelMessage] = useState<ErrorLabelMessage>();
 
     const handleLogin = async (data: UserInput) => {
@@ -20,8 +25,8 @@ const Login: React.FC = () => {
 
             if (!userResponse.ok) {
                 setErrorLabelMessage({
-                    label: 'Backend Error',
-                    message: userJson.message || 'An error occurred while logging in.',
+                    label: t('error.unexpectedErrorLabel'),
+                    message: userJson.message || t('error.unexpectedErrorMessage'),
                 });
                 return;
             }
@@ -36,7 +41,7 @@ const Login: React.FC = () => {
                 }),
             );
 
-            toast.success(`You successfully logged in! Redirecting you...`);
+            toast.success(t('pages.login.success'));
 
             setTimeout(() => {
                 router.push('/');
@@ -44,8 +49,8 @@ const Login: React.FC = () => {
         } catch (error) {
             if (error instanceof Error) {
                 setErrorLabelMessage({
-                    label: 'Error',
-                    message: error.message,
+                    label: t('error.unexpectedErrorLabel'),
+                    message: error.message || t('error.unexpectedErrorMessage'),
                 });
             }
         }
@@ -53,7 +58,7 @@ const Login: React.FC = () => {
 
     return (
         <>
-            <MainLayout title="Login" description="Time tracker login">
+            <MainLayout title={t('pages.login.title')} description={t('pages.login.description')}>
                 <div className="flex justify-center">
                     <div className="flex flex-col gap-4 p-2 max-w-md w-full">
                         <LoginSignup
@@ -69,6 +74,16 @@ const Login: React.FC = () => {
             </MainLayout>
         </>
     );
+};
+
+export const getServerSideProps = async (context) => {
+    const { locale } = context;
+
+    return {
+        props: {
+            ...(await serverSideTranslations(locale ?? 'nl', ['common'])),
+        },
+    };
 };
 
 export default Login;

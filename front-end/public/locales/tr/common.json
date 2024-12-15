@@ -1,0 +1,160 @@
+{
+    "appName": "Zaman Takipçisi",
+    "pages": {
+        "home": {
+            "title": "Ana Sayfa",
+            "description": "Zaman Takipçisi Ana Sayfa",
+            "message": "Ana sayfamıza hoş geldiniz! Burada projemizin ana işlevleri üzerinde çalışıyoruz. Lütfen şu anda geçici bir veritabanı kullandığımızı unutmayın. Buraya girilen tüm veriler kalıcı değildir ve yalnızca test amaçlıdır. Yapmaya ve geliştirmeye devam ederken sabrınız için teşekkür ederiz!"
+        },
+        "workDays": {
+            "title": "Çalışma Günleri",
+            "description": "Zaman Takipçisi Çalışma Günleri",
+            "noWorkdays": "Bu hafta için çalışma günü bulunmamaktadır"
+        },
+        "signUp": {
+            "title": "Kayıt Ol",
+            "description": "Zaman Takipçisi Kayıt Ol",
+            "success": "Kayıt başarıyla tamamlandı! Yönlendiriliyorsunuz...",
+            "button": "Kayıt Ol"
+        },
+        "projects": {
+            "title": "Projeler",
+            "description": "Zaman Takipçisi Projeler",
+            "addProject": "Proje Ekle"
+        },
+        "login": {
+            "title": "Giriş Yap",
+            "description": "Zaman Takipçisi Giriş Yap",
+            "success": "Giriş başarılı. Yönlendiriliyorsunuz..."
+        }
+    },
+    "components": {
+        "workDay": {},
+        "timeBlock": {},
+        "userSignUpLoginForm": {
+            "labels": {
+                "firstName": "Ad",
+                "lastName": "Soyad",
+                "email": "E-posta",
+                "userName": "Kullanıcı Adı",
+                "passWord": "Parola"
+            },
+            "placeholders": {
+                "signUp": {
+                    "firstName": "Adınızı girin",
+                    "lastName": "Soyadınızı girin",
+                    "email": "E-posta adresinizi girin",
+                    "userName": "Bir kullanıcı adı seçin",
+                    "passWord": "Parolanızı girin"
+                },
+                "login": {
+                    "userName": "Kullanıcı adınızı girin",
+                    "passWord": "Parolanızı girin"
+                }
+            },
+            "buttons": {
+                "signUp": "Kayıt Ol",
+                "login": "Giriş Yap"
+            },
+            "validate": {
+                "firstName": {
+                    "required": "Ad zorunludur",
+                    "minLength": "Ad en az 2 karakter olmalıdır",
+                    "capitalLetter": "Ad bir büyük harfle başlamalıdır",
+                    "lettersOnly": "Ad yalnızca harf içerebilir (aksanlı harfler dahil)"
+                },
+                "lastName": {
+                    "required": "Soyad zorunludur",
+                    "minLength": "Soyad en az 2 karakter olmalıdır",
+                    "capitalLetter": "Soyad bir büyük harfle başlamalıdır",
+                    "lettersOnly": "Soyad yalnızca harf içerebilir (aksanlı harfler dahil)"
+                },
+                "email": {
+                    "required": "E-posta zorunludur",
+                    "format": "Geçersiz e-posta formatı"
+                },
+                "userName": {
+                    "required": "Kullanıcı adı zorunludur",
+                    "minLength": "Kullanıcı adı en az 6 karakter olmalıdır",
+                    "format": "Kullanıcı adı yalnızca harfler, rakamlar ve alt çizgi içerebilir"
+                },
+                "passWord": {
+                    "required": "Parola zorunludur",
+                    "minLength": "Parola en az 6 karakter olmalıdır",
+                    "uppercase": "Parola en az bir büyük harf içermelidir",
+                    "number": "Parola en az bir rakam içermelidir",
+                    "special": "Parola en az bir özel karakter içermelidir (@, $, !, %, *, ?, & veya #)"
+                }
+            }
+        },
+        "weekPaginator": {
+            "labels": {
+                "previousWeek": "Geçen Hafta",
+                "goToCurrentWeek": "Bu Haftaya Git",
+                "nextWeek": "Gelecek Hafta"
+            }
+        },
+        "userSelectField": {},
+        "navigation": {
+            "home": "Ana Sayfa",
+            "projects": "Projeler",
+            "workDays": "Çalışma Günleri",
+            "logout": "Çıkış Yap",
+            "login": "Giriş Yap",
+            "signUp": "Kayıt Ol",
+            "logoutSuccess": "Çıkış yapıldı! Yönlendiriliyorsunuz..."
+        },
+        "inputField": {},
+        "colorSelectField": {},
+        "projectSidePanel": {
+            "labels": {
+                "name": "Proje Adı",
+                "color": "Renk Seç",
+                "users": "Kullanıcıları Seç"
+            },
+            "placeholders": {
+                "name": "Bir isim girin",
+                "color": "Bir renk seçin",
+                "users": "Kullanıcıları seçin (isteğe bağlı)"
+            },
+            "buttons": {
+                "addUsers": "Kullanıcıları Ekle",
+                "createProject": "Proje Oluştur"
+            },
+            "toast": {
+                "success": "Proje başarıyla oluşturuldu!"
+            },
+            "validate": {
+                "name": {
+                    "required": "Proje adı zorunludur",
+                    "minLength": "Proje adı en az 6 karakter olmalıdır",
+                    "invalid": "Proje adı yalnızca harfler, rakamlar ve boşluklar içerebilir"
+                },
+                "color": {
+                    "required": "Renk zorunludur",
+                    "invalid": "Geçerli bir proje rengi seçin"
+                },
+                "users": {
+                    "unique": "Aynı kullanıcıyı birden fazla seçemezsiniz."
+                }
+            }
+        },
+        "projectOverviewTable": {
+            "labels": {
+                "id": "Id",
+                "color": "Renk",
+                "name": "Proje Adı",
+                "userCount": "Kullanıcı Sayısı"
+            }
+        },
+        "mainLayout": {},
+        "errorMessage": {}
+    },
+    "error": {
+        "unexpectedErrorLabel": "Beklenmeyen Hata",
+        "unexpectedErrorMessage": "Beklenmeyen bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
+        "forbidden": "Bu sayfayı görüntüleme izniniz yok.",
+        "unauthorized": "Yetkiniz yok. Lütfen giriş yapın.",
+        "genericError": "Bir hata oluştu."
+    }
+}
