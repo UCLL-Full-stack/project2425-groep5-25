@@ -3,12 +3,14 @@ import MainLayout from '@components/layout/MainLayout';
 import LoginSignup from '@components/users/UserSignupLoginForm';
 import { userService } from '@services/userService';
 import { ErrorLabelMessage, UserInput } from '@types';
+import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import router from 'next/router';
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 
 const Login: React.FC = () => {
+    const { t } = useTranslation();
     const [errorLabelMessage, setErrorLabelMessage] = useState<ErrorLabelMessage>();
 
     const handleLogin = async (data: UserInput) => {
@@ -21,8 +23,8 @@ const Login: React.FC = () => {
 
             if (!userResponse.ok) {
                 setErrorLabelMessage({
-                    label: 'Backend Error',
-                    message: userJson.message || 'An error occurred while logging in.',
+                    label: t('error.backendErrorLabel'),
+                    message: userJson.message || t('general.error'),
                 });
                 return;
             }
@@ -37,7 +39,7 @@ const Login: React.FC = () => {
                 }),
             );
 
-            toast.success(`You successfully logged in! Redirecting you...`);
+            toast.success(t('login.successMessage'));
 
             setTimeout(() => {
                 router.push('/');
@@ -45,7 +47,7 @@ const Login: React.FC = () => {
         } catch (error) {
             if (error instanceof Error) {
                 setErrorLabelMessage({
-                    label: 'Error',
+                    label: t('error.genericErrorLabel'),
                     message: error.message,
                 });
             }
@@ -54,7 +56,7 @@ const Login: React.FC = () => {
 
     return (
         <>
-            <MainLayout title="Login" description="Time tracker login">
+            <MainLayout title={t('login.title')} description={t('login.description')}>
                 <div className="flex justify-center">
                     <div className="flex flex-col gap-4 p-2 max-w-md w-full">
                         <LoginSignup

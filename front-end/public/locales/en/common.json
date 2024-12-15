@@ -1,6 +1,5 @@
 {
     "app.title": "Time Tracker",
-    "general.error": "An error has occurred. Please try again later.",
     "header": {
         "home": "Home",
         "projects": "Projects",
@@ -11,9 +10,25 @@
         "title": "Time Tracker",
         "logoutSuccess": "You are being logged out! Redirecting you..."
     },
+    "home": {
+        "description": "Project tracker Home",
+        "message": "This will be our main page, in the future, it remains empty for now. We make use of a fake database, and any values or things stored here will not be permanent."
+    },
+    "workdays": {
+        "title": "Workdays",
+        "description": "Project tracker workdays",
+        "noWorkdays": "No workdays available for this week"
+    },
+    "projects": {
+        "title": "Projects",
+        "description": "Project tracker projects",
+        "addProjectButton": "Add Project"
+    },
+
     "login": {
         "title": "Login",
         "button": "Login",
+        "description": "Time Tracker Login",
         "success": "Login successful. Redirecting to homepage...",
         "field": {
             "username": "Username",
@@ -29,6 +44,8 @@
     },
     "signup": {
         "title": "Sign Up",
+        "description": "Time Tracker Signup",
+        "success": "Signup successful. Redirecting to the login page...",
         "button": "Sign Up",
         "field": {
             "firstName": "First Name",
@@ -73,5 +90,54 @@
                 "placeholder": "Choose a password"
             }
         }
+    },
+    "error": {
+        "fetchingData": "Error fetching data",
+        "backendErrorLabel": "Backend Error"
+    },
+    "general.error": "An error has occurred. Please try again later.",
+    "weekPageComponent": {
+        "previousWeek": "Previous Week",
+        "goToCurrentWeek": "Go to Current Week",
+        "nextWeek": "Next Week"
+    },
+    "projectSidePanelComponent": {
+        "titel": "Create a Project",
+        "validation": {
+            "nameRequired": "Project name is required",
+            "nameLength": "Project name must be at least 6 characters long",
+            "nameInvalid": "Project name can only contain letters, numbers, and spaces",
+            "colorRequired": "Project color is required",
+            "invalidColor": "Please select a valid project color"
+        },
+        "error": {
+            "uniqueUsers": "You cannot select the same user more than once.",
+            "validationError": {
+                "label": "Validation Error",
+                "message": "Please fix the errors above."
+            },
+            "createError": "An error occurred while creating the project."
+        },
+        "createSuccess": "Project was created successfully!",
+        "projectName": {
+            "label": "Project Name:",
+            "placeholder": "Enter name"
+        },
+        "selectColor": {
+            "label": "Select Color:",
+            "placeholder": "Select a color"
+        },
+        "addUsersButton": "Want to add users?",
+        "selectUsers": {
+            "label": "Select Users:",
+            "placeholder": "Select users (optional)"
+        },
+        "createProjectButton": "Create Project"
+    },
+    "projectOverviewTableComponent": {
+        "id": "Id",
+        "color": "Color",
+        "name": "Name",
+        "userCount": "Number of Users"
     }
 }

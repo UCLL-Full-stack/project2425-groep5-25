@@ -1,4 +1,5 @@
 import { ProjectOutput } from '@types';
+import { useTranslation } from 'next-i18next';
 import React from 'react';
 import { formatOptionLabel, getColorName } from 'utils/colorUtils';
 
@@ -7,6 +8,7 @@ type Props = {
 };
 
 const ProjectOverviewTable: React.FC<Props> = ({ projects }: Props) => {
+    const { t } = useTranslation();
     return (
         <>
             {projects && (
@@ -16,22 +18,22 @@ const ProjectOverviewTable: React.FC<Props> = ({ projects }: Props) => {
                             <th
                                 scope="col"
                                 className="px-4 py-2 text-left text-sm font-semibold text-gray-700 border-b">
-                                Id
+                                {t('projectOverviewTableComponent.id')}
                             </th>
                             <th
                                 scope="col"
                                 className="px-4 py-2 text-left text-sm font-semibold text-gray-700 border-b">
-                                Color
+                                {t('projectOverviewTableComponent.color')}
                             </th>
                             <th
                                 scope="col"
                                 className="px-4 py-2 text-left text-sm font-semibold text-gray-700 border-b">
-                                Name
+                                {t('projectOverviewTableComponent.name')}
                             </th>
                             <th
                                 scope="col"
                                 className="px-4 py-2 text-left text-sm font-semibold text-gray-700 border-b">
-                                Aantal Gebruikers
+                                {t('projectOverviewTableComponent.userCount')}
                             </th>
                         </tr>
                     </thead>

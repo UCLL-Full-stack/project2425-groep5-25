@@ -1,5 +1,23 @@
 {
-    "app.title": "Tijdregistratie",
+    "app.title": "Time Tracker",
+    "home": {
+        "description": "Project tracker Home",
+        "message": "Dit wordt onze hoofdpagina. Voorlopig blijft deze leeg. We maken gebruik van een nepdatabase, en alle waarden of dingen die hier worden opgeslagen, zijn niet permanent."
+    },
+    "workdays": {
+        "title": "Werkdagen",
+        "description": "Project tracker werkdagen",
+        "noWorkdays": "Geen werkdagen beschikbaar voor deze week"
+    },
+    "projects": {
+        "title": "Projecten",
+        "description": "Projecttracker projecten",
+        "addProjectButton": "Project toevoegen"
+    },
+    "error": {
+        "fetchingData": "Fout bij het ophalen van gegevens",
+        "backendErrorLabel": "Backend Fout"
+    },
     "general.error": "Er is een fout opgetreden. Probeer het later opnieuw.",
     "header": {
         "home": "Home",
@@ -8,13 +26,14 @@
         "logout": "Uitloggen",
         "login": "Inloggen",
         "signup": "Aanmelden",
-        "title": "Tijdregistratie",
+        "title": "Time Tracker",
         "logoutSuccess": "Je wordt uitgelogd! Je wordt doorgestuurd..."
     },
     "login": {
         "title": "Inloggen",
-        "button": "Inloggen",
+        "description": "Time Tracker Inloggen",
         "success": "Inloggen geslaagd. Wordt doorgestuurd naar de homepage...",
+        "button": "Inloggen",
         "field": {
             "username": "Gebruikersnaam",
             "password": "Wachtwoord"
@@ -29,6 +48,8 @@
     },
     "signup": {
         "title": "Aanmelden",
+        "description": "Time Tracker Aanmelden",
+        "success": "Aanmelden geslaagd. U wordt doorgestuurd naar de inlogpagina...",
         "button": "Aanmelden",
         "field": {
             "firstName": "Voornaam",
@@ -73,5 +94,49 @@
                 "placeholder": "Kies een wachtwoord"
             }
         }
+    },
+    "weekPageComponent": {
+        "previousWeek": "Vorige Week",
+        "goToCurrentWeek": "Ga naar de Huidige Week",
+        "nextWeek": "Volgende Week"
+    },
+    "projectSidePanelComponent": {
+        "titel": "Maak een Project",
+        "validation": {
+            "nameRequired": "Projectnaam is verplicht",
+            "nameLength": "Projectnaam moet minimaal 6 tekens bevatten",
+            "nameInvalid": "Projectnaam mag alleen letters, cijfers en spaties bevatten",
+            "colorRequired": "Projectkleur is verplicht",
+            "invalidColor": "Selecteer een geldige projectkleur"
+        },
+        "error": {
+            "uniqueUsers": "Je kunt dezelfde gebruiker niet meer dan één keer selecteren.",
+            "validationError": {
+                "label": "Validatiefout",
+                "message": "Los de bovenstaande fouten op."
+            },
+            "createError": "Er is een fout opgetreden bij het aanmaken van het project."
+        },
+        "createSuccess": "Project is succesvol aangemaakt!",
+        "projectName": {
+            "label": "Projectnaam:",
+            "placeholder": "Voer naam in"
+        },
+        "selectColor": {
+            "label": "Selecteer Kleur:",
+            "placeholder": "Selecteer een kleur"
+        },
+        "addUsersButton": "Wil je gebruikers toevoegen?",
+        "selectUsers": {
+            "label": "Selecteer Gebruikers:",
+            "placeholder": "Selecteer gebruikers (optioneel)"
+        },
+        "createProjectButton": "Maak Project"
+    },
+    "projectOverviewTableComponent": {
+        "id": "Id",
+        "color": "Kleur",
+        "name": "Naam",
+        "userCount": "Aantal Gebruikers"
     }
 }

@@ -3,12 +3,14 @@ import MainLayout from '@components/layout/MainLayout';
 import LoginSignup from '@components/users/UserSignupLoginForm';
 import { userService } from '@services/userService';
 import { ErrorLabelMessage, UserInput } from '@types';
+import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import router from 'next/router';
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 
 const SignUp: React.FC = () => {
+    const { t } = useTranslation();
     const [errorLabelMessage, setErrorLabelMessage] = useState<ErrorLabelMessage>();
 
     const handleSignUp = async (data: UserInput) => {
@@ -27,8 +29,8 @@ const SignUp: React.FC = () => {
 
             if (!userResponse.ok) {
                 setErrorLabelMessage({
-                    label: 'Backend Error',
-                    message: userJson.message || 'An error occurred while logging in.',
+                    label: t('error.backendErrorLabel'),
+                    message: userJson.message || t('general.error'),
                 });
                 return;
             }
@@ -43,9 +45,7 @@ const SignUp: React.FC = () => {
                 }),
             );
 
-            toast.success(
-                `You successfully created an account! You are now logged in! Redirecting you...`,
-            );
+            toast.success(t('signup.success'));
 
             setTimeout(() => {
                 router.push('/');
@@ -53,7 +53,7 @@ const SignUp: React.FC = () => {
         } catch (error) {
             if (error instanceof Error) {
                 setErrorLabelMessage({
-                    label: 'Error',
+                    label: t('error.fetchingData'),
                     message: error.message,
                 });
             }
@@ -62,7 +62,7 @@ const SignUp: React.FC = () => {
 
     return (
         <>
-            <MainLayout title="Signup" description="Time tracker signup">
+            <MainLayout title={t('signup.title')} description={t('signup.description')}>
                 {errorLabelMessage && <ErrorMessage errorLabelMessage={errorLabelMessage} />}
                 <div className="flex justify-center">
                     <div className="flex flex-col gap-4 p-2 max-w-md w-full">

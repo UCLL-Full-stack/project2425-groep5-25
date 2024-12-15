@@ -4,12 +4,14 @@ import ProjectSidePanel from '@components/projects/ProjectSidePanel';
 import { projectService } from '@services/projectService';
 import { userService } from '@services/userService';
 import userTokenInfo from 'hooks/userTokenInfo';
+import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useState } from 'react';
 import useSWR from 'swr';
 import { handleResponse } from 'utils/responseUtils';
 
 const Home: React.FC = () => {
+    const { t } = useTranslation();
     const { userRole, userName, userFullName, userToken } = userTokenInfo();
     const [isSidePanelOpen, setIsSidePanelOpen] = useState<boolean>(false);
 
@@ -27,7 +29,7 @@ const Home: React.FC = () => {
 
             return { userIdNames, projects };
         } catch (error) {
-            console.error('Error fetching data', error);
+            console.error(t('error.fetchingData'), error);
             return null;
         }
     };
@@ -37,8 +39,8 @@ const Home: React.FC = () => {
     return (
         <>
             <MainLayout
-                title="Projects"
-                description="Project tracker projects"
+                title={t('projects.title')}
+                description={t('projects.description')}
                 isLoading={isLoading}
                 titleContent={
                     data &&
@@ -46,7 +48,7 @@ const Home: React.FC = () => {
                         <button
                             onClick={() => setIsSidePanelOpen(!isSidePanelOpen)}
                             className="bg-blue-500 text-white px-6 py-2 rounded-md shadow-md hover:bg-blue-600 transition duration-200">
-                            Add Project
+                            {t('projects.addProjectButton')}
                         </button>
                     )
                 }>

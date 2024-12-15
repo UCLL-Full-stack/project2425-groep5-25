@@ -3,6 +3,7 @@ import WeekPaginator from '@components/shared/WeekPaginator';
 import Workday from '@components/workWeek/WorkDay';
 import { workDayService } from '@services/workDayService';
 import { WorkDayOutput } from '@types';
+import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useEffect, useState } from 'react';
 import useSWR, { mutate } from 'swr';
@@ -11,6 +12,7 @@ import { getStartAndEndOfWeek } from 'utils/dateTimeUtils';
 import { handleResponse } from 'utils/responseUtils';
 
 const Home: React.FC = () => {
+    const { t } = useTranslation();
     const [currentWeekStart, setCurrentWeekStart] = useState<string>('');
     const [currentWeekEnd, setCurrentWeekEnd] = useState<string>('');
 
@@ -39,7 +41,7 @@ const Home: React.FC = () => {
 
             return { workDays };
         } catch (error) {
-            console.error('Error fetching data', error);
+            console.error(t('error.fetchingData'), error);
             return null;
         }
     };
@@ -58,8 +60,8 @@ const Home: React.FC = () => {
     return (
         <>
             <MainLayout
-                title="Workdays"
-                description="Project tracker workdays"
+                title={t('workdays.title')}
+                description={t('workdays.description')}
                 isLoading={isLoading}
                 titleContent={
                     <WeekPaginator
@@ -75,9 +77,7 @@ const Home: React.FC = () => {
                             <Workday key={workday.id} workday={workday} />
                         ))
                     ) : (
-                        <p className="text-center text-gray-500">
-                            No workdays available for this week
-                        </p>
+                        <p className="text-center text-gray-500">{t('workdays.noWorkdays')}</p>
                     )}
                 </div>
             </MainLayout>

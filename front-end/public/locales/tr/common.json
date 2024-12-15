@@ -1,5 +1,23 @@
 {
-    "app.title": "Zaman Takip",
+    "app.title": "Time Tracker",
+    "home": {
+        "description": "Proje takip ana sayfası",
+        "message": "Bu bizim ana sayfamız olacak, şimdilik boş kalacak. Sahte bir veritabanı kullanıyoruz ve buraya kaydedilen herhangi bir değer veya şey kalıcı olmayacaktır."
+    },
+    "workdays": {
+        "title": "Çalışma Günleri",
+        "description": "Proje takip çalışma günleri",
+        "noWorkdays": "Bu hafta için mevcut çalışma günü yok"
+    },
+    "projects": {
+        "title": "Projeler",
+        "description": "Proje takip projeleri",
+        "addProjectButton": "Proje Ekle"
+    },
+    "error": {
+        "fetchingData": "Veri alınırken hata oluştu",
+        "backendErrorLabel": "Backend Hatası"
+    },
     "general.error": "Bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
     "header": {
         "home": "Ana Sayfa",
@@ -8,7 +26,7 @@
         "logout": "Çıkış Yap",
         "login": "Giriş Yap",
         "signup": "Kayıt Ol",
-        "title": "Zaman Takip",
+        "title": "Time Tracker",
         "logoutSuccess": "Çıkış yapılıyor! Yönlendiriliyorsunuz..."
     },
     "login": {
@@ -29,6 +47,8 @@
     },
     "signup": {
         "title": "Kayıt Ol",
+        "description": "Project tracker Kayıt Ol",
+        "success": "Kayıt Ol başarılı.Giriş sayfasına yönlendiriliyorsunuz...",
         "button": "Kayıt Ol",
         "field": {
             "firstName": "Ad",
@@ -73,5 +93,50 @@
                 "placeholder": "Bir şifre seçin"
             }
         }
+    },
+    "weekPageComponent": {
+        "previousWeek": "Geçen Hafta",
+        "goToCurrentWeek": "Şu Anki Haftaya Git",
+        "nextWeek": "Sonraki Hafta"
+    },
+
+    "projectSidePanelComponent": {
+        "titel": "Bir Proje Oluştur",
+        "validation": {
+            "nameRequired": "Proje adı gereklidir",
+            "nameLength": "Proje adı en az 6 karakter olmalıdır",
+            "nameInvalid": "Proje adı yalnızca harfler, sayılar ve boşluklar içerebilir",
+            "colorRequired": "Proje rengi gereklidir",
+            "invalidColor": "Geçerli bir proje rengi seçin"
+        },
+        "error": {
+            "uniqueUsers": "Aynı kullanıcıyı birden fazla seçemezsiniz.",
+            "validationError": {
+                "label": "Geçerlilik Hatası",
+                "message": "Yukarıdaki hataları düzeltin."
+            },
+            "createError": "Proje oluşturulurken bir hata oluştu."
+        },
+        "createSuccess": "Proje başarıyla oluşturuldu!",
+        "projectName": {
+            "label": "Proje Adı:",
+            "placeholder": "Adı girin"
+        },
+        "selectColor": {
+            "label": "Renk Seçin:",
+            "placeholder": "Bir renk seçin"
+        },
+        "addUsersButton": "Kullanıcı eklemek ister misiniz?",
+        "selectUsers": {
+            "label": "Kullanıcıları Seçin:",
+            "placeholder": "Kullanıcıları seçin (isteğe bağlı)"
+        },
+        "createProjectButton": "Proje Oluştur"
+    },
+    "projectOverviewTableComponent": {
+        "id": "Id",
+        "color": "Renk",
+        "name": "Ad",
+        "userCount": "Kullanıcı Sayısı"
     }
 }
