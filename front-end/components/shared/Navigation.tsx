@@ -1,4 +1,4 @@
-import userTokenInfo from 'hooks/userTokenInfo';
+import handleTokenInfo from 'hooks/handleTokenInfo';
 import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -8,7 +8,7 @@ import Language from '../language/Language';
 const Header: React.FC = () => {
     const router = useRouter();
     const { t } = useTranslation();
-    const { userRole, userName, userFullName, userToken } = userTokenInfo();
+    const { userRole, userName, userFullName, userToken } = handleTokenInfo();
 
     const handleLogout = () => {
         localStorage.clear();
@@ -27,7 +27,7 @@ const Header: React.FC = () => {
                     <Link
                         href="/"
                         className="text-2xl font-bold text-gray-400 hover:text-white transition duration-300">
-                        {t('header.title')}
+                        {t('appName')}
                     </Link>
                     {userRole && (
                         <span className="text-white text-lg font-medium">
@@ -42,27 +42,27 @@ const Header: React.FC = () => {
                         className={`text-white text-lg font-medium ${
                             router.pathname === '/' ? 'border-b-2 border-white' : ''
                         }`}>
-                        {t('header.home')}
+                        {t('components.navigation.home')}
                     </Link>
                     <Link
                         href="/projects"
                         className={`text-white text-lg font-medium ${
                             router.pathname === '/projects' ? 'border-b-2 border-white' : ''
                         }`}>
-                        {t('header.projects')}
+                        {t('components.navigation.projects')}
                     </Link>
                     <Link
                         href="/workdays"
                         className={`text-white text-lg font-medium ${
                             router.pathname === '/workdays' ? 'border-b-2 border-white' : ''
                         }`}>
-                        {t('header.workdays')}
+                        {t('components.navigation.workDays')}
                     </Link>
                     {userRole ? (
                         <button
                             onClick={handleLogout}
                             className="text-white text-lg font-medium hover:underline">
-                            {t('header.logout')}
+                            {t('components.navigation.logout')}
                         </button>
                     ) : (
                         <>
@@ -71,14 +71,14 @@ const Header: React.FC = () => {
                                 className={`text-white text-lg font-medium ${
                                     router.pathname === '/login' ? 'border-b-2 border-white' : ''
                                 }`}>
-                                {t('header.login')}
+                                {t('components.navigation.login')}
                             </Link>
                             <Link
                                 href="/signup"
                                 className={`text-white text-lg font-medium ${
                                     router.pathname === '/signup' ? 'border-b-2 border-white' : ''
                                 }`}>
-                                {t('header.signup')}
+                                {t('components.navigation.signUp')}
                             </Link>
                         </>
                     )}

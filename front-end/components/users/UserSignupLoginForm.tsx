@@ -20,43 +20,58 @@ const UserSignupLoginForm: React.FC<Props> = ({ isSignUp, onSubmit, clearParentE
     const { t } = useTranslation();
 
     const validateFirstName = (firstName: string | null) => {
-        if (!firstName?.trim()) return t('signup.validate.firstName.required');
-        if (firstName.trim().length < 2) return t('signup.validate.firstName.minLength');
+        if (!firstName?.trim())
+            return t('components.userSignUpLoginForm.validate.firstName.required');
+        if (firstName.trim().length < 2)
+            return t('components.userSignUpLoginForm.validate.firstName.minLength');
         if (firstName[0] !== firstName[0].toUpperCase())
-            return t('signup.validate.firstName.capital');
-        if (!/^[\p{L}]+$/u.test(firstName)) return t('signup.validate.firstName.lettersOnly');
+            return t('components.userSignUpLoginForm.validate.firstName.capitalLetter');
+        if (!/^[\p{L}]+$/u.test(firstName))
+            return t('components.userSignUpLoginForm.validate.firstName.lettersOnly');
         return null;
     };
 
     const validateLastName = (lastName: string | null) => {
-        if (!lastName?.trim()) return t('signup.validate.lastName.required');
-        if (lastName.trim().length < 2) return t('signup.validate.lastName.minLength');
-        if (lastName[0] !== lastName[0].toUpperCase()) return t('signup.validate.lastName.capital');
-        if (!/^[\p{L}]+$/u.test(lastName)) return t('signup.validate.lastName.lettersOnly');
+        if (!lastName?.trim())
+            return t('components.userSignUpLoginForm.validate.lastName.required');
+        if (lastName.trim().length < 2)
+            return t('components.userSignUpLoginForm.validate.lastName.minLength');
+        if (lastName[0] !== lastName[0].toUpperCase())
+            return t('components.userSignUpLoginForm.validate.lastName.capitalLetter');
+        if (!/^[\p{L}]+$/u.test(lastName))
+            return t('components.userSignUpLoginForm.validate.lastName.lettersOnly');
         return null;
     };
 
     const validateEmail = (email: string | null) => {
-        if (!email?.trim()) return t('signup.validate.email.required');
-        if (!email.includes('@')) return t('signup.validate.email.format');
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return t('signup.validate.email.format');
+        if (!email?.trim()) return t('components.userSignUpLoginForm.validate.email.required');
+        if (!email.includes('@')) return t('components.userSignUpLoginForm.validate.email.format');
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+            return t('components.userSignUpLoginForm.validate.email.format');
         return null;
     };
 
     const validateUserName = (userName: string | null) => {
-        if (!userName?.trim()) return t('signup.validate.username.required');
-        if (userName.trim().length < 6) return t('signup.validate.username.minLength');
-        if (!/^[a-zA-Z0-9_]+$/.test(userName)) return t('signup.validate.username.format');
+        if (!userName?.trim())
+            return t('components.userSignUpLoginForm.validate.userName.required');
+        if (userName.trim().length < 6)
+            return t('components.userSignUpLoginForm.validate.userName.minLength');
+        if (!/^[a-zA-Z0-9_]+$/.test(userName))
+            return t('components.userSignUpLoginForm.validate.userName.format');
         return null;
     };
 
     const validatePassWord = (passWord: string | null) => {
-        if (!passWord?.trim()) return t('signup.validate.password.required');
-        if (passWord.trim().length < 6) return t('signup.validate.password.minLength');
-        if (!/[A-Z]/.test(passWord)) return t('signup.validate.password.uppercase');
-        if (!/[a-z]/.test(passWord)) return t('signup.validate.password.lowercase');
-        if (!/[0-9]/.test(passWord)) return t('signup.validate.password.number');
-        if (!/[@$!%*?&#]/.test(passWord)) return t('signup.validate.password.special');
+        if (!passWord?.trim())
+            return t('components.userSignUpLoginForm.validate.passWord.required');
+        if (passWord.trim().length < 6)
+            return t('components.userSignUpLoginForm.validate.passWord.minLength');
+        if (!/[A-Z]/.test(passWord))
+            return t('components.userSignUpLoginForm.validate.passWord.uppercase');
+        if (!/[0-9]/.test(passWord))
+            return t('components.userSignUpLoginForm.validate.passWord.number');
+        if (!/[@$!%*?&#]/.test(passWord))
+            return t('components.userSignUpLoginForm.validate.passWord.special');
         return null;
     };
 
@@ -70,8 +85,12 @@ const UserSignupLoginForm: React.FC<Props> = ({ isSignUp, onSubmit, clearParentE
 
             if (firstNameError || lastNameError || emailError) {
                 setErrorLabelMessage({
-                    label: t('general.error'),
-                    message: firstNameError || lastNameError || emailError || '',
+                    label: t('error.unexpectedErrorLabel'),
+                    message:
+                        firstNameError ||
+                        lastNameError ||
+                        emailError ||
+                        t('error.unexpectedErrorMessage'),
                 });
                 valid = false;
             }
@@ -82,8 +101,8 @@ const UserSignupLoginForm: React.FC<Props> = ({ isSignUp, onSubmit, clearParentE
 
         if (userNameError || passWordError) {
             setErrorLabelMessage({
-                label: t('general.error'),
-                message: userNameError || passWordError || '',
+                label: t('error.unexpectedErrorLabel'),
+                message: userNameError || passWordError || t('error.unexpectedErrorMessage'),
             });
             valid = false;
         }
@@ -124,31 +143,37 @@ const UserSignupLoginForm: React.FC<Props> = ({ isSignUp, onSubmit, clearParentE
                     <>
                         <InputField
                             type="text"
-                            label={t('signup.field.firstName')}
+                            label={t('components.userSignUpLoginForm.labels.firstName')}
                             value={firstName}
                             onChange={setFirstName}
                             validate={validateFirstName}
-                            placeholder={t('signup.validate.firstName.placeholder')}
+                            placeholder={t(
+                                'components.userSignUpLoginForm.placeholders.signUp.firstName',
+                            )}
                             required
                         />
 
                         <InputField
                             type="text"
-                            label={t('signup.field.lastName')}
+                            label={t('components.userSignUpLoginForm.labels.lastName')}
                             value={lastName}
                             onChange={setLastName}
                             validate={validateLastName}
-                            placeholder={t('signup.validate.lastName.placeholder')}
+                            placeholder={t(
+                                'components.userSignUpLoginForm.placeholders.signUp.lastName',
+                            )}
                             required
                         />
 
                         <InputField
                             type="email"
-                            label={t('signup.field.email')}
+                            label={t('components.userSignUpLoginForm.labels.email')}
                             value={email}
                             onChange={setEmail}
                             validate={validateEmail}
-                            placeholder={t('signup.validate.email.placeholder')}
+                            placeholder={t(
+                                'components.userSignUpLoginForm.placeholders.signUp.email',
+                            )}
                             required
                         />
                     </>
@@ -156,28 +181,28 @@ const UserSignupLoginForm: React.FC<Props> = ({ isSignUp, onSubmit, clearParentE
 
                 <InputField
                     type="text"
-                    label={isSignUp ? t('signup.field.username') : t('login.field.username')}
+                    label={t('components.userSignUpLoginForm.labels.userName')}
                     value={userName}
                     onChange={setUserName}
                     validate={validateUserName}
                     placeholder={
                         isSignUp
-                            ? t('signup.validate.username.placeholder')
-                            : t('login.validate.username.placeholder')
+                            ? t('components.userSignUpLoginForm.placeholders.signUp.userName')
+                            : t('components.userSignUpLoginForm.placeholders.login.userName')
                     }
                     required
                 />
 
                 <InputField
                     type="password"
-                    label={isSignUp ? t('signup.field.password') : t('login.field.password')}
+                    label={t('components.userSignUpLoginForm.labels.passWord')}
                     value={passWord}
                     onChange={setPassWord}
                     validate={validatePassWord}
                     placeholder={
                         isSignUp
-                            ? t('signup.validate.username.placeholder')
-                            : t('login.validate.username.placeholder')
+                            ? t('components.userSignUpLoginForm.placeholders.signUp.passWord')
+                            : t('components.userSignUpLoginForm.placeholders.login.passWord')
                     }
                     required
                 />
@@ -185,7 +210,9 @@ const UserSignupLoginForm: React.FC<Props> = ({ isSignUp, onSubmit, clearParentE
                 <button
                     type="submit"
                     className="bg-blue-500 text-white px-6 py-2 rounded-md shadow-md hover:bg-blue-600 transition duration-200">
-                    {isSignUp ? t('signup.button') : t('login.button')}
+                    {isSignUp
+                        ? t('components.userSignUpLoginForm.buttons.signUp')
+                        : t('components.userSignUpLoginForm.buttons.login')}
                 </button>
 
                 {errorLabelMessage && <ErrorMessage errorLabelMessage={errorLabelMessage} />}

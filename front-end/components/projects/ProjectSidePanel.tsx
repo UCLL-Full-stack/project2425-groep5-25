@@ -27,24 +27,24 @@ const ProjectSidePanel: React.FC<Props> = ({ userIdNames, onProjectCreated, onCl
     const [errorLabelMessage, setErrorLabelMessage] = useState<ErrorLabelMessage>();
 
     const validateName = (name: string | null) => {
-        if (!name?.trim()) return t('projectSidePanelComponent.validation.nameRequired');
-        if (name.trim().length < 6) return t('projectSidePanelComponent.validation.nameLength');
+        if (!name?.trim()) return t('components.projectSidePanel.validate.name.required');
+        if (name.trim().length < 6) return t('components.projectSidePanel.validate.name.minLength');
         if (!/^[a-zA-Z0-9 ]+$/.test(name))
-            return t('projectSidePanelComponent.validation.nameInvalid');
+            return t('components.projectSidePanel.validate.name.invalid');
         return null;
     };
 
     const validateColor = (color: Color | null) => {
-        if (!color?.trim()) return t('projectSidePanelComponent.validation.colorRequired');
+        if (!color?.trim()) return t('components.projectSidePanel.validate.color.required');
         if (!Object.values(Color).includes(color))
-            return t('projectSidePanelComponent.validation.invalidColor');
+            return t('components.projectSidePanel.validate.color.invalid');
         return null;
     };
 
     const validateUserSelection = (value: number[]) => {
         const uniqueUserIds = new Set(value);
         if (uniqueUserIds.size !== value.length)
-            return t('projectSidePanelComponent.error.uniqueUsers');
+            return t('components.projectSidePanel.validate.users.unique');
         return null;
     };
 
@@ -57,8 +57,8 @@ const ProjectSidePanel: React.FC<Props> = ({ userIdNames, onProjectCreated, onCl
 
         if (nameError || colorError || userError) {
             setErrorLabelMessage({
-                label: t('projectSidePanelComponent.error.validationError.label'),
-                message: nameError || colorError || userError || '',
+                label: t('error.unexpectedErrorLabel'),
+                message: nameError || colorError || userError || t('error.unexpectedErrorMessage'),
             });
             return false;
         }
@@ -82,18 +82,16 @@ const ProjectSidePanel: React.FC<Props> = ({ userIdNames, onProjectCreated, onCl
             const [projectJson] = await Promise.all([projectResponse.json()]);
 
             if (!projectResponse.ok)
-                throw new Error(
-                    projectJson.message || t('projectSidePanelComponent.error.createError'),
-                );
+                throw new Error(projectJson.message || t('error.unexpectedErrorMessage'));
 
             onProjectCreated();
-            toast.success(t('projectSidePanelComponent.createSuccess'));
+            toast.success(t('components.projectSidePanel.toast.success'));
             onClose();
         } catch (error) {
             if (error instanceof Error) {
                 setErrorLabelMessage({
-                    label: t('projectSidePanelComponent.error.validationError.label'),
-                    message: error.message,
+                    label: t('error.unexpectedErrorLabel'),
+                    message: error.message || t('error.unexpectedErrorMessage'),
                 });
             }
         }
@@ -111,20 +109,20 @@ const ProjectSidePanel: React.FC<Props> = ({ userIdNames, onProjectCreated, onCl
                 <form onSubmit={createProject} className={styles['form-container']}>
                     <InputField
                         type="text"
-                        label={t('projectSidePanelComponent.projectName.label')}
+                        label={t('components.projectSidePanel.labels.name')}
                         value={name}
                         onChange={setName}
                         validate={validateName}
-                        placeholder={t('projectSidePanelComponent.projectName.placeholder')}
+                        placeholder={t('components.projectSidePanel.placeholders.name')}
                         required
                     />
 
                     <ColorSelectField
-                        label={t('projectSidePanelComponent.selectColor.label')}
+                        label={t('components.projectSidePanel.labels.color')}
                         value={color}
                         onChange={setColor}
                         validate={validateColor}
-                        placeholder={t('projectSidePanelComponent.selectColor.placeholder')}
+                        placeholder={t('components.projectSidePanel.placeholders.color')}
                         required
                     />
 
@@ -133,22 +131,22 @@ const ProjectSidePanel: React.FC<Props> = ({ userIdNames, onProjectCreated, onCl
                             type="button"
                             className={styles.button}
                             onClick={() => setShowUserSelector(true)}>
-                            {t('projectSidePanelComponent.addUsersButton')}
+                            {t('components.projectSidePanel.buttons.addUsers')}
                         </button>
                     ) : (
                         <UserSelectField
-                            label={t('projectSidePanelComponent.selectUsers.label')}
+                            label={t('components.projectSidePanel.labels.users')}
                             userIdNames={userIdNames}
                             value={userIds}
                             onChange={setUserIds}
                             validate={validateUserSelection}
-                            placeholder={t('projectSidePanelComponent.selectUsers.placeholder')}
+                            placeholder={t('components.projectSidePanel.placeholders.users')}
                             required={false}
                         />
                     )}
 
                     <button type="submit" className={styles.button}>
-                        {t('projectSidePanelComponent.createProjectButton')}
+                        {t('components.projectSidePanel.buttons.createProject')}
                     </button>
 
                     {errorLabelMessage && <ErrorMessage errorLabelMessage={errorLabelMessage} />}

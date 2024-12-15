@@ -3,6 +3,7 @@ import MainLayout from '@components/layout/MainLayout';
 import LoginSignup from '@components/users/UserSignupLoginForm';
 import { userService } from '@services/userService';
 import { ErrorLabelMessage, UserInput } from '@types';
+import handleTokenInfo from 'hooks/handleTokenInfo';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import router from 'next/router';
@@ -11,7 +12,7 @@ import { toast } from 'react-toastify';
 
 const SignUp: React.FC = () => {
     const { t } = useTranslation();
-
+    const { userRole, userName, userFullName, userToken } = handleTokenInfo();
     const [errorLabelMessage, setErrorLabelMessage] = useState<ErrorLabelMessage>();
 
     const handleSignUp = async (data: UserInput) => {
@@ -30,8 +31,8 @@ const SignUp: React.FC = () => {
 
             if (!userResponse.ok) {
                 setErrorLabelMessage({
-                    label: t('error.backendErrorLabel'),
-                    message: userJson.message || t('general.error'),
+                    label: t('error.unexpectedErrorLabel'),
+                    message: userJson.message || t('error.unexpectedErrorMessage'),
                 });
                 return;
             }
@@ -46,7 +47,7 @@ const SignUp: React.FC = () => {
                 }),
             );
 
-            toast.success(t('signup.success'));
+            toast.success(t('pages.signUp.success'));
 
             setTimeout(() => {
                 router.push('/');
@@ -54,8 +55,8 @@ const SignUp: React.FC = () => {
         } catch (error) {
             if (error instanceof Error) {
                 setErrorLabelMessage({
-                    label: t('error.fetchingData'),
-                    message: error.message,
+                    label: t('error.unexpectedErrorLabel'),
+                    message: error.message || t('error.unexpectedErrorMessage'),
                 });
             }
         }
@@ -63,8 +64,7 @@ const SignUp: React.FC = () => {
 
     return (
         <>
-            <MainLayout title={t('signup.title')} description={t('signup.description')}>
-                {errorLabelMessage && <ErrorMessage errorLabelMessage={errorLabelMessage} />}
+            <MainLayout title={t('pages.signUp.title')} description={t('pages.signUp.description')}>
                 <div className="flex justify-center">
                     <div className="flex flex-col gap-4 p-2 max-w-md w-full">
                         <LoginSignup

@@ -1,143 +1,160 @@
 {
-    "app.title": "Time Tracker",
-    "header": {
-        "home": "Home",
-        "projects": "Projects",
-        "workdays": "Workdays",
-        "logout": "Logout",
-        "login": "Login",
-        "signup": "Signup",
-        "title": "Time Tracker",
-        "logoutSuccess": "You are being logged out! Redirecting you..."
-    },
-    "home": {
-        "description": "Project tracker Home",
-        "message": "This will be our main page, in the future, it remains empty for now. We make use of a fake database, and any values or things stored here will not be permanent."
-    },
-    "workdays": {
-        "title": "Workdays",
-        "description": "Project tracker workdays",
-        "noWorkdays": "No workdays available for this week"
-    },
-    "projects": {
-        "title": "Projects",
-        "description": "Project tracker projects",
-        "addProjectButton": "Add Project"
-    },
-
-    "login": {
-        "title": "Login",
-        "button": "Login",
-        "description": "Time Tracker Login",
-        "success": "Login successful. Redirecting to homepage...",
-        "field": {
-            "username": "Username",
-            "password": "Password"
+    "appName": "Time Tracker",
+    "pages": {
+        "home": {
+            "title": "Home",
+            "description": "Time Tracker Home",
+            "message": "Welcome to our homepage! Here we are working on the core features of our project. Please note that we are currently using a temporary database. All data entered here is not permanent and is for testing purposes only. Thank you for your patience as we continue building and improving!"
         },
-        "validate": {
-            "name": "Name is required",
-            "password": "Password is required",
-            "username": {
-                "placeholder": "Enter your username"
-            }
+        "workDays": {
+            "title": "Workdays",
+            "description": "Time Tracker Workdays",
+            "noWorkdays": "No workdays available for this week"
+        },
+        "signUp": {
+            "title": "Sign Up",
+            "description": "Time Tracker Sign Up",
+            "success": "Sign up successful! You will be redirected...",
+            "button": "Sign Up"
+        },
+        "projects": {
+            "title": "Projects",
+            "description": "Time Tracker Projects",
+            "addProject": "Add Project"
+        },
+        "login": {
+            "title": "Login",
+            "description": "Time Tracker Login",
+            "success": "Login successful. You will be redirected..."
         }
     },
-    "signup": {
-        "title": "Sign Up",
-        "description": "Time Tracker Signup",
-        "success": "Signup successful. Redirecting to the login page...",
-        "button": "Sign Up",
-        "field": {
-            "firstName": "First Name",
-            "lastName": "Last Name",
-            "email": "Email",
-            "username": "Username",
-            "password": "Password"
-        },
-        "validate": {
-            "firstName": {
-                "required": "First name is required",
-                "minLength": "First name needs to be at least 2 letters",
-                "capital": "First name needs to start with a capital letter",
-                "lettersOnly": "First name can only contain letters (including accented characters)",
-                "placeholder": "Enter your first name"
+    "components": {
+        "workDay": {},
+        "timeBlock": {},
+        "userSignUpLoginForm": {
+            "labels": {
+                "firstName": "First Name",
+                "lastName": "Last Name",
+                "email": "Email",
+                "userName": "Username",
+                "passWord": "Password"
             },
-            "lastName": {
-                "required": "Last name is required",
-                "minLength": "Last name needs to be at least 2 letters",
-                "capital": "Last name needs to start with a capital letter",
-                "lettersOnly": "Last name can only contain letters (including accented characters)",
-                "placeholder": "Enter your last name"
+            "placeholders": {
+                "signUp": {
+                    "firstName": "Enter your first name",
+                    "lastName": "Enter your last name",
+                    "email": "Enter your email address",
+                    "userName": "Choose a username",
+                    "passWord": "Enter your password"
+                },
+                "login": {
+                    "userName": "Enter your username",
+                    "passWord": "Enter your password"
+                }
             },
-            "email": {
-                "required": "Email is required",
-                "format": "Email format is invalid",
-                "placeholder": "Enter your email address"
+            "buttons": {
+                "signUp": "Sign Up",
+                "login": "Login"
             },
-            "username": {
-                "required": "Username is required",
-                "minLength": "Username must be at least 6 characters long",
-                "format": "Username can only contain letters, numbers, and underscores",
-                "placeholder": "Choose a username"
-            },
-            "password": {
-                "required": "Password is required",
-                "minLength": "Password must be at least 6 characters long",
-                "uppercase": "Password must contain at least one uppercase letter",
-                "lowercase": "Password must contain at least one lowercase letter",
-                "number": "Password must contain at least one number",
-                "special": "Password must contain at least one special character (@, $, !, %, *, ?, & or #)",
-                "placeholder": "Choose a password"
+            "validate": {
+                "firstName": {
+                    "required": "First name is required",
+                    "minLength": "First name must be at least 2 characters",
+                    "capitalLetter": "First name must start with a capital letter",
+                    "lettersOnly": "First name can only contain letters (including accents)"
+                },
+                "lastName": {
+                    "required": "Last name is required",
+                    "minLength": "Last name must be at least 2 characters",
+                    "capitalLetter": "Last name must start with a capital letter",
+                    "lettersOnly": "Last name can only contain letters (including accents)"
+                },
+                "email": {
+                    "required": "Email is required",
+                    "format": "Invalid email format"
+                },
+                "userName": {
+                    "required": "Username is required",
+                    "minLength": "Username must be at least 6 characters",
+                    "format": "Username can only contain letters, numbers, and underscores"
+                },
+                "passWord": {
+                    "required": "Password is required",
+                    "minLength": "Password must be at least 6 characters",
+                    "uppercase": "Password must contain at least one uppercase letter",
+                    "number": "Password must contain at least one number",
+                    "special": "Password must contain at least one special character (@, $, !, %, *, ?, & or #)"
+                }
             }
-        }
+        },
+        "weekPaginator": {
+            "labels": {
+                "previousWeek": "Previous Week",
+                "goToCurrentWeek": "Go to Current Week",
+                "nextWeek": "Next Week"
+            }
+        },
+        "userSelectField": {},
+        "navigation": {
+            "home": "Home",
+            "projects": "Projects",
+            "workDays": "Workdays",
+            "logout": "Logout",
+            "login": "Login",
+            "signUp": "Sign Up",
+            "logoutSuccess": "You have logged out! You will be redirected..."
+        },
+        "inputField": {},
+        "colorSelectField": {},
+        "projectSidePanel": {
+            "labels": {
+                "name": "Project Name",
+                "color": "Select Color",
+                "users": "Select Users"
+            },
+            "placeholders": {
+                "name": "Enter a name",
+                "color": "Select a color",
+                "users": "Select users (optional)"
+            },
+            "buttons": {
+                "addUsers": "Add Users",
+                "createProject": "Create Project"
+            },
+            "toast": {
+                "success": "Project successfully created!"
+            },
+            "validate": {
+                "name": {
+                    "required": "Project name is required",
+                    "minLength": "Project name must be at least 6 characters",
+                    "invalid": "Project name can only contain letters, numbers, and spaces"
+                },
+                "color": {
+                    "required": "Color is required",
+                    "invalid": "Select a valid project color"
+                },
+                "users": {
+                    "unique": "You cannot select the same user more than once."
+                }
+            }
+        },
+        "projectOverviewTable": {
+            "labels": {
+                "id": "Id",
+                "color": "Color",
+                "name": "Project Name",
+                "userCount": "User Count"
+            }
+        },
+        "mainLayout": {},
+        "errorMessage": {}
     },
     "error": {
-        "fetchingData": "Error fetching data",
-        "backendErrorLabel": "Backend Error"
-    },
-    "general.error": "An error has occurred. Please try again later.",
-    "weekPageComponent": {
-        "previousWeek": "Previous Week",
-        "goToCurrentWeek": "Go to Current Week",
-        "nextWeek": "Next Week"
-    },
-    "projectSidePanelComponent": {
-        "titel": "Create a Project",
-        "validation": {
-            "nameRequired": "Project name is required",
-            "nameLength": "Project name must be at least 6 characters long",
-            "nameInvalid": "Project name can only contain letters, numbers, and spaces",
-            "colorRequired": "Project color is required",
-            "invalidColor": "Please select a valid project color"
-        },
-        "error": {
-            "uniqueUsers": "You cannot select the same user more than once.",
-            "validationError": {
-                "label": "Validation Error",
-                "message": "Please fix the errors above."
-            },
-            "createError": "An error occurred while creating the project."
-        },
-        "createSuccess": "Project was created successfully!",
-        "projectName": {
-            "label": "Project Name:",
-            "placeholder": "Enter name"
-        },
-        "selectColor": {
-            "label": "Select Color:",
-            "placeholder": "Select a color"
-        },
-        "addUsersButton": "Want to add users?",
-        "selectUsers": {
-            "label": "Select Users:",
-            "placeholder": "Select users (optional)"
-        },
-        "createProjectButton": "Create Project"
-    },
-    "projectOverviewTableComponent": {
-        "id": "Id",
-        "color": "Color",
-        "name": "Name",
-        "userCount": "Number of Users"
+        "unexpectedErrorLabel": "Unexpected Error",
+        "unexpectedErrorMessage": "An unexpected error occurred. Please try again later.",
+        "forbidden": "You do not have permission to view this page.",
+        "unauthorized": "You are not authorized. Please log in.",
+        "genericError": "An error occurred."
     }
 }

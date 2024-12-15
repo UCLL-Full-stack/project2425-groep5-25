@@ -1,142 +1,160 @@
 {
-    "app.title": "Time Tracker",
-    "home": {
-        "description": "Project tracker Home",
-        "message": "Dit wordt onze hoofdpagina. Voorlopig blijft deze leeg. We maken gebruik van een nepdatabase, en alle waarden of dingen die hier worden opgeslagen, zijn niet permanent."
+    "appName": "Time Tracker",
+    "pages": {
+        "home": {
+            "title": "Home",
+            "description": "Time Tracker Home",
+            "message": "Welkom op onze hoofdpagina! Hier werken we aan de kernfunctionaliteiten van ons project. Houd er rekening mee dat we momenteel gebruikmaken van een tijdelijke database. Alle gegevens die hier worden ingevoerd, zijn niet permanent en dienen enkel voor testdoeleinden. Bedankt voor je geduld terwijl we blijven bouwen en verbeteren!"
+        },
+        "workDays": {
+            "title": "Werkdagen",
+            "description": "Time Tracker Werkdagen",
+            "noWorkdays": "Geen werkdagen beschikbaar voor deze week"
+        },
+        "signUp": {
+            "title": "Aanmelden",
+            "description": "Time Tracker Aanmelden",
+            "success": "Aanmelden geslaagd! Je wordt doorgestuurd...",
+            "button": "Aanmelden"
+        },
+        "projects": {
+            "title": "Projecten",
+            "description": "Time Tracker Projecten",
+            "addProject": "Project toevoegen"
+        },
+        "login": {
+            "title": "Inloggen",
+            "description": "Time Tracker Inloggen",
+            "success": "Inloggen geslaagd. Je wordt doorgestuurd..."
+        }
     },
-    "workdays": {
-        "title": "Werkdagen",
-        "description": "Project tracker werkdagen",
-        "noWorkdays": "Geen werkdagen beschikbaar voor deze week"
-    },
-    "projects": {
-        "title": "Projecten",
-        "description": "Projecttracker projecten",
-        "addProjectButton": "Project toevoegen"
+    "components": {
+        "workDay": {},
+        "timeBlock": {},
+        "userSignUpLoginForm": {
+            "labels": {
+                "firstName": "Voornaam",
+                "lastName": "Achternaam",
+                "email": "E-mail",
+                "userName": "Gebruikersnaam",
+                "passWord": "Wachtwoord"
+            },
+            "placeholders": {
+                "signUp": {
+                    "firstName": "Voer je voornaam in",
+                    "lastName": "Voer je achternaam in",
+                    "email": "Voer je e-mailadres in",
+                    "userName": "Kies een gebruikersnaam",
+                    "passWord": "Voer je wachtwoord in"
+                },
+                "login": {
+                    "userName": "Voer je gebruikersnaam in",
+                    "passWord": "Voer je wachtwoord in"
+                }
+            },
+            "buttons": {
+                "signUp": "Aanmelden",
+                "login": "Inloggen"
+            },
+            "validate": {
+                "firstName": {
+                    "required": "Voornaam is verplicht",
+                    "minLength": "Voornaam heeft minimaal 2 letters nodig",
+                    "capitalLetter": "Voornaam begint met een hoofdletter",
+                    "lettersOnly": "Voornaam mag alleen letters bevatten (inclusief accenttekens)"
+                },
+                "lastName": {
+                    "required": "Achternaam is verplicht",
+                    "minLength": "Achternaam heeft minimaal 2 letters nodig",
+                    "capitalLetter": "Achternaam begint met een hoofdletter",
+                    "lettersOnly": "Achternaam mag alleen letters bevatten (inclusief accenttekens)"
+                },
+                "email": {
+                    "required": "E-mail is verplicht",
+                    "format": "E-mailformaat is ongeldig"
+                },
+                "userName": {
+                    "required": "Gebruikersnaam is verplicht",
+                    "minLength": "Gebruikersnaam heeft minimaal 6 tekens nodig",
+                    "format": "Gebruikersnaam mag alleen letters, nummers en underscores bevatten"
+                },
+                "passWord": {
+                    "required": "Wachtwoord is verplicht",
+                    "minLength": "Wachtwoord heeft minimaal 6 tekens nodig",
+                    "uppercase": "Wachtwoord moet ten minste één hoofdletter bevatten",
+                    "number": "Wachtwoord moet ten minste één cijfer bevatten",
+                    "special": "Wachtwoord moet ten minste één speciaal teken bevatten (@, $, !, %, *, ?, & of #)"
+                }
+            }
+        },
+        "weekPaginator": {
+            "labels": {
+                "previousWeek": "Vorige Week",
+                "goToCurrentWeek": "Ga naar de Huidige Week",
+                "nextWeek": "Volgende Week"
+            }
+        },
+        "userSelectField": {},
+        "navigation": {
+            "home": "Home",
+            "projects": "Projecten",
+            "workDays": "Werkdagen",
+            "logout": "Uitloggen",
+            "login": "Inloggen",
+            "signUp": "Aanmelden",
+            "logoutSuccess": "Je wordt uitgelogd! Je wordt doorgestuurd..."
+        },
+        "inputField": {},
+        "colorSelectField": {},
+        "projectSidePanel": {
+            "labels": {
+                "name": "Projectnaam",
+                "color": "Selecteer Kleur",
+                "users": "Selecteer Gebruikers"
+            },
+            "placeholders": {
+                "name": "Voer een naam in",
+                "color": "Selecteer een kleur",
+                "users": "Selecteer gebruikers (optioneel)"
+            },
+            "buttons": {
+                "addUsers": "Gebruikers toevoegen",
+                "createProject": "Project aanmaken"
+            },
+            "toast": {
+                "success": "Project is succesvol aangemaakt!"
+            },
+            "validate": {
+                "name": {
+                    "required": "Projectnaam is verplicht",
+                    "minLength": "Projectnaam heeft minimaal 6 letters nodig",
+                    "invalid": "Projectnaam mag alleen letters, cijfers en spaties bevatten"
+                },
+                "color": {
+                    "required": "Kleur is verplicht",
+                    "invalid": "Selecteer een geldige projectkleur"
+                },
+                "users": {
+                    "unique": "Je kunt dezelfde gebruiker niet meer dan één keer selecteren."
+                }
+            }
+        },
+        "projectOverviewTable": {
+            "labels": {
+                "id": "Id",
+                "color": "Kleur",
+                "name": "Projectnaam",
+                "userCount": "Aantal Gebruikers"
+            }
+        },
+        "mainLayout": {},
+        "errorMessage": {}
     },
     "error": {
-        "fetchingData": "Fout bij het ophalen van gegevens",
-        "backendErrorLabel": "Backend Fout"
-    },
-    "general.error": "Er is een fout opgetreden. Probeer het later opnieuw.",
-    "header": {
-        "home": "Home",
-        "projects": "Projecten",
-        "workdays": "Werkdagen",
-        "logout": "Uitloggen",
-        "login": "Inloggen",
-        "signup": "Aanmelden",
-        "title": "Time Tracker",
-        "logoutSuccess": "Je wordt uitgelogd! Je wordt doorgestuurd..."
-    },
-    "login": {
-        "title": "Inloggen",
-        "description": "Time Tracker Inloggen",
-        "success": "Inloggen geslaagd. Wordt doorgestuurd naar de homepage...",
-        "button": "Inloggen",
-        "field": {
-            "username": "Gebruikersnaam",
-            "password": "Wachtwoord"
-        },
-        "validate": {
-            "name": "Naam is verplicht",
-            "password": "Wachtwoord is verplicht",
-            "username": {
-                "placeholder": "Voer je gebruikersnaam in"
-            }
-        }
-    },
-    "signup": {
-        "title": "Aanmelden",
-        "description": "Time Tracker Aanmelden",
-        "success": "Aanmelden geslaagd. U wordt doorgestuurd naar de inlogpagina...",
-        "button": "Aanmelden",
-        "field": {
-            "firstName": "Voornaam",
-            "lastName": "Achternaam",
-            "email": "E-mail",
-            "username": "Gebruikersnaam",
-            "password": "Wachtwoord"
-        },
-        "validate": {
-            "firstName": {
-                "required": "Voornaam is verplicht",
-                "minLength": "Voornaam moet minimaal 2 letters bevatten",
-                "capital": "Voornaam moet beginnen met een hoofdletter",
-                "lettersOnly": "Voornaam mag alleen letters bevatten (inclusief accenttekens)",
-                "placeholder": "Voer je voornaam in"
-            },
-            "lastName": {
-                "required": "Achternaam is verplicht",
-                "minLength": "Achternaam moet minimaal 2 letters bevatten",
-                "capital": "Achternaam moet beginnen met een hoofdletter",
-                "lettersOnly": "Achternaam mag alleen letters bevatten (inclusief accenttekens)",
-                "placeholder": "Voer je achternaam in"
-            },
-            "email": {
-                "required": "E-mail is verplicht",
-                "format": "E-mailformaat is ongeldig",
-                "placeholder": "Voer je e-mailadres in"
-            },
-            "username": {
-                "required": "Gebruikersnaam is verplicht",
-                "minLength": "Gebruikersnaam moet minimaal 6 tekens bevatten",
-                "format": "Gebruikersnaam mag alleen letters, cijfers en underscores bevatten",
-                "placeholder": "Kies een gebruikersnaam"
-            },
-            "password": {
-                "required": "Wachtwoord is verplicht",
-                "minLength": "Wachtwoord moet minimaal 6 tekens bevatten",
-                "uppercase": "Wachtwoord moet ten minste één hoofdletter bevatten",
-                "lowercase": "Wachtwoord moet ten minste één kleine letter bevatten",
-                "number": "Wachtwoord moet ten minste één cijfer bevatten",
-                "special": "Wachtwoord moet ten minste één speciaal teken bevatten (@, $, !, %, *, ?, & of #)",
-                "placeholder": "Kies een wachtwoord"
-            }
-        }
-    },
-    "weekPageComponent": {
-        "previousWeek": "Vorige Week",
-        "goToCurrentWeek": "Ga naar de Huidige Week",
-        "nextWeek": "Volgende Week"
-    },
-    "projectSidePanelComponent": {
-        "titel": "Maak een Project",
-        "validation": {
-            "nameRequired": "Projectnaam is verplicht",
-            "nameLength": "Projectnaam moet minimaal 6 tekens bevatten",
-            "nameInvalid": "Projectnaam mag alleen letters, cijfers en spaties bevatten",
-            "colorRequired": "Projectkleur is verplicht",
-            "invalidColor": "Selecteer een geldige projectkleur"
-        },
-        "error": {
-            "uniqueUsers": "Je kunt dezelfde gebruiker niet meer dan één keer selecteren.",
-            "validationError": {
-                "label": "Validatiefout",
-                "message": "Los de bovenstaande fouten op."
-            },
-            "createError": "Er is een fout opgetreden bij het aanmaken van het project."
-        },
-        "createSuccess": "Project is succesvol aangemaakt!",
-        "projectName": {
-            "label": "Projectnaam:",
-            "placeholder": "Voer naam in"
-        },
-        "selectColor": {
-            "label": "Selecteer Kleur:",
-            "placeholder": "Selecteer een kleur"
-        },
-        "addUsersButton": "Wil je gebruikers toevoegen?",
-        "selectUsers": {
-            "label": "Selecteer Gebruikers:",
-            "placeholder": "Selecteer gebruikers (optioneel)"
-        },
-        "createProjectButton": "Maak Project"
-    },
-    "projectOverviewTableComponent": {
-        "id": "Id",
-        "color": "Kleur",
-        "name": "Naam",
-        "userCount": "Aantal Gebruikers"
+        "unexpectedErrorLabel": "Onverwachte fout",
+        "unexpectedErrorMessage": "Er is een onverwachte fout opgetreden. Probeer het later opnieuw.",
+        "forbidden": "U heeft geen toestemming om deze pagina te bekijken.",
+        "unauthorized": "U bent niet geautoriseerd. Log in.",
+        "genericError": "Er is een fout opgetreden."
     }
 }

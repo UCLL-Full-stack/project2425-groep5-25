@@ -43,19 +43,19 @@ const WeekPaginator: React.FC<Props> = ({
                     <button
                         className="text-2xl p-2 hover:text-blue-500"
                         onClick={goToPreviousWeek}
-                        aria-label={t('weekPageComponent.previousWeek')}>
+                        aria-label={t('components.weekPaginator.labels.previousWeek')}>
                         <FaArrowLeft />
                     </button>
                     <button
                         className="text-2xl p-2 hover:text-blue-500"
                         onClick={resetToCurrentWeek}
-                        aria-label={t('weekPageComponent.goToCurrentWeek')}>
+                        aria-label={t('components.weekPaginator.labels.goToCurrentWeek')}>
                         <FaCalendarDay />
                     </button>
                     <button
                         className="text-2xl p-2 hover:text-blue-500"
                         onClick={goToNextWeek}
-                        aria-label={t('weekPageComponent.nextWeek')}>
+                        aria-label={t('components.weekPaginator.labels.nextWeek')}>
                         <FaArrowRight />
                     </button>
                 </div>

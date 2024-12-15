@@ -19,22 +19,22 @@ const ProjectOverviewTable: React.FC<Props> = ({ projects }: Props) => {
                             <th
                                 scope="col"
                                 className="px-4 py-2 text-left text-sm font-semibold text-gray-700 border-b">
-                                {t('projectOverviewTableComponent.id')}
+                                {t('components.projectOverviewTable.labels.id')}
                             </th>
                             <th
                                 scope="col"
                                 className="px-4 py-2 text-left text-sm font-semibold text-gray-700 border-b">
-                                {t('projectOverviewTableComponent.color')}
+                                {t('components.projectOverviewTable.labels.color')}
                             </th>
                             <th
                                 scope="col"
                                 className="px-4 py-2 text-left text-sm font-semibold text-gray-700 border-b">
-                                {t('projectOverviewTableComponent.name')}
+                                {t('components.projectOverviewTable.labels.name')}
                             </th>
                             <th
                                 scope="col"
                                 className="px-4 py-2 text-left text-sm font-semibold text-gray-700 border-b">
-                                {t('projectOverviewTableComponent.userCount')}
+                                {t('components.projectOverviewTable.labels.userCount')}
                             </th>
                         </tr>
                     </thead>
