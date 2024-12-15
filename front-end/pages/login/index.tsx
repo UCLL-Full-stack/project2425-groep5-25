@@ -7,6 +7,7 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import router from 'next/router';
 import React, { useState } from 'react';
+import { FaCopy } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 
 const Login: React.FC = () => {
@@ -53,6 +54,15 @@ const Login: React.FC = () => {
             }
         }
     };
+    const testUsers = [
+        { username: 'test user', password: 'test password' },
+        { username: 'test hr', password: 'test password' },
+        { username: 'test admin', password: 'test password' },
+    ];
+    const copyToClipboard = (text: string) => {
+        const textToCopy = `${text}`;
+        navigator.clipboard.writeText(textToCopy);
+    };
 
     return (
         <>
@@ -68,6 +78,42 @@ const Login: React.FC = () => {
                             <ErrorMessage errorLabelMessage={errorLabelMessage} />
                         )}
                     </div>
+                </div>
+                {/* Table for Test Users */}
+                <div className="p-4 mt-6 bg-gray-700 rounded-md">
+                    <h3 className="text-white text-xl font-semibold mb-4">Test Users</h3>
+                    <table className="min-w-full table-auto border-collapse text-white">
+                        <thead className="bg-gray-600">
+                            <tr>
+                                <th className="px-4 py-2 text-left text-sm font-semibold">
+                                    Username
+                                </th>
+                                <th className="px-4 py-2 text-left text-sm font-semibold">
+                                    Password
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {testUsers.map((user, index) => (
+                                <tr key={index} className="bg-gray-500 hover:bg-gray-600">
+                                    <td className="px-4 py-2 text-sm flex items-center justify-between">
+                                        {user.username}
+                                        <FaCopy
+                                            onClick={() => copyToClipboard(user.username)}
+                                            className="cursor-pointer text-transparent border border-gray-300 rounded-md hover:border-white p-1 ml-4"
+                                        />
+                                    </td>
+                                    <td className="px-4 py-2 text-sm flex items-center justify-between">
+                                        {user.password}
+                                        <FaCopy
+                                            onClick={() => copyToClipboard(user.password)}
+                                            className="cursor-pointer text-transparent border border-gray-300 rounded-md hover:border-white p-1 ml-4"
+                                        />
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
                 </div>
             </MainLayout>
         </>
