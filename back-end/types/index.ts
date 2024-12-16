@@ -50,12 +50,17 @@ type JwtToken = {
     role?: Role;
 };
 
+const projectNames = {
+    DEFAULT_PROJECT: 'General',
+};
+
 export {
     AuthenticationResponse,
     Color,
     IdName,
     JwtToken,
     ProjectInput,
+    projectNames,
     ProjectToUserInput,
     Role,
     UserInput,

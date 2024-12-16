@@ -68,6 +68,8 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     if (err.name === 'UnauthorizedError') {
         res.status(401).json({ status: 'Unauthorized', message: err.message });
+    } else if (err.name === 'NotFoundError') {
+        res.status(404).json({ status: 'Not Found', message: err.message });
     } else {
         res.status(400).json({ status: 'Application Error', message: err.message });
     }
