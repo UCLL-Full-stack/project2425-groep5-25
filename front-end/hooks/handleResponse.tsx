@@ -6,6 +6,8 @@ const handleResponse = () => {
     const { t } = useTranslation();
 
     const handleApiResponse = async (response: Response) => {
+        if (response.ok) return await response.json();
+
         if (!response.ok) {
             if (response.status === 403) {
                 console.error(`Forbidden error: ${response.status}`);
@@ -17,14 +19,8 @@ const handleResponse = () => {
                 sessionStorage.setItem('authError', t('error.unauthorized'));
                 router.push('/login');
                 return null;
-            } else {
-                const errorData = await response.json();
-                console.error(`Error: ${errorData.message || response.statusText}`);
-                throw new Error(errorData.message || t('error.unexpectedErrorLabel'));
             }
         }
-
-        return await response.json();
     };
 
     return { handleApiResponse };

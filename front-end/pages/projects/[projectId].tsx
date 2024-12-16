@@ -24,19 +24,22 @@ const ProjectById: React.FC = () => {
     const [errorLabelMessage, setErrorLabelMessage] = useState<ErrorLabelMessage>();
     const [isDeleted, setIsDeleted] = useState(false);
 
-    const getProjectById = async () => {
+    const getProjectByIdAndUsersIdName = async () => {
         try {
             const [projectResponse, userResponse] = await Promise.all([
                 projectService.getProjectById(projectId as string),
                 userService.getAllUsersIdName(),
             ]);
 
-            const [project, userIdNames] = await Promise.all([
-                handleApiResponse(projectResponse),
-                handleApiResponse(userResponse),
-            ]);
+            if (projectResponse.ok) {
+                const [project, userIdNames] = await Promise.all([
+                    handleApiResponse(projectResponse),
+                    handleApiResponse(userResponse),
+                ]);
 
-            return { project, userIdNames };
+                return { project, userIdNames };
+            }
+            return null;
         } catch (error) {
             console.error('Error fetching data', error);
             return null;
@@ -44,13 +47,13 @@ const ProjectById: React.FC = () => {
     };
 
     const { data, isLoading } = useSWR(
-        projectId && !isDeleted ? `getProjectById-${projectId}` : null,
-        getProjectById,
+        projectId && !isDeleted ? `projectUserIdNames` : null,
+        getProjectByIdAndUsersIdName,
     );
 
     useInterval(() => {
         if (projectId && !isDeleted) {
-            mutate(`getProjectById-${projectId}`, getProjectById);
+            mutate(`projectUserIdNames`, getProjectByIdAndUsersIdName);
         }
     }, 2500);
 
@@ -172,7 +175,7 @@ const ProjectById: React.FC = () => {
                     ) : (
                         <div className="w-full text-center mt-4">
                             <p>{t('error.projectNotFound')}</p>
-                            <p>{t('error.projectDeletedOrNotLoaded')}</p>{' '}
+                            <p>{t('error.projectDeletedOrNotLoaded')}</p>
                         </div>
                     )}
                 </div>

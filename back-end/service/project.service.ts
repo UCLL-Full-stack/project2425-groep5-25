@@ -4,16 +4,17 @@ import { Project } from '../model/project';
 import { projectDb } from '../repository/project.db';
 import { authorizeRole } from '../repository/utils/jwt';
 import { JwtToken, ProjectInput } from '../types';
+
 import { userService } from './user.service';
 
 const getAllProjects = async ({ auth }: { auth: JwtToken }): Promise<Project[]> => {
     const { userId, role } = auth;
     const permissions = authorizeRole(role);
 
+    if (permissions.isUser) return projectDb.getProjectsByUserId({ userId });
+
     if (permissions.isAdmin || permissions.isHr) {
         return projectDb.getAllProjects();
-    } else if (permissions.isUser) {
-        return projectDb.getProjectsByUserId({ userId });
     } else {
         throw new UnauthorizedError('credentials_required', {
             message: 'You are not authorized to access this resource.',
@@ -27,12 +28,14 @@ const getProjectById = async ({
 }: {
     auth: JwtToken;
     projectId: number;
-}): Promise<Project | null> => {
+}): Promise<Project> => {
     const { userId, role } = auth;
     const permissions = authorizeRole(role);
 
     if (permissions.isAdmin || permissions.isHr) {
-        return projectDb.getProjectById({ id: projectId });
+        const fProject = await projectDb.getProjectById({ id: projectId });
+        if (!fProject) throw new Error(`Project with id <${projectId}> doesn't exist.`);
+        return fProject;
     } else {
         throw new UnauthorizedError('credentials_required', {
             message: 'You are not authorized to access this resource.',
@@ -79,8 +82,47 @@ const updateProject = async ({
     }
 };
 
-const createProject = async (projectInput: ProjectInput): Promise<Project> => {
+const deleteProjectById = async ({
+    auth,
+    projectId,
+}: {
+    auth: JwtToken;
+    projectId: number;
+}): Promise<Project> => {
+    const { userId, role } = auth;
+    const permissions = authorizeRole(role);
+
+    const project = await projectDb.getProjectById({ id: projectId });
+    if (!project) throw new Error(`Project with id <${projectId}> doesn't exist.`);
+
+    const dProject = await getDefaultProject();
+    if (dProject.getId() === project.getId()) throw new Error('Cannot delete default project.');
+
+    if (permissions.isAdmin) {
+        return await projectDb.deleteProject(project);
+    } else {
+        throw new UnauthorizedError('credentials_required', {
+            message: 'You are not authorized to access this resource.',
+        });
+    }
+};
+
+const createProject = async ({
+    auth,
+    projectInput,
+}: {
+    auth: JwtToken;
+    projectInput: ProjectInput;
+}): Promise<Project> => {
+    const { userId, role } = auth;
+    const permissions = authorizeRole(role);
     const { name, color, userIds } = projectInput;
+
+    if (!permissions.isAdmin) {
+        throw new UnauthorizedError('credentials_required', {
+            message: 'You are not authorized to access this resource.',
+        });
+    }
 
     const eProject = await projectDb.getProjectByName({ name });
     if (eProject) throw new Error(`Project with name <${name}> already exists.`);
@@ -118,31 +160,6 @@ const addUsersToDefaultProject = async (projectInput: ProjectInput): Promise<Pro
     });
 
     return await projectDb.addUsersToProject(uProject);
-};
-
-const deleteProjectById = async ({
-    auth,
-    projectId,
-}: {
-    auth: JwtToken;
-    projectId: number;
-}): Promise<Project> => {
-    const { userId, role } = auth;
-    const permissions = authorizeRole(role);
-
-    const project = await projectDb.getProjectById({ id: projectId });
-    if (!project) throw new Error(`Project with id <${projectId}> doesn't exist.`);
-
-    const dProject = await getDefaultProject();
-    if (dProject.getId() === project.getId()) throw new Error('Cannot delete default project.');
-
-    if (permissions.isAdmin) {
-        return await projectDb.deleteProject(project);
-    } else {
-        throw new UnauthorizedError('credentials_required', {
-            message: 'You are not authorized to access this resource.',
-        });
-    }
 };
 
 export const projectService = {

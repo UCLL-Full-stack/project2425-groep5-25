@@ -150,7 +150,10 @@ projectRouter.post(
     async (req: Request & { auth: JwtToken }, res: Response, next: NextFunction) => {
         try {
             const projectInput = <ProjectInput>req.body;
-            const result = await projectService.createProject(projectInput);
+            const result = await projectService.createProject({
+                auth: req.auth,
+                projectInput,
+            });
             res.status(201).json(result);
         } catch (error) {
             next(error);

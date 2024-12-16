@@ -19,17 +19,19 @@ const Home: React.FC = () => {
 
     const getUsersAndProjects = async () => {
         try {
-            const [usersResponse, projectsResponse] = await Promise.all([
-                userService.getAllUsersIdName(),
-                projectService.getAllProjects(),
-            ]);
+            const [projectsResponse] = await Promise.all([projectService.getAllProjects()]);
 
-            const [userIdNames, projects] = await Promise.all([
-                handleApiResponse(usersResponse),
-                handleApiResponse(projectsResponse),
-            ]);
+            let usersResponse;
+            if (userRole === 'admin') {
+                usersResponse = await userService.getAllUsersIdName();
+            }
 
-            return { userIdNames, projects };
+            if (projectsResponse.ok && (!usersResponse || usersResponse.ok)) {
+                const projects = await handleApiResponse(projectsResponse);
+                const userIdNames = usersResponse ? await handleApiResponse(usersResponse) : null;
+                return { projects, userIdNames };
+            }
+            return null;
         } catch (error) {
             console.error('Error fetching data', error);
             return null;
@@ -61,7 +63,7 @@ const Home: React.FC = () => {
                 {data && (
                     <>
                         <ProjectOverviewTable projects={data.projects} />
-                        {isSidePanelOpen && (
+                        {userRole === 'admin' && isSidePanelOpen && (
                             <ProjectSidePanel
                                 userIdNames={data.userIdNames}
                                 onClose={() => setIsSidePanelOpen(!isSidePanelOpen)}
