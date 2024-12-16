@@ -26,8 +26,8 @@ const Home: React.FC = () => {
                 usersResponse = await userService.getAllUsersIdName();
             }
 
+            const projects = await handleApiResponse(projectsResponse);
             if (projectsResponse.ok && (!usersResponse || usersResponse.ok)) {
-                const projects = await handleApiResponse(projectsResponse);
                 const userIdNames = usersResponse ? await handleApiResponse(usersResponse) : null;
                 return { projects, userIdNames };
             }

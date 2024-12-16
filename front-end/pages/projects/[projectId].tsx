@@ -26,17 +26,18 @@ const ProjectById: React.FC = () => {
 
     const getProjectByIdAndUsersIdName = async () => {
         try {
-            const [projectResponse, userResponse] = await Promise.all([
+            const [projectResponse] = await Promise.all([
                 projectService.getProjectById(projectId as string),
-                userService.getAllUsersIdName(),
             ]);
 
-            if (projectResponse.ok) {
-                const [project, userIdNames] = await Promise.all([
-                    handleApiResponse(projectResponse),
-                    handleApiResponse(userResponse),
-                ]);
+            let usersResponse;
+            if (userRole === 'admin' || userRole === 'hr') {
+                usersResponse = await userService.getAllUsersIdName();
+            }
 
+            const project = await handleApiResponse(projectResponse);
+            if (projectResponse.ok && (!usersResponse || usersResponse.ok)) {
+                const userIdNames = usersResponse ? await handleApiResponse(usersResponse) : null;
                 return { project, userIdNames };
             }
             return null;
@@ -55,7 +56,7 @@ const ProjectById: React.FC = () => {
         if (projectId && !isDeleted) {
             mutate(`projectUserIdNames`, getProjectByIdAndUsersIdName);
         }
-    }, 2500);
+    }, 1000);
 
     const handleUpdate = async (data: ProjectInput) => {
         setErrorLabelMessage(undefined);

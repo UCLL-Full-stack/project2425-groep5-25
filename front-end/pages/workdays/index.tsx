@@ -1,8 +1,7 @@
 import MainLayout from '@components/layout/MainLayout';
 import WeekPaginator from '@components/shared/WeekPaginator';
-import Workday from '@components/workWeek/WorkDay';
+import Workweek from '@components/workWeek/WorkWeek';
 import { workDayService } from '@services/workDayService';
-import { WorkDayOutput } from '@types';
 import handleResponse from 'hooks/handleResponse';
 import handleTokenInfo from 'hooks/handleTokenInfo';
 import { useTranslation } from 'next-i18next';
@@ -36,12 +35,8 @@ const Home: React.FC = () => {
 
     const getWorkWeekByDates = async (start: string, end: string) => {
         try {
-            const [workDayResponse] = await Promise.all([
-                workDayService.getWorkWeekByDates(start, end),
-            ]);
-
-            const [workDays] = await Promise.all([handleApiResponse(workDayResponse)]);
-
+            const workDayResponse = await workDayService.getWorkWeekByDates(start, end);
+            const workDays = await handleApiResponse(workDayResponse);
             return { workDays };
         } catch (error) {
             console.error('Error fetching data', error);
@@ -74,17 +69,7 @@ const Home: React.FC = () => {
                         resetToCurrentWeek={resetToCurrentWeek}
                     />
                 }>
-                <div className="flex gap-3 flex-wrap">
-                    {data && data.workDays.length > 0 ? (
-                        data.workDays.map((workday: WorkDayOutput) => (
-                            <Workday key={workday.id} workday={workday} />
-                        ))
-                    ) : (
-                        <p className="text-center text-gray-500">
-                            {t('pages.workDays.noWorkdays')}
-                        </p>
-                    )}
-                </div>
+                {data && <Workweek workDays={data.workDays}></Workweek>}
             </MainLayout>
         </>
     );
