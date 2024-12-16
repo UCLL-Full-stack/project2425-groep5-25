@@ -20,7 +20,9 @@
         "projects": {
             "title": "Projecten",
             "description": "Time Tracker Projecten",
-            "addProject": "Project toevoegen"
+            "addProject": "Project toevoegen",
+            "success": "Project is succesvol bijgewerkt!",
+            "deleteProject": "Verwijder dit project?"
         },
         "login": {
             "title": "Inloggen",
@@ -107,6 +109,7 @@
         "inputField": {},
         "colorSelectField": {},
         "projectSidePanel": {
+            "title": "Project toevoegen",
             "labels": {
                 "name": "Projectnaam",
                 "color": "Selecteer Kleur",
@@ -118,11 +121,8 @@
                 "users": "Selecteer gebruikers (optioneel)"
             },
             "buttons": {
-                "addUsers": "Gebruikers toevoegen",
+                "addUsers": "Gebruikers toevoegen of wijzigen",
                 "createProject": "Project aanmaken"
-            },
-            "toast": {
-                "success": "Project is succesvol aangemaakt!"
             },
             "validate": {
                 "name": {
@@ -148,13 +148,48 @@
             }
         },
         "mainLayout": {},
-        "errorMessage": {}
+        "errorMessage": {},
+        "projectDetails": {
+            "title": "Project bijwerken",
+            "labels": {
+                "name": "Projectnaam",
+                "color": "Selecteer Kleur",
+                "users": "Selecteer Gebruikers"
+            },
+            "placeholders": {
+                "name": "Voer een naam in",
+                "color": "Selecteer een kleur",
+                "users": "Selecteer gebruikers (optioneel)"
+            },
+            "buttons": {
+                "updateProject": "Project bijwerken"
+            },
+            "toast": {
+                "success": "Project is succesvol bijgewerkt!"
+            },
+            "validate": {
+                "name": {
+                    "required": "Projectnaam is verplicht",
+                    "minLength": "Projectnaam heeft minimaal 6 letters nodig",
+                    "invalid": "Projectnaam mag alleen letters, cijfers en spaties bevatten"
+                },
+                "color": {
+                    "required": "Kleur is verplicht",
+                    "invalid": "Selecteer een geldige projectkleur"
+                },
+                "users": {
+                    "unique": "Je kunt dezelfde gebruiker niet meer dan één keer selecteren."
+                }
+            }
+        }
     },
     "error": {
         "unexpectedErrorLabel": "Onverwachte fout",
         "unexpectedErrorMessage": "Er is een onverwachte fout opgetreden. Probeer het later opnieuw.",
         "forbidden": "U heeft geen toestemming om deze pagina te bekijken.",
         "unauthorized": "U bent niet geautoriseerd. Log in.",
-        "genericError": "Er is een fout opgetreden."
+        "genericError": "Er is een fout opgetreden.",
+        "projectNotFound": "Project not found",
+        "projectDeletedOrNotLoaded": "The project may have been deleted or is unavailable"
     }
 }

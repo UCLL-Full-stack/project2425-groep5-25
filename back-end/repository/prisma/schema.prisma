@@ -23,7 +23,7 @@ model WorkSchedule {
 
     // Relations
     userId              Int             @unique
-    user                User            @relation(fields: [userId], references: [id])
+    user                User            @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model User {
@@ -40,7 +40,7 @@ model User {
     role                String
 
     // Relations
-    workSchedule        WorkSchedule?   
+    workSchedule        WorkSchedule?
     projects            Project[]       @relation("UserProjects")
     workDays            Workday[]
 }
@@ -71,7 +71,7 @@ model Workday {
 
     // Relations
     userId              Int          
-    user                User            @relation(fields: [userId], references: [id])
+    user                User            @relation(fields: [userId], references: [id], onDelete: Cascade)
     timeBlocks          TimeBlock[]
 }
 
@@ -86,7 +86,7 @@ model TimeBlock {
 
     // Relations
     projectId           Int          
-    project             Project         @relation(fields: [projectId], references: [id])
+    project             Project         @relation(fields: [projectId], references: [id], onDelete: Cascade)
     workDayId           Int          
-    workDay             Workday         @relation(fields: [workDayId], references: [id])
+    workDay             Workday         @relation(fields: [workDayId], references: [id], onDelete: Cascade)
 }

@@ -158,4 +158,130 @@ projectRouter.post(
     },
 );
 
+/**
+ * @swagger
+ * /projects/{id}:
+ *   get:
+ *     summary: Get a project by ID
+ *     description: Retrieve the details of a specific project by its ID.
+ *     tags:
+ *       - Projects
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *           format: int64
+ *         description: The unique identifier of the project.
+ *     responses:
+ *       200:
+ *         description: The project details.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ProjectDto'
+ */
+projectRouter.get(
+    '/:id',
+    async (req: Request & { auth: JwtToken }, res: Response, next: NextFunction) => {
+        try {
+            const projectId = Number(req.params.id);
+            const project = await projectService.getProjectById({
+                auth: req.auth,
+                projectId: projectId,
+            });
+            res.status(200).json(project);
+        } catch (error) {
+            next(error);
+        }
+    },
+);
+
+/**
+ * @swagger
+ * /projects:
+ *   put:
+ *     summary: Update an existing project
+ *     description: Update an existing project by providing the project details such as name, color, and associated user IDs. Only users with the appropriate permissions can update the project.
+ *     tags:
+ *       - Projects
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/ProjectInput'
+ *     responses:
+ *       200:
+ *         description: The project was successfully updated.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ProjectDto'
+ */
+projectRouter.put(
+    '/:id',
+    async (req: Request & { auth: JwtToken }, res: Response, next: NextFunction) => {
+        try {
+            const projectId = Number(req.params.id);
+            const projectInput = <ProjectInput>req.body;
+            const result = await projectService.updateProject({
+                auth: req.auth,
+                projectId,
+                projectInput,
+            });
+            res.status(200).json(result);
+        } catch (error) {
+            next(error);
+        }
+    },
+);
+
+/**
+ * @swagger
+ * /projects/{id}:
+ *   delete:
+ *     summary: Delete a project by ID
+ *     description: Delete a specific project by its ID. Only users with the appropriate permissions (e.g., Admin) can delete a project.
+ *     tags:
+ *       - Projects
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *           format: int64
+ *         description: The unique identifier of the project to be deleted.
+ *     responses:
+ *       200:
+ *         description: The project was successfully deleted.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ProjectDto'
+ */
+projectRouter.delete(
+    '/:id',
+    async (req: Request & { auth: JwtToken }, res: Response, next: NextFunction) => {
+        try {
+            const projectId = Number(req.params.id);
+            const result = await projectService.deleteProjectById({
+                auth: req.auth,
+                projectId,
+            });
+            res.status(200).json(result);
+        } catch (error) {
+            next(error);
+        }
+    },
+);
+
 export { projectRouter };

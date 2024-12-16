@@ -27,5 +27,5 @@
 .errorMessage {
     color: #d9534f;
     font-size: 0.875rem;
-    margin-left: 0.5rem;
+    margin: 0 0.5rem 0 0.5rem;
 }

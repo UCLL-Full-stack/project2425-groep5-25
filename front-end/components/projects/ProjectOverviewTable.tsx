@@ -1,6 +1,7 @@
 import { ProjectOutput } from '@types';
-import { useTranslation } from 'next-i18next';
+import { useRouter } from 'next/router';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { formatOptionLabel, getColorName } from 'utils/colorUtils';
 
 type Props = {
@@ -8,7 +9,14 @@ type Props = {
 };
 
 const ProjectOverviewTable: React.FC<Props> = ({ projects }: Props) => {
+    const router = useRouter();
     const { t } = useTranslation();
+
+    const handleRowClick = (projectId: number | undefined) => {
+        if (projectId) {
+            router.push(`/projects/${projectId}`);
+        }
+    };
 
     return (
         <>
@@ -40,7 +48,10 @@ const ProjectOverviewTable: React.FC<Props> = ({ projects }: Props) => {
                     </thead>
                     <tbody>
                         {projects.map((project, index) => (
-                            <tr key={index} className="cursor-pointer hover:bg-gray-50 border-b">
+                            <tr
+                                key={index}
+                                className="cursor-pointer hover:bg-gray-50 border-b"
+                                onClick={() => handleRowClick(project.id)}>
                                 <td className="px-4 py-2 text-sm text-gray-900 border-r">
                                     {project.id}
                                 </td>

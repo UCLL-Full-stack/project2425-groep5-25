@@ -3,7 +3,7 @@ import { processEnv } from 'env/env';
 import { getToken } from 'utils/authUtils';
 
 const getAllProjects = async () => {
-    return fetch(processEnv.getApiUrl() + `/projects`, {
+    return await fetch(processEnv.getApiUrl() + `/projects`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -13,7 +13,7 @@ const getAllProjects = async () => {
 };
 
 const createProject = async (formData: ProjectInput) => {
-    return fetch(processEnv.getApiUrl() + `/projects`, {
+    return await fetch(processEnv.getApiUrl() + `/projects`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -23,7 +23,41 @@ const createProject = async (formData: ProjectInput) => {
     });
 };
 
+const getProjectById = async (projectId: string) => {
+    return await fetch(processEnv.getApiUrl() + `/projects/${projectId}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + getToken(),
+        },
+    });
+};
+
+const updateProject = async (projectId: string, formData: ProjectInput) => {
+    return await fetch(processEnv.getApiUrl() + `/projects/${projectId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + getToken(),
+        },
+        body: JSON.stringify(formData),
+    });
+};
+
+const deleteProjectById = async (projectId: string) => {
+    return await fetch(processEnv.getApiUrl() + `/projects/${projectId}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + getToken(),
+        },
+    });
+};
+
 export const projectService = {
     getAllProjects,
     createProject,
+    getProjectById,
+    updateProject,
+    deleteProjectById,
 };

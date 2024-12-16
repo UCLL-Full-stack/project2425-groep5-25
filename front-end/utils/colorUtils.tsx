@@ -33,3 +33,8 @@ export const hexToRgba = (hex: string, alpha: number): string => {
 
     return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 };
+
+export const getColorEnumFromHex = (hex: string): Color | null => {
+    const colorName = getColorName(hex);
+    return Color[colorName as keyof typeof Color] || null;
+};

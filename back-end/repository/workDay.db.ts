@@ -36,9 +36,8 @@ const getWorkWeekByDates = async ({
                 user: true,
                 timeBlocks: { include: { project: { include: { users: true } } } },
             },
+            orderBy: { date: 'asc' },
         });
-
-        workDaysPrisma.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
         return workDaysPrisma.map((workDay) => WorkDay.from(workDay));
     } catch (error) {
