@@ -78,6 +78,29 @@ export class WorkSchedule extends ModelBase {
         return this.user;
     }
 
+    getHoursForDay(date: Date): number | null {
+        const dayOfWeek = date.getDay();
+
+        switch (dayOfWeek) {
+            case 0:
+                return this.sundayHours;
+            case 1:
+                return this.mondayHours;
+            case 2:
+                return this.tuesdayHours;
+            case 3:
+                return this.wednesdayHours;
+            case 4:
+                return this.thursdayHours;
+            case 5:
+                return this.fridayHours;
+            case 6:
+                return this.saturdayHours;
+            default:
+                return null;
+        }
+    }
+
     validate(workSchedule: {
         mondayHours: number;
         tuesdayHours: number;

@@ -29,7 +29,7 @@ const Header: React.FC = () => {
                         className="text-2xl font-bold text-gray-400 hover:text-white transition duration-300">
                         {t('appName')}
                     </Link>
-                    {userRole && (
+                    {userRole && (userRole == 'admin' || userRole == 'hr') && (
                         <span className="text-white text-lg font-medium">
                             ({userRole === 'admin' ? 'Admin' : userRole === 'hr' ? 'HR' : ''})
                         </span>

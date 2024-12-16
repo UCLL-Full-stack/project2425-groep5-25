@@ -15,13 +15,13 @@ const generateJwtToken = ({ userId, role }: JwtToken) => {
 const authorizeRole = (role: Role) => {
     switch (role) {
         case 'admin':
-            return { isAdmin: true };
+            return { isAdmin: true, isHr: false, isUser: false };
         case 'hr':
-            return { isHr: true };
+            return { isAdmin: false, isHr: true, isUser: false };
         case 'user':
-            return { isUser: true };
+            return { isAdmin: false, isHr: false, isUser: true };
         default:
-            return { isUnauthorized: true };
+            return { isAdmin: false, isHr: false, isUser: false };
     }
 };
 

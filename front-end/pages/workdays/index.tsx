@@ -1,6 +1,8 @@
 import MainLayout from '@components/layout/MainLayout';
 import WeekPaginator from '@components/shared/WeekPaginator';
+import TimeBlockSideForm from '@components/workWeek/TimeBlockSideForm';
 import Workweek from '@components/workWeek/WorkWeek';
+import { projectService } from '@services/projectService';
 import { workDayService } from '@services/workDayService';
 import handleResponse from 'hooks/handleResponse';
 import handleTokenInfo from 'hooks/handleTokenInfo';
@@ -35,9 +37,20 @@ const Home: React.FC = () => {
 
     const getWorkWeekByDates = async (start: string, end: string) => {
         try {
-            const workDayResponse = await workDayService.getWorkWeekByDates(start, end);
-            const workDays = await handleApiResponse(workDayResponse);
-            return { workDays };
+            const [workDayResponse, projectsResponse] = await Promise.all([
+                workDayService.getWorkWeekByDates(start, end),
+                projectService.getAllProjectsByUserId(),
+            ]);
+
+            if (workDayResponse.ok && projectsResponse.ok) {
+                const [workDays, projects] = await Promise.all([
+                    handleApiResponse(workDayResponse),
+                    handleApiResponse(projectsResponse),
+                ]);
+
+                return { workDays, projects };
+            }
+            return null;
         } catch (error) {
             console.error('Error fetching data', error);
             return null;
@@ -69,7 +82,14 @@ const Home: React.FC = () => {
                         resetToCurrentWeek={resetToCurrentWeek}
                     />
                 }>
-                {data && <Workweek workDays={data.workDays}></Workweek>}
+                {data && (
+                    <>
+                        <div className="flex gap-6 mt-6 px-4 max-w-7xl">
+                            <Workweek workDays={data.workDays} />
+                            <TimeBlockSideForm projects={data.projects} />
+                        </div>
+                    </>
+                )}
             </MainLayout>
         </>
     );

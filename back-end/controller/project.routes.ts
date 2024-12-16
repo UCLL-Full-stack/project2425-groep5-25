@@ -163,6 +163,40 @@ projectRouter.post(
 
 /**
  * @swagger
+ * /projects/user:
+ *   get:
+ *     summary: Get all projects for the authenticated user
+ *     description: Retrieve a list of all projects associated with the authenticated user.
+ *     tags:
+ *       - Projects
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: A list of projects associated with the authenticated user.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/ProjectDto'
+ */
+projectRouter.get(
+    '/user',
+    async (req: Request & { auth: JwtToken }, res: Response, next: NextFunction) => {
+        try {
+            const projects = await projectService.getAllProjectsByUserId({
+                auth: req.auth,
+            });
+            res.status(200).json(projects);
+        } catch (error) {
+            next(error);
+        }
+    },
+);
+
+/**
+ * @swagger
  * /projects/{id}:
  *   get:
  *     summary: Get a project by ID

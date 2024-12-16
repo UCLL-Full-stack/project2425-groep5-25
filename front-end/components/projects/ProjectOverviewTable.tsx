@@ -58,7 +58,7 @@ const ProjectOverviewTable: React.FC<Props> = ({ projects }: Props) => {
                                 <td className="px-4 py-2 text-sm text-gray-900 border-r">
                                     {formatOptionLabel({
                                         label: getColorName(project.color as string),
-                                        value: project.color as string,
+                                        color: project.color as string,
                                     })}
                                 </td>
                                 <td className="px-4 py-2 text-sm text-gray-900 border-r">
