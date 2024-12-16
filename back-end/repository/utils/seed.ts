@@ -1,8 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
 import casual from 'casual';
-import { projectNames } from '../../constants';
-import { Color, Role } from '../../types';
+import { Color, projectNames, Role } from '../../types';
 
 const prisma = new PrismaClient();
 

@@ -1,9 +1,8 @@
 import { UnauthorizedError } from 'express-jwt';
-import { projectNames } from '../constants';
 import { Project } from '../model/project';
 import { projectDb } from '../repository/project.db';
 import { authorizeRole } from '../repository/utils/jwt';
-import { JwtToken, ProjectInput } from '../types';
+import { JwtToken, ProjectInput, projectNames } from '../types';
 
 import { userService } from './user.service';
 
