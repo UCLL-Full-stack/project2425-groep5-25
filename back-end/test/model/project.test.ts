@@ -31,7 +31,7 @@ const cInvalidUser1 = new User({
     lastName: 'Hozan',
     email: 'yasir.hozan@example.com',
     passWord: '@Password123!',
-    role: 'user' as Role,
+    role: 'hr' as Role,
 });
 
 test('Testing the getter methods 1', () => {
