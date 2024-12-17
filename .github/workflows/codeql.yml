@@ -45,10 +45,10 @@ jobs:
         npm install
         npm run build
 
-    # - name: Test backend
-    #   if: matrix.build-mode == 'manual'
-    #   run: |
-    #     cd back-end
-    #     rm -rf node_modules/.cache
-    #     npm install
-    #     npm test
+    - name: Test backend
+      if: matrix.build-mode == 'manual'
+      run: |
+        cd back-end
+        rm -rf node_modules/.cache
+        npm install
+        npm test

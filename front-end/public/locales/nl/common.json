@@ -62,12 +62,14 @@
                 "firstName": {
                     "required": "Voornaam is verplicht",
                     "minLength": "Voornaam heeft minimaal 2 letters nodig",
+                    "maxLength": "Voornaam heeft maximaal 20 letters nodig",
                     "capitalLetter": "Voornaam begint met een hoofdletter",
                     "lettersOnly": "Voornaam mag alleen letters bevatten (inclusief accenttekens)"
                 },
                 "lastName": {
                     "required": "Achternaam is verplicht",
                     "minLength": "Achternaam heeft minimaal 2 letters nodig",
+                    "maxLength": "Achternaam heeft maximaal 20 letters nodig",
                     "capitalLetter": "Achternaam begint met een hoofdletter",
                     "lettersOnly": "Achternaam mag alleen letters bevatten (inclusief accenttekens)"
                 },
@@ -78,11 +80,13 @@
                 "userName": {
                     "required": "Gebruikersnaam is verplicht",
                     "minLength": "Gebruikersnaam heeft minimaal 6 tekens nodig",
+                    "maxLenght": "Gebruikersnaam heeft maximaal 30 tekens nodig",
                     "format": "Gebruikersnaam mag alleen letters, nummers en underscores bevatten"
                 },
                 "passWord": {
                     "required": "Wachtwoord is verplicht",
                     "minLength": "Wachtwoord heeft minimaal 6 tekens nodig",
+                    "maxLength": "Wachtwoord heeft maximaal 30 tekens nodig",
                     "uppercase": "Wachtwoord moet ten minste één hoofdletter bevatten",
                     "number": "Wachtwoord moet ten minste één cijfer bevatten",
                     "special": "Wachtwoord moet ten minste één speciaal teken bevatten (@, $, !, %, *, ?, & of #)"
@@ -128,6 +132,7 @@
                 "name": {
                     "required": "Projectnaam is verplicht",
                     "minLength": "Projectnaam heeft minimaal 6 letters nodig",
+                    "maxLength": "Projectnaam heeft maximaal 30 letters nodig",
                     "invalid": "Projectnaam mag alleen letters, cijfers en spaties bevatten"
                 },
                 "color": {

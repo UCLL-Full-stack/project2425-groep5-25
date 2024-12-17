@@ -48,6 +48,8 @@ export class Project extends ModelBase {
         if (!project.name?.trim()) throw new Error('Project validation: Project name is required');
         if (project.name?.trim().length < 6)
             throw new Error('Project validation: Project name must be at least 6 characters long');
+        if (project.name?.trim().length > 30)
+            throw new Error('Project validation: Project name cannot be longer than 30 characters');
         if (!/^[a-zA-Z0-9 ]+$/.test(project.name)) {
             throw new Error(
                 'Project validation: Project name can only contain letters, numbers, and spaces',
@@ -59,12 +61,15 @@ export class Project extends ModelBase {
             throw new Error('Project validation: Please select a valid project color.');
 
         if (project.users) {
+            const userIds = new Set();
             for (const user of project.users) {
                 if (!user.getId()) {
-                    throw new Error(
-                        `Project validation: User with ID ${user.getId()} does not exist`,
-                    );
+                    throw new Error(`Project validation: User does not exist!`);
                 }
+                if (userIds.has(user.getId())) {
+                    throw new Error(`Project validation: Duplicate user found!`);
+                }
+                userIds.add(user.getId());
             }
         }
     }

@@ -7,7 +7,7 @@
         "esModuleInterop": true,
         "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true,
-        "types": ["node"]
+        "types": ["node", "@types/jest"]
     },
     "include": ["src/**/*.ts", "app.ts"],
     "exclude": ["node_modules", "dist"]
