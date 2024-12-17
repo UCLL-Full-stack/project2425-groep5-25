@@ -29,6 +29,8 @@ const ProjectSidePanel: React.FC<Props> = ({ userIdNames, onProjectCreated, onCl
     const validateName = (name: string | null) => {
         if (!name?.trim()) return t('components.projectSidePanel.validate.name.required');
         if (name.trim().length < 6) return t('components.projectSidePanel.validate.name.minLength');
+        if (name.trim().length > 15)
+            return t('components.projectSidePanel.validate.name.maxLength');
         if (!/^[a-zA-Z0-9 ]+$/.test(name))
             return t('components.projectSidePanel.validate.name.invalid');
         return null;
