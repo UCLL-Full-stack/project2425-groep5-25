@@ -59,12 +59,15 @@ export class Project extends ModelBase {
             throw new Error('Project validation: Please select a valid project color.');
 
         if (project.users) {
+            const userIds = new Set();
             for (const user of project.users) {
                 if (!user.getId()) {
-                    throw new Error(
-                        `Project validation: User with ID ${user.getId()} does not exist`,
-                    );
+                    throw new Error(`Project validation: User does not exist!`);
                 }
+                if (userIds.has(user.getId())) {
+                    throw new Error(`Project validation: Duplicate user found!`);
+                }
+                userIds.add(user.getId());
             }
         }
     }
