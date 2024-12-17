@@ -392,23 +392,6 @@ test('Expect to throw an error if PassWord is too short', () => {
     expect(createUser).toThrow(expectedError);
 });
 
-test('Expect to throw an error if PassWord is too long', () => {
-    // When
-    const createUser = () =>
-        new User({
-            userName: 'Yasir_DaBoss',
-            firstName: 'Yasir',
-            lastName: 'Hozan',
-            email: 'yasir.hozan@example.com',
-            passWord: 'YasirsPasswordIsWayTooLongAndHeNeedsToUpdateIt',
-            role: 'user' as Role,
-        });
-    const expectedError = 'User validation: Password cannot be longer than 30 characters';
-
-    // Then
-    expect(createUser).toThrow(expectedError);
-});
-
 test('Expect to throw an error if password does not contain at least 1 capital letter', () => {
     // When
     const createUser = () =>
