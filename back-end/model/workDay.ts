@@ -101,7 +101,7 @@ export class WorkDay extends ModelBase {
             this.expectedHours === workDay.getExpectedHours() &&
             this.achievedHours === workDay.getAchievedHours() &&
             this.date === workDay.getDate() &&
-            this.user == workDay.getUser() &&
+            this.user.equals(workDay.getUser()) &&
             this.timeBlocks.every((timeBlock, index) =>
                 timeBlock.equals(workDay.getTimeBlocks()[index]),
             )
