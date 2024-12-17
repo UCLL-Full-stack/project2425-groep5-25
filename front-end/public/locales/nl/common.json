@@ -80,7 +80,7 @@
                 "userName": {
                     "required": "Gebruikersnaam is verplicht",
                     "minLength": "Gebruikersnaam heeft minimaal 6 tekens nodig",
-                    "maxLenght": "Gebruikersnaam heeft maximaal 15 tekens nodig",
+                    "maxLenght": "Gebruikersnaam heeft maximaal 30 tekens nodig",
                     "format": "Gebruikersnaam mag alleen letters, nummers en underscores bevatten"
                 },
                 "passWord": {
@@ -132,7 +132,7 @@
                 "name": {
                     "required": "Projectnaam is verplicht",
                     "minLength": "Projectnaam heeft minimaal 6 letters nodig",
-                    "maxLength": "Projectnaam heeft maximaal 15 letters nodig",
+                    "maxLength": "Projectnaam heeft maximaal 30 letters nodig",
                     "invalid": "Projectnaam mag alleen letters, cijfers en spaties bevatten"
                 },
                 "color": {

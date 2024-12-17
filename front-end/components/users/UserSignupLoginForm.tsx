@@ -60,7 +60,7 @@ const UserSignupLoginForm: React.FC<Props> = ({ isSignUp, onSubmit, clearParentE
             return t('components.userSignUpLoginForm.validate.userName.required');
         if (userName.trim().length < 6)
             return t('components.userSignUpLoginForm.validate.userName.minLength');
-        if (userName.trim().length > 15)
+        if (userName.trim().length > 30)
             return t('components.userSignUpLoginForm.validate.userName.maxlength');
         if (!/^[a-zA-Z0-9_]+$/.test(userName))
             return t('components.userSignUpLoginForm.validate.userName.format');
