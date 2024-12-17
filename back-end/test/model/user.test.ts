@@ -104,14 +104,14 @@ test('Expect to throw an error if UserName is too long', () => {
     const createUser = () =>
         new User({
             id: 1,
-            userName: 'Yasir_Was_Here_Before_69',
+            userName: 'Yasir_Was_Here_Before_69_And_Still_Is_Im_A_God',
             firstName: 'Yasir',
             lastName: 'Hozan',
             email: 'yasir.hozan@example.com',
             passWord: '@Password123!',
             role: 'user' as Role,
         });
-    const expectedError = 'User validation: Username cannot be longer than 15 characters';
+    const expectedError = 'User validation: Username cannot be longer than 30 characters';
 
     // Then
     expect(createUser).toThrow(expectedError);

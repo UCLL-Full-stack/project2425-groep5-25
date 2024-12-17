@@ -71,8 +71,8 @@ export class User extends ModelBase {
         if (!user.userName?.trim()) throw new Error('User validation: Username is required');
         if (user.userName?.trim().length < 6)
             throw new Error('User validation: Username must be at least 6 characters long');
-        if (user.userName?.trim().length > 15)
-            throw new Error('User validation: Username cannot be longer than 15 characters');
+        if (user.userName?.trim().length > 30)
+            throw new Error('User validation: Username cannot be longer than 30 characters');
         if (!/^[a-zA-Z0-9_]+$/.test(user.userName))
             throw new Error(
                 'User validation: Username can only contain letters, numbers, and underscores',
