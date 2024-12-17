@@ -116,7 +116,6 @@ test('should not throw an error for valid work schedule', () => {
     expect(createWorkSchedule({})).not.toThrow();
 });
 
-// Constructor Tests
 test('should create a WorkSchedule instance with valid inputs', () => {
     const workSchedule = new WorkSchedule({
         mondayHours: 8,
@@ -175,7 +174,6 @@ test('should throw an error if a day has invalid hours (e.g., <0 or >8)', () => 
     expect(createInvalidWorkSchedule).toThrow(expectedError);
 });
 
-// Equals Tests
 test('should return true for equal WorkSchedule instances', () => {
     const workSchedule1 = new WorkSchedule({
         mondayHours: 8,
@@ -215,7 +213,7 @@ test('should return false for WorkSchedule instances with different hours', () =
     });
 
     const workSchedule2 = new WorkSchedule({
-        mondayHours: 7, // Different Monday hours
+        mondayHours: 7,
         tuesdayHours: 7,
         wednesdayHours: 6,
         thursdayHours: 5,
@@ -258,7 +256,7 @@ test('should return false for WorkSchedule instances with different users', () =
         fridayHours: 4,
         saturdayHours: 3,
         sundayHours: 2,
-        user: differentUser, // Different user
+        user: differentUser,
     });
 
     expect(workSchedule1.equals(workSchedule2)).toBe(false);
