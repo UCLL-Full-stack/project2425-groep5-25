@@ -35,7 +35,7 @@ const createTimeBlock = async ({
     if (!fUser) throw new Error(`User with id <${userId}> does not exist.`);
 
     const fTimeBlock = await timeBlockDb.getRunningTimeBlockByUserId({ userId });
-    if (fTimeBlock) throw new Error(`Time block for user <${userId}> does exist.`);
+    if (fTimeBlock) throw new Error(`Userid <${userId}> is working on something.`);
 
     const fProject = await projectDb.getProjectById({ id: projectId });
     if (!fProject) throw new Error(`Project with id <${projectId}> doesn't exist.`);
@@ -76,7 +76,7 @@ const updateTimeBlock = async ({ auth }: { auth: JwtToken }): Promise<TimeBlock>
 
     const endDate = new Date();
     const fTimeBlock = await timeBlockDb.getRunningTimeBlockByUserId({ userId });
-    if (!fTimeBlock) throw new Error(`Time block for user <${userId}> doesn't exist.`);
+    if (!fTimeBlock) throw new Error(`Time block for userId <${userId}> doesn't exist.`);
 
     const uTimeBlock = new TimeBlock({
         id: fTimeBlock.getId(),
