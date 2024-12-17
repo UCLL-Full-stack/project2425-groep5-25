@@ -15,7 +15,6 @@ test('Constructor tests with getters', () => {
 
     //when
     const password = user2.getPassWord();
-    console.log(password);
     // Then
     expect(user2.getUserName()).toBe('yasirrandom');
     expect(user2.getFirstName()).toBe('Yasir');

@@ -24,6 +24,8 @@ const UserSignupLoginForm: React.FC<Props> = ({ isSignUp, onSubmit, clearParentE
             return t('components.userSignUpLoginForm.validate.firstName.required');
         if (firstName.trim().length < 2)
             return t('components.userSignUpLoginForm.validate.firstName.minLength');
+        if (firstName.trim().length > 20)
+            return t('components.userSignUpLoginForm.validate.firstName.maxLength');
         if (firstName[0] !== firstName[0].toUpperCase())
             return t('components.userSignUpLoginForm.validate.firstName.capitalLetter');
         if (!/^[\p{L}]+$/u.test(firstName))
@@ -36,6 +38,8 @@ const UserSignupLoginForm: React.FC<Props> = ({ isSignUp, onSubmit, clearParentE
             return t('components.userSignUpLoginForm.validate.lastName.required');
         if (lastName.trim().length < 2)
             return t('components.userSignUpLoginForm.validate.lastName.minLength');
+        if (lastName.trim().length > 20)
+            return t('components.userSignUpLoginForm.validate.lastName.maxLength');
         if (lastName[0] !== lastName[0].toUpperCase())
             return t('components.userSignUpLoginForm.validate.lastName.capitalLetter');
         if (!/^[\p{L}]+$/u.test(lastName))
@@ -56,6 +60,8 @@ const UserSignupLoginForm: React.FC<Props> = ({ isSignUp, onSubmit, clearParentE
             return t('components.userSignUpLoginForm.validate.userName.required');
         if (userName.trim().length < 6)
             return t('components.userSignUpLoginForm.validate.userName.minLength');
+        if (userName.trim().length > 15)
+            return t('components.userSignUpLoginForm.validate.userName.maxlength');
         if (!/^[a-zA-Z0-9_]+$/.test(userName))
             return t('components.userSignUpLoginForm.validate.userName.format');
         return null;
@@ -66,6 +72,8 @@ const UserSignupLoginForm: React.FC<Props> = ({ isSignUp, onSubmit, clearParentE
             return t('components.userSignUpLoginForm.validate.passWord.required');
         if (passWord.trim().length < 6)
             return t('components.userSignUpLoginForm.validate.passWord.minLength');
+        if (passWord.trim().length > 30)
+            return t('components.userSignUpLoginForm.validate.passWord.maxLength');
         if (!/[A-Z]/.test(passWord))
             return t('components.userSignUpLoginForm.validate.passWord.uppercase');
         if (!/[0-9]/.test(passWord))
