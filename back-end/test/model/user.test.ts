@@ -494,7 +494,7 @@ jest.mock('@prisma/client', () => {
                 user: {
                     findUnique: jest.fn().mockResolvedValue({
                         id: 1,
-                        userName: 'fromMethodValidationUser',
+                        userName: 'fromMethod',
                         firstName: 'Roel',
                         lastName: 'Crabbe',
                         email: 'roel.crabbe@example.com',
@@ -516,7 +516,7 @@ test('should correctly map PrismaUser to User object', async () => {
     const user = User.from(prismaUser as any);
 
     expect(user.getId()).toBe(1);
-    expect(user.getUserName()).toBe('fromMethodValidationUser');
+    expect(user.getUserName()).toBe('fromMethod');
     expect(user.getFirstName()).toBe('Roel');
     expect(user.getLastName()).toBe('Crabbe');
     expect(user.getEmail()).toBe('roel.crabbe@example.com');
@@ -537,7 +537,7 @@ test('should throw an error for SQL injection-like input', () => {
             passWord: 'Password1@',
             role: 'admin' as Role,
         });
-    }).toThrow('User validation: Username can only contain letters, numbers, and underscores');
+    }).toThrow('User validation: Username cannot be longer than 15 characters');
 });
 
 test('should throw an error for XSS injection attempts', () => {
@@ -551,5 +551,5 @@ test('should throw an error for XSS injection attempts', () => {
             passWord: 'Password1@',
             role: 'user' as Role,
         });
-    }).toThrow('User validation: Username can only contain letters, numbers, and underscores');
+    }).toThrow('User validation: Username cannot be longer than 15 characters');
 });

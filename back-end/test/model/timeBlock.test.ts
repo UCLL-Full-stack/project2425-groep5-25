@@ -119,7 +119,7 @@ test('should give false if properties of 2 objects are not same', function () {
     const startTime = new Date('2024-12-01 08:00:00');
     const endTime = new Date('2024-12-01 10:00:00');
     const project1 = new Project({
-        name: 'totallynotthesameprojectnameandiknowthisstringishardtoread',
+        name: 'totallynot',
         color: Color.Gray,
         users: [user2],
     });
@@ -181,7 +181,7 @@ test('should not throw an error if Time Block does contain everything', function
     const startTime = new Date('2024-12-01 08:00:00');
     const endTime = new Date('2024-12-01 10:00:00');
     const project1 = new Project({
-        name: 'totallynotthesameprojectnameandiknowthisstringishardtoread',
+        name: 'totallynot',
         color: Color.Gray,
         users: [user2],
     });
@@ -218,7 +218,7 @@ test('should throw an error if Start time is after the end time', function () {
     const startTime = new Date('2024-12-13 12:36:00');
     const endTime = new Date('2024-12-13 10:43:00');
     const project1 = new Project({
-        name: 'totallynotthesameprojectnameandiknowthisstringishardtoread',
+        name: 'totallynot',
         color: Color.Gray,
         users: [user2],
     });
@@ -267,7 +267,7 @@ const user2 = new User({
 const startTime = new Date('2024-12-13 10:43:00 ');
 const endTime = new Date('2024-12-13 12:36:00');
 const project1 = new Project({
-    name: 'totallynotthesameprojectnameandiknowthisstringishardtoread',
+    name: 'totallynot',
     color: Color.Gray,
     users: [user2],
 });
