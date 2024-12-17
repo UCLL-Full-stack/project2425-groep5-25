@@ -222,7 +222,6 @@ test('should throw an error if Start time is after the end time', function () {
         color: Color.Gray,
         users: [user2],
     });
-    console.log(startTime, endTime);
     // When
     const createTimeBlock = () =>
         new TimeBlock({
@@ -230,7 +229,6 @@ test('should throw an error if Start time is after the end time', function () {
             endTime,
             project: project1,
         });
-    console.log(startTime, endTime);
     const expectedError = 'TimeBlock validation: Start date cannot be after end date';
 
     // Then
