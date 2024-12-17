@@ -111,8 +111,6 @@ export class User extends ModelBase {
         if (!user.passWord?.trim()) throw new Error('User validation: Password is required');
         if (user.passWord?.trim().length < 6)
             throw new Error('User validation: Password must be at least 6 characters long');
-        if (user.passWord?.trim().length > 30)
-            throw new Error('User validation: Password cannot be longer than 30 characters');
         if (!/[A-Z]/.test(user.passWord))
             throw new Error('User validation: Password must contain at least one uppercase letter');
         if (!/[a-z]/.test(user.passWord))
