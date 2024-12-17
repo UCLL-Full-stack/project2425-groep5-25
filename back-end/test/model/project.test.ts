@@ -132,7 +132,7 @@ test('Expect to throw an error if Project name is too long', () => {
             color: pColor1,
             users: [cUser1],
         });
-    const expectedError = 'Project validation: Project name cannot be longer than 15 characters';
+    const expectedError = 'Project validation: Project name cannot be longer than 30 characters';
 
     // Then
     expect(createProject).toThrow(expectedError);
