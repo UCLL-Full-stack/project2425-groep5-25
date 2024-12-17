@@ -124,6 +124,20 @@ test('Expect to throw an error if Project name is too short', () => {
     expect(createProject).toThrow(expectedError);
 });
 
+test('Expect to throw an error if Project name is too long', () => {
+    // When
+    const createProject = () =>
+        new Project({
+            name: 'Testing this super long name of a project',
+            color: pColor1,
+            users: [cUser1],
+        });
+    const expectedError = 'Project validation: Project name cannot be longer than 15 characters';
+
+    // Then
+    expect(createProject).toThrow(expectedError);
+});
+
 test('Expect to throw an error if Project name is not valid', () => {
     // When
     const createProject = () =>

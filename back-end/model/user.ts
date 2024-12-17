@@ -71,6 +71,8 @@ export class User extends ModelBase {
         if (!user.userName?.trim()) throw new Error('User validation: Username is required');
         if (user.userName?.trim().length < 6)
             throw new Error('User validation: Username must be at least 6 characters long');
+        if (user.userName?.trim().length > 15)
+            throw new Error('User validation: Username cannot be longer than 15 characters');
         if (!/^[a-zA-Z0-9_]+$/.test(user.userName))
             throw new Error(
                 'User validation: Username can only contain letters, numbers, and underscores',
@@ -79,6 +81,8 @@ export class User extends ModelBase {
         if (!user.firstName?.trim()) throw new Error('User validation: First name is required');
         if (user.firstName.trim().length < 2)
             throw new Error('User validation: First name needs to be at least 2 letters');
+        if (user.firstName?.trim().length > 20)
+            throw new Error('User validation: First name cannot be longer than 20 characters');
         if (user.firstName[0] !== user.firstName[0].toUpperCase())
             throw new Error('User validation: First name needs to start with a capital letter');
         if (!/^[\p{L}]+$/u.test(user.firstName))
@@ -89,6 +93,8 @@ export class User extends ModelBase {
         if (!user.lastName?.trim()) throw new Error('User validation: Last name is required');
         if (user.lastName.trim().length < 2)
             throw new Error('User validation: Last name needs to be at least 2 letters');
+        if (user.lastName?.trim().length > 20)
+            throw new Error('User validation: Last name cannot be longer than 20 characters');
         if (user.lastName[0] !== user.lastName[0].toUpperCase())
             throw new Error('User validation: Last name needs to start with a capital letter');
         if (!/^[\p{L}]+$/u.test(user.lastName))
@@ -105,6 +111,8 @@ export class User extends ModelBase {
         if (!user.passWord?.trim()) throw new Error('User validation: Password is required');
         if (user.passWord?.trim().length < 6)
             throw new Error('User validation: Password must be at least 6 characters long');
+        if (user.passWord?.trim().length > 30)
+            throw new Error('User validation: Password cannot be longer than 30 characters');
         if (!/[A-Z]/.test(user.passWord))
             throw new Error('User validation: Password must contain at least one uppercase letter');
         if (!/[a-z]/.test(user.passWord))
