@@ -2,6 +2,7 @@ import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
 import casual from 'casual';
 import { Color, projectNames, Role } from '../../types';
+import { dateUtils } from '../../utils/date';
 
 const prisma = new PrismaClient();
 
@@ -112,14 +113,12 @@ const main = async () => {
                 return [];
             }
 
-            // So for each user, this would generate workdays starting TODAY going back : length: 365 something like that
-            // Does this function do that, so why am i only seeing 1 day with mondays in it?
             const userWorkdays = Array.from({ length: 365 }).map((_, index) => {
                 const workdayDate = new Date(today);
                 workdayDate.setDate(today.getDate() - index);
-                workdayDate.setHours(0, 0, 0, 0);
+                const startOfWorkday = dateUtils.getUTCStartOfDay(workdayDate);
 
-                const dayOfWeek = workdayDate.getDay();
+                const dayOfWeek = startOfWorkday.getDay();
                 let expectedHours = 0;
 
                 switch (dayOfWeek) {
@@ -154,7 +153,7 @@ const main = async () => {
                     data: {
                         expectedHours,
                         achievedHours,
-                        date: workdayDate.toISOString(),
+                        date: startOfWorkday,
                         userId: user.id,
                     },
                 });
@@ -183,17 +182,17 @@ const main = async () => {
                     const createdTimeBlocks = await Promise.all(
                         Array.from({ length: casual.integer(2, 5) }).map(() => {
                             const workdayDate = new Date(workday.date);
-                            workdayDate.setHours(8, 0, 0, 0);
+                            workdayDate.setUTCHours(8, 0, 0, 0);
                             const startHour = casual.integer(8, 17);
                             const startMinute = casual.integer(0, 59);
                             const startDateTime = new Date(workday.date);
-                            startDateTime.setHours(startHour, startMinute, 0, 0);
+                            startDateTime.setUTCHours(startHour, startMinute, 0, 0);
 
                             const maxEndHour = Math.min(startHour + casual.integer(1, 4), 18);
                             const endHour = casual.integer(startHour + 1, maxEndHour);
                             const endMinute = casual.integer(0, 59);
                             const endDateTime = new Date(workday.date);
-                            endDateTime.setHours(endHour, endMinute, 0, 0);
+                            endDateTime.setUTCHours(endHour, endMinute, 0, 0);
 
                             const project =
                                 userProjects[casual.integer(0, userProjects.length - 1)];

@@ -8,6 +8,7 @@ import { authorizeRole } from '../repository/utils/jwt';
 import { workDayDb } from '../repository/workDay.db';
 import { workScheduleDb } from '../repository/workSchedule.db';
 import { JwtToken, TimeBlockInput } from '../types';
+import { dateUtils } from '../utils/date';
 
 const getAllTimeBlocks = async (): Promise<TimeBlock[]> => {
     return timeBlockDb.getAllTimeBlocks();
@@ -23,7 +24,7 @@ const createTimeBlock = async ({
     const { role, userId } = auth;
     const permissions = authorizeRole(role);
     const { projectId } = timeBlockInput;
-    const startDate = new Date();
+    const startDate = dateUtils.getLocalCurrentDate();
 
     if (!permissions.isAdmin && !permissions.isHr && !permissions.isUser) {
         throw new UnauthorizedError('credentials_required', {
@@ -35,10 +36,14 @@ const createTimeBlock = async ({
     if (!fUser) throw new Error(`User with id <${userId}> does not exist.`);
 
     const fTimeBlock = await timeBlockDb.getRunningTimeBlockByUserId({ userId });
-    if (fTimeBlock) throw new Error(`Userid <${userId}> is working on something.`);
+    if (fTimeBlock) throw new Error(`You are not working on anything.`);
 
     const fProject = await projectDb.getProjectById({ id: projectId });
     if (!fProject) throw new Error(`Project with id <${projectId}> doesn't exist.`);
+
+    const userProjects = await projectDb.getProjectsByUserId({ userId });
+    if (!userProjects.includes(fProject))
+        throw new Error(`User <${userId}> is not assigned to project <${projectId}>.`);
 
     const fWorkSchedule = await workScheduleDb.getWorkScheduleByUserId({ userId });
     if (!fWorkSchedule) throw new Error(`Work schedule for user <${userId}> doesn't exist.`);
@@ -47,7 +52,7 @@ const createTimeBlock = async ({
     const fWorkDay = await workDayDb.getCurrentWorkDay({ date: startDate, userId });
 
     if (!fWorkDay) {
-        const workDayStart = new Date(startDate.setHours(0, 0, 0, 0));
+        const workDayStart = dateUtils.getUTCStartOfDay(startDate);
         const nWorkday = new WorkDay({
             date: workDayStart,
             expectedHours: fWorkSchedule.getHoursForDay(startDate),
@@ -67,6 +72,7 @@ const createTimeBlock = async ({
 const updateTimeBlock = async ({ auth }: { auth: JwtToken }): Promise<TimeBlock> => {
     const { role, userId } = auth;
     const permissions = authorizeRole(role);
+    const endDate = dateUtils.getLocalCurrentDate();
 
     if (!permissions.isAdmin && !permissions.isHr && !permissions.isUser) {
         throw new UnauthorizedError('credentials_required', {
@@ -74,9 +80,11 @@ const updateTimeBlock = async ({ auth }: { auth: JwtToken }): Promise<TimeBlock>
         });
     }
 
-    const endDate = new Date();
+    const fUser = await userDb.getUserById({ id: userId });
+    if (!fUser) throw new Error(`User with id <${userId}> does not exist.`);
+
     const fTimeBlock = await timeBlockDb.getRunningTimeBlockByUserId({ userId });
-    if (!fTimeBlock) throw new Error(`Time block for userId <${userId}> doesn't exist.`);
+    if (!fTimeBlock) throw new Error(`You are not working on anything.`);
 
     const uTimeBlock = new TimeBlock({
         id: fTimeBlock.getId(),

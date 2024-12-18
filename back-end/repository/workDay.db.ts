@@ -1,4 +1,5 @@
 import { WorkDay } from '../model/workDay';
+import { dateUtils } from '../utils/date';
 import database from './utils/database';
 
 const getAllWorkDays = async (): Promise<WorkDay[]> => {
@@ -54,8 +55,9 @@ const getCurrentWorkDay = async ({
     userId: number;
 }): Promise<WorkDay | null> => {
     try {
-        const startDate = new Date(date.setHours(0, 0, 0, 0));
-        const endDate = new Date(date.setHours(23, 59, 59, 999));
+        const startDate = dateUtils.getUTCStartOfDay(date);
+        const endDate = dateUtils.getUTCEndOfDay(date);
+
         const workDayPrisma = await database.workday.findFirst({
             where: {
                 userId,

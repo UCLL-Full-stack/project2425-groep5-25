@@ -48,8 +48,6 @@ export class TimeBlock extends ModelBase {
     }
 
     validate(timeBlock: { startTime: Date; endTime?: Date; project: Project }) {
-        // if (timeBlock.startTime === undefined)
-        //     throw new Error('TimeBlock validation: Start time is required');
         if (!timeBlock.startTime) throw new Error('TimeBlock validation: Start time is required');
         if (!timeBlock.project) throw new Error('TimeBlock validation: Project is required');
 
