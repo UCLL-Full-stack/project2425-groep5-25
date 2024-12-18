@@ -38,7 +38,6 @@ const ColorSelectField: React.FC<Props> = ({
 
     const handleChange = (option: { value: any } | null) => {
         const selectedValue = (option?.value || null) as Color;
-        console.log(selectedValue);
         onChange(selectedValue);
         validateValue(selectedValue);
     };
