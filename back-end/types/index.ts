@@ -54,6 +54,11 @@ const projectNames = {
     DEFAULT_PROJECT: 'General',
 };
 
+type TimeBlockInput = {
+    id?: number;
+    projectId?: number;
+};
+
 export {
     AuthenticationResponse,
     Color,
@@ -63,5 +68,6 @@ export {
     projectNames,
     ProjectToUserInput,
     Role,
+    TimeBlockInput,
     UserInput,
 };

@@ -22,7 +22,7 @@ const InputField: React.FC<Props> = ({
 }: Props) => {
     const [error, setError] = useState<string | null>(null);
 
-    const validation = (newValue: string | null) => {
+    const validateValue = (newValue: any | null) => {
         if (newValue && validate) {
             const validationError = validate(newValue);
             setError(validationError);
@@ -31,10 +31,10 @@ const InputField: React.FC<Props> = ({
         }
     };
 
-    const handleChange = (option: { value: string } | null) => {
+    const handleChange = (option: { value: any } | null) => {
         const newValue = option?.value || null;
         onChange(newValue);
-        validation(newValue);
+        validateValue(newValue);
     };
 
     return (
@@ -45,9 +45,9 @@ const InputField: React.FC<Props> = ({
                     <input
                         type={type}
                         value={value || ''}
-                        required={required}
-                        placeholder={placeholder}
                         onChange={(e) => handleChange({ value: e.target.value })}
+                        placeholder={placeholder}
+                        required={required}
                         className={`${styles.input} ${error ? styles.error : ''}`}
                     />
                     {error && <span className={styles.errorMessage}>{error}</span>}

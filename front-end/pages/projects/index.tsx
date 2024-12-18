@@ -19,7 +19,7 @@ const Home: React.FC = () => {
 
     const getUsersAndProjects = async () => {
         try {
-            const [projectsResponse] = await Promise.all([projectService.getAllProjects()]);
+            const projectsResponse = await projectService.getAllProjects();
 
             let usersResponse;
             if (userRole === 'admin') {

@@ -54,10 +54,21 @@ const deleteProjectById = async (projectId: string) => {
     });
 };
 
+const getAllProjectsByUserId = async () => {
+    return await fetch(processEnv.getApiUrl() + `/projects/user`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + getToken(),
+        },
+    });
+};
+
 export const projectService = {
     getAllProjects,
     createProject,
     getProjectById,
     updateProject,
     deleteProjectById,
+    getAllProjectsByUserId,
 };
