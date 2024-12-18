@@ -12,12 +12,12 @@ const handleResponse = () => {
             if (response.status === 403) {
                 console.error(`Forbidden error: ${response.status}`);
                 sessionStorage.setItem('authError', t('error.forbidden'));
-                router.push('/');
+                router.push('/login');
                 return null;
             } else if (response.status === 401) {
                 console.error(`Authentication error: ${response.status}`);
                 sessionStorage.setItem('authError', t('error.unauthorized'));
-                router.push('/login');
+                router.push('/');
                 return null;
             }
         }

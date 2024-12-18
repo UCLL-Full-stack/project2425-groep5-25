@@ -2,7 +2,7 @@ import { ProjectOutput } from '@types';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { formatOptionLabel, getColorName } from 'utils/colorUtils';
+import { formatOptionLabelByColor, getColorName } from 'utils/colorUtils';
 
 type Props = {
     projects: Array<ProjectOutput>;
@@ -56,9 +56,9 @@ const ProjectOverviewTable: React.FC<Props> = ({ projects }: Props) => {
                                     {project.id}
                                 </td>
                                 <td className="px-4 py-2 text-sm text-gray-900 border-r">
-                                    {formatOptionLabel({
+                                    {formatOptionLabelByColor({
                                         label: getColorName(project.color as string),
-                                        value: project.color as string,
+                                        color: project.color as string,
                                     })}
                                 </td>
                                 <td className="px-4 py-2 text-sm text-gray-900 border-r">

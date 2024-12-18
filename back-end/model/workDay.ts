@@ -4,6 +4,7 @@ import {
     User as PrismaUser,
     Workday as PrismaWorkday,
 } from '@prisma/client';
+import { dateUtils } from '../utils/date';
 import { ModelBase } from './modelBase';
 import { TimeBlock } from './timeBlock';
 import { User } from './user';
@@ -72,7 +73,7 @@ export class WorkDay extends ModelBase {
     }) {
         if (!workDay.date) throw new Error('WorkDay validation: Date is required');
 
-        if (workDay.date > new Date())
+        if (workDay.date > dateUtils.getLocalCurrentDate())
             throw new Error('WorkDay validation: Date cannot be in the future');
 
         if (workDay.expectedHours < 0)

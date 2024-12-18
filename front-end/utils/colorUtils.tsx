@@ -1,6 +1,6 @@
 import { Color } from '@types';
 
-export const formatOptionLabel = ({ label, value }: { label: string; value: string }) => (
+export const formatOptionLabelByValue = ({ label, value }: { label: string; value: string }) => (
     <div style={{ display: 'flex', alignItems: 'center' }}>
         <div
             style={{
@@ -8,6 +8,21 @@ export const formatOptionLabel = ({ label, value }: { label: string; value: stri
                 height: '20px',
                 borderRadius: '50%',
                 backgroundColor: value,
+                marginRight: '10px',
+            }}
+        />
+        <span>{label}</span>
+    </div>
+);
+
+export const formatOptionLabelByColor = ({ label, color }: { label: string; color: string }) => (
+    <div style={{ display: 'flex', alignItems: 'center' }}>
+        <div
+            style={{
+                width: '20px',
+                height: '20px',
+                borderRadius: '50%',
+                backgroundColor: color,
                 marginRight: '10px',
             }}
         />

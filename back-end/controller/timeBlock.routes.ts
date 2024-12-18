@@ -25,17 +25,59 @@
  *           $ref: '#/components/schemas/Project'
  *         workDay:
  *           $ref: '#/components/schemas/WorkDay'
- *   responses:
- *     UnauthorizedError:
- *       description: Unauthorized access due to missing or invalid token.
- *     NotFoundError:
- *       description: The requested resource was not found.
- *     ValidationError:
- *       description: Invalid input or data format.
+ *     Project:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *           description: Unique identifier of the project
+ *         name:
+ *           type: string
+ *           description: Name of the project
+ *         description:
+ *           type: string
+ *           description: Detailed description of the project
+ *     WorkDay:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *           description: Unique identifier of the work day
+ *         date:
+ *           type: string
+ *           format: date
+ *           description: Date of the work day
+ *         user:
+ *           $ref: '#/components/schemas/User'
+ *     User:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *           description: Unique identifier of the user
+ *         name:
+ *           type: string
+ *           description: Name of the user
+ *         email:
+ *           type: string
+ *           description: Email address of the user
+ *     ScheduleComponent:
+ *       type: object
+ *       properties:
+ *         projectId:
+ *           type: integer
+ *           description: ID of the associated project
+ *     responses:
+ *       UnauthorizedError:
+ *         description: Unauthorized access due to missing or invalid token.
+ *       NotFoundError:
+ *         description: The requested resource was not found.
+ *       ValidationError:
+ *         description: Invalid input or data format.
  */
 import express, { NextFunction, Request, Response } from 'express';
 import { timeBlockService } from '../service/timeBlock.service';
-import { JwtToken } from '../types';
+import { JwtToken, TimeBlockInput } from '../types';
 
 const timeBlockRouter = express.Router();
 
@@ -65,6 +107,84 @@ timeBlockRouter.get(
         try {
             const timeBlocks = await timeBlockService.getAllTimeBlocks();
             res.status(200).json(timeBlocks);
+        } catch (error) {
+            next(error);
+        }
+    },
+);
+
+/**
+ * @swagger
+ * /timeblocks:
+ *   post:
+ *     summary: Create a new time block
+ *     description: Create a new time block, linking it to a project and a work day.
+ *     tags:
+ *       - TimeBlocks
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/ScheduleComponent'
+ *     responses:
+ *       201:
+ *         description: Time block created successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/TimeBlock'
+ */
+timeBlockRouter.post(
+    '/',
+    async (req: Request & { auth: JwtToken }, res: Response, next: NextFunction) => {
+        try {
+            const timeBlockInput = <TimeBlockInput>req.body;
+            const result = await timeBlockService.createTimeBlock({
+                auth: req.auth,
+                timeBlockInput,
+            });
+            res.status(201).json(result);
+        } catch (error) {
+            next(error);
+        }
+    },
+);
+
+/**
+ * @swagger
+ * /timeblocks:
+ *   put:
+ *     summary: Create a new time block
+ *     description: Create a new time block, linking it to a project and a work day.
+ *     tags:
+ *       - TimeBlocks
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/ScheduleComponent'
+ *     responses:
+ *       200:
+ *         description: Time block created successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/TimeBlock'
+ */
+timeBlockRouter.put(
+    '/',
+    async (req: Request & { auth: JwtToken }, res: Response, next: NextFunction) => {
+        try {
+            const result = await timeBlockService.updateTimeBlock({
+                auth: req.auth,
+            });
+            res.status(200).json(result);
         } catch (error) {
             next(error);
         }

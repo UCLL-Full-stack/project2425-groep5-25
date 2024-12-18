@@ -1,33 +1,37 @@
 import styles from '@styles/InputField.module.css';
-import { Color } from '@types';
+import { ProjectOutput } from '@types';
 import React, { useState } from 'react';
 import Select from 'react-select';
-import { formatOptionLabelByValue } from 'utils/colorUtils';
+import { formatOptionLabelByColor } from 'utils/colorUtils';
 
 type Props = {
     label: string;
-    value: Color | null;
-    onChange: (value: Color | null) => void;
-    validate?: (value: Color | null) => string | null;
+    value: ProjectOutput | null;
+    onChange: (value: ProjectOutput | null) => void;
+    validate?: (value: ProjectOutput | null) => string | null;
     placeholder: string;
     required: boolean;
+    projects: Array<ProjectOutput>;
 };
 
-const ColorSelectField: React.FC<Props> = ({
+const ProjectSelectField: React.FC<Props> = ({
     label,
     value,
     onChange,
     validate,
     placeholder,
     required,
+    projects,
 }: Props) => {
     const [error, setError] = useState<string | null>(null);
-    const options = Object.entries(Color).map(([label, hex]) => ({
-        value: hex,
-        label,
+
+    const formattedOptions = projects.map((project) => ({
+        value: project.id,
+        label: project.name,
+        color: project.color,
     }));
 
-    const validateValue = (newValue: Color | null) => {
+    const validateValue = (newValue: ProjectOutput | null) => {
         if (newValue !== null && validate) {
             const validationError = validate(newValue);
             setError(validationError);
@@ -36,8 +40,10 @@ const ColorSelectField: React.FC<Props> = ({
         }
     };
 
-    const handleChange = (option: { value: any } | null) => {
-        const selectedValue = (option?.value || null) as Color;
+    const handleChange = (option: { value: number; label: string } | null) => {
+        const selectedValue = option
+            ? projects.find((opt) => opt.id === option.value) || null
+            : null;
         onChange(selectedValue);
         validateValue(selectedValue);
     };
@@ -48,10 +54,14 @@ const ColorSelectField: React.FC<Props> = ({
                 <label>{label}</label>
                 <div className={styles.innerInputContainer}>
                     <Select
-                        options={options}
-                        value={options.find((option) => option.value === value) ?? null}
+                        options={formattedOptions}
+                        value={
+                            formattedOptions.find(
+                                (option) => option.value === (value?.id || null),
+                            ) ?? null
+                        }
                         onChange={handleChange}
-                        formatOptionLabel={formatOptionLabelByValue}
+                        formatOptionLabel={formatOptionLabelByColor}
                         isSearchable={false}
                         placeholder={placeholder}
                         required={required}
@@ -64,4 +74,4 @@ const ColorSelectField: React.FC<Props> = ({
     );
 };
 
-export default ColorSelectField;
+export default ProjectSelectField;
