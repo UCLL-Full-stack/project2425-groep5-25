@@ -1,7 +1,7 @@
 import { useTranslation } from 'next-i18next';
 import React from 'react';
 import { FaArrowLeft, FaArrowRight, FaCalendarDay } from 'react-icons/fa';
-import { formatWeekDisplay, getStartAndEndOfWeek } from 'utils/dateTimeUtils';
+import { dateUtils, formatWeekDisplay } from 'utils/date';
 
 type Props = {
     currentWeekStart: string;
@@ -19,16 +19,16 @@ const WeekPaginator: React.FC<Props> = ({
     const { t } = useTranslation();
 
     const goToPreviousWeek = () => {
-        const currentDate = new Date(currentWeekStart);
+        const currentDate = dateUtils.getLocalCurrentDate();
         currentDate.setDate(currentDate.getDate() - 7);
-        const { start, end } = getStartAndEndOfWeek(currentDate);
+        const { start, end } = dateUtils.getStartAndEndOfWeek(currentDate);
         updateWeek(start, end);
     };
 
     const goToNextWeek = () => {
-        const currentDate = new Date(currentWeekStart);
+        const currentDate = dateUtils.getLocalCurrentDate();
         currentDate.setDate(currentDate.getDate() + 7);
-        const { start, end } = getStartAndEndOfWeek(currentDate);
+        const { start, end } = dateUtils.getStartAndEndOfWeek(currentDate);
         updateWeek(start, end);
     };
 

@@ -39,6 +39,11 @@ export type UserInput = {
     passWord?: string;
 };
 
+export type TimeBlockInput = {
+    id?: number;
+    projectId?: number;
+};
+
 /* OUTPUT VALUES */
 
 export type WorkDayOutput = {
