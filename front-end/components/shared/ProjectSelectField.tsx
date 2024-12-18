@@ -2,7 +2,7 @@ import styles from '@styles/InputField.module.css';
 import { ProjectOutput } from '@types';
 import React, { useState } from 'react';
 import Select from 'react-select';
-import { formatOptionLabel } from 'utils/colorUtils';
+import { formatOptionLabelByColor } from 'utils/colorUtils';
 
 type Props = {
     label: string;
@@ -61,7 +61,7 @@ const ProjectSelectField: React.FC<Props> = ({
                             ) ?? null
                         }
                         onChange={handleChange}
-                        formatOptionLabel={formatOptionLabel}
+                        formatOptionLabel={formatOptionLabelByColor}
                         isSearchable={false}
                         placeholder={placeholder}
                         required={required}

@@ -2,7 +2,7 @@ import styles from '@styles/InputField.module.css';
 import { Color } from '@types';
 import React, { useState } from 'react';
 import Select from 'react-select';
-import { formatOptionLabel } from 'utils/colorUtils';
+import { formatOptionLabelByValue } from 'utils/colorUtils';
 
 type Props = {
     label: string;
@@ -23,7 +23,7 @@ const ColorSelectField: React.FC<Props> = ({
 }: Props) => {
     const [error, setError] = useState<string | null>(null);
     const options = Object.entries(Color).map(([label, hex]) => ({
-        color: hex,
+        value: hex,
         label,
     }));
 
@@ -36,8 +36,9 @@ const ColorSelectField: React.FC<Props> = ({
         }
     };
 
-    const handleChange = (option: { value: string } | null) => {
+    const handleChange = (option: { value: any } | null) => {
         const selectedValue = (option?.value || null) as Color;
+        console.log(selectedValue);
         onChange(selectedValue);
         validateValue(selectedValue);
     };
@@ -49,9 +50,9 @@ const ColorSelectField: React.FC<Props> = ({
                 <div className={styles.innerInputContainer}>
                     <Select
                         options={options}
-                        value={options.find((option) => option.color === value) ?? null}
+                        value={options.find((option) => option.value === value) ?? null}
                         onChange={handleChange}
-                        formatOptionLabel={formatOptionLabel}
+                        formatOptionLabel={formatOptionLabelByValue}
                         isSearchable={false}
                         placeholder={placeholder}
                         required={required}
