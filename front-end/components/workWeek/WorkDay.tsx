@@ -1,4 +1,3 @@
-import styles from '@styles/Workday.module.css';
 import { WorkDayOutput } from '@types';
 import { dateUtils } from 'utils/date';
 import TimeBlock from './TimeBlock';
@@ -32,16 +31,16 @@ const Workday: React.FC<props> = ({ workday }) => {
     return (
         <>
             {workday && (
-                <div className={styles.container}>
-                    <div className={styles.informationContainer}>
-                        <span>
+                <div className="workday-container">
+                    <div className="workday-header-container">
+                        <p>
                             {dateName} {dateNr}
-                        </span>
-                        <span>
+                        </p>
+                        <p>
                             {achievedHours} / {expectedHours}
-                        </span>
+                        </p>
                     </div>
-                    <div className={styles.timeBlocksContainer}>
+                    <div className="worday-timeblock-container">
                         {workday.timeBlocks &&
                             workday.timeBlocks.length > 0 &&
                             workday.timeBlocks.map((timeBlock) => (

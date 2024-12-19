@@ -17,12 +17,12 @@ type IdName = {
 
 type UserInput = {
     id?: number;
-    userName?: string;
-    firstName?: string;
-    lastName?: string;
-    email?: string;
+    userName: string;
+    firstName: string;
+    lastName: string;
+    email: string;
     role?: Role;
-    passWord?: string;
+    passWord: string;
 };
 
 type AuthenticationResponse = {
@@ -35,9 +35,9 @@ type AuthenticationResponse = {
 
 type ProjectInput = {
     id?: number;
-    name?: string;
-    color?: Color;
-    userIds?: number[];
+    name: string;
+    color: Color;
+    userIds: number[];
 };
 
 type ProjectToUserInput = {
@@ -46,8 +46,8 @@ type ProjectToUserInput = {
 };
 
 type JwtToken = {
-    userId?: number;
-    role?: Role;
+    userId: number;
+    role: Role;
 };
 
 const projectNames = {
@@ -56,7 +56,7 @@ const projectNames = {
 
 type TimeBlockInput = {
     id?: number;
-    projectId?: number;
+    projectId: number;
 };
 
 export {

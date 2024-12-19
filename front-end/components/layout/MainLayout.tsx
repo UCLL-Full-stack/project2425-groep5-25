@@ -1,5 +1,4 @@
 import Header from '@components/shared/Navigation';
-import styles from '@styles/MainLayout.module.css';
 import Head from 'next/head';
 import React, { ReactNode, useEffect } from 'react';
 import { ClipLoader } from 'react-spinners';
@@ -19,7 +18,7 @@ const MainLayout: React.FC<Props> = ({
     titleContent,
     title,
     description,
-    isLoading,
+    isLoading = false,
 }: Props) => {
     useEffect(() => {
         const authErrorToast = sessionStorage.getItem('authError');
@@ -38,15 +37,22 @@ const MainLayout: React.FC<Props> = ({
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <Header />
-            <main className={styles.main}>
-                <div className={styles['main-container']}>
-                    <div className={styles['main-title-container']}>
-                        <h1>{title}</h1>
-                        {titleContent}
+            <main className="main">
+                <div className="main-div-container">
+                    <div className="main-head-container">
+                        <div className="main-title-container">
+                            <div className="main-title">
+                                <h1>{title}</h1>
+                            </div>
+                            {!isLoading && titleContent && (
+                                <div className="main-title-extra">{titleContent}</div>
+                            )}
+                        </div>
                     </div>
-                    <hr />
-                    {isLoading ? (
-                        <div className={styles['spinner-container']}>
+                    {!isLoading ? (
+                        <div className="main-inner-container">{children}</div>
+                    ) : (
+                        <div className="spinner-container">
                             <ClipLoader
                                 size={200}
                                 color={'#0d6efd'}
@@ -55,14 +61,12 @@ const MainLayout: React.FC<Props> = ({
                                 }}
                             />
                         </div>
-                    ) : (
-                        <div className={styles['main-inner-container']}>{children}</div>
                     )}
                 </div>
             </main>
             <ToastContainer
-                position="top-right"
-                autoClose={2500}
+                position="bottom-right"
+                autoClose={2000}
                 hideProgressBar={false}
                 newestOnTop={false}
                 closeOnClick

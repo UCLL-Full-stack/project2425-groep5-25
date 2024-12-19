@@ -1,4 +1,3 @@
-import styles from '@styles/ErrorMessage.module.css';
 import { ErrorLabelMessage } from '@types';
 import React from 'react';
 
@@ -9,7 +8,7 @@ type Props = {
 const ErrorMessage: React.FC<Props> = ({ errorLabelMessage }: Props) => {
     return (
         <>
-            <div className={styles['error-container']}>
+            <div className="error-container">
                 <label>{errorLabelMessage.label}</label>
                 <p>{errorLabelMessage.message}</p>
             </div>

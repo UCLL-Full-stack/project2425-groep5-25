@@ -1,4 +1,5 @@
 import ErrorMessage from '@components/layout/ErrorMessage';
+import Button from '@components/shared/Button';
 import InputField from '@components/shared/InputField';
 import { ErrorLabelMessage, UserInput } from '@types';
 import { useTranslation } from 'next-i18next';
@@ -215,13 +216,15 @@ const UserSignupLoginForm: React.FC<Props> = ({ isSignUp, onSubmit, clearParentE
                     required
                 />
 
-                <button
+                <Button
                     type="submit"
-                    className="bg-blue-500 text-white px-6 py-2 rounded-md shadow-md hover:bg-blue-600 transition duration-200">
-                    {isSignUp
-                        ? t('components.userSignUpLoginForm.buttons.signUp')
-                        : t('components.userSignUpLoginForm.buttons.login')}
-                </button>
+                    label={
+                        isSignUp
+                            ? t('components.userSignUpLoginForm.buttons.signUp')
+                            : t('components.userSignUpLoginForm.buttons.login')
+                    }
+                    onClick={handleSubmit}
+                />
 
                 {errorLabelMessage && <ErrorMessage errorLabelMessage={errorLabelMessage} />}
             </form>

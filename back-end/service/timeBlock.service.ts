@@ -4,7 +4,7 @@ import { WorkDay } from '../model/workDay';
 import { projectDb } from '../repository/project.db';
 import { timeBlockDb } from '../repository/timeBlock.db';
 import { userDb } from '../repository/user.db';
-import { authorizeRole } from '../repository/utils/jwt';
+import { isValidRole } from '../repository/utils/jwt';
 import { workDayDb } from '../repository/workDay.db';
 import { workScheduleDb } from '../repository/workSchedule.db';
 import { JwtToken, TimeBlockInput } from '../types';
@@ -22,15 +22,15 @@ const createTimeBlock = async ({
     timeBlockInput: TimeBlockInput;
 }): Promise<TimeBlock> => {
     const { role, userId } = auth;
-    const permissions = authorizeRole(role);
     const { projectId } = timeBlockInput;
-    const startDate = dateUtils.getLocalCurrentDate();
 
-    if (!permissions.isAdmin && !permissions.isHr && !permissions.isUser) {
+    if (!isValidRole(role)) {
         throw new UnauthorizedError('credentials_required', {
             message: 'You are not authorized to access this resource.',
         });
     }
+
+    const startDate = dateUtils.getLocalCurrentDate();
 
     const fUser = await userDb.getUserById({ id: userId });
     if (!fUser) throw new Error(`User with id <${userId}> does not exist.`);
@@ -75,14 +75,14 @@ const createTimeBlock = async ({
 
 const updateTimeBlock = async ({ auth }: { auth: JwtToken }): Promise<TimeBlock> => {
     const { role, userId } = auth;
-    const permissions = authorizeRole(role);
-    const endDate = dateUtils.getLocalCurrentDate();
 
-    if (!permissions.isAdmin && !permissions.isHr && !permissions.isUser) {
+    if (!isValidRole(role)) {
         throw new UnauthorizedError('credentials_required', {
             message: 'You are not authorized to access this resource.',
         });
     }
+
+    const endDate = dateUtils.getLocalCurrentDate();
 
     const fUser = await userDb.getUserById({ id: userId });
     if (!fUser) throw new Error(`User with id <${userId}> does not exist.`);

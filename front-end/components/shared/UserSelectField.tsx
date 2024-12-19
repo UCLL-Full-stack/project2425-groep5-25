@@ -1,4 +1,3 @@
-import styles from '@styles/InputField.module.css';
 import { IdName } from '@types';
 import React, { useState } from 'react';
 import Select, { MultiValue } from 'react-select';
@@ -47,9 +46,9 @@ const UserSelectField: React.FC<Props> = ({
 
     return (
         <>
-            <div className={styles.inputContainer}>
+            <div className="input-container">
                 <label>{label}</label>
-                <div className={styles.innerInputContainer}>
+                <div className="input-inner-container">
                     <Select
                         isMulti
                         options={options}
@@ -57,9 +56,9 @@ const UserSelectField: React.FC<Props> = ({
                         required={required}
                         placeholder={placeholder}
                         onChange={handleChange}
-                        className={`${error ? styles.error : ''}`}
+                        className={` ${error ? 'error' : ''}`}
                     />
-                    {error && <span className={styles.errorMessage}>{error}</span>}
+                    {error && <span className="input-error-message">{error}</span>}
                 </div>
             </div>
         </>

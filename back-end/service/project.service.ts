@@ -7,10 +7,9 @@ import { JwtToken, ProjectInput, projectNames } from '../types';
 import { userService } from './user.service';
 
 const getAllProjects = async ({ auth }: { auth: JwtToken }): Promise<Project[]> => {
-    const { userId, role } = auth;
-    const permissions = authorizeRole(role);
+    const permissions = authorizeRole(auth.role);
 
-    if (permissions.isUser) return projectDb.getProjectsByUserId({ userId });
+    if (permissions.isUser) return projectDb.getProjectsByUserId({ userId: auth.userId });
 
     if (permissions.isAdmin || permissions.isHr) {
         return projectDb.getAllProjects();
@@ -22,11 +21,10 @@ const getAllProjects = async ({ auth }: { auth: JwtToken }): Promise<Project[]> 
 };
 
 const getAllProjectsByUserId = async ({ auth }: { auth: JwtToken }): Promise<Project[]> => {
-    const { userId, role } = auth;
-    const permissions = authorizeRole(role);
+    const permissions = authorizeRole(auth.role);
 
     if (permissions.isAdmin || permissions.isHr || permissions.isUser) {
-        return projectDb.getProjectsByUserId({ userId });
+        return projectDb.getProjectsByUserId({ userId: auth.userId });
     } else {
         throw new UnauthorizedError('credentials_required', {
             message: 'You are not authorized to access this resource.',
@@ -41,8 +39,7 @@ const getProjectById = async ({
     auth: JwtToken;
     projectId: number;
 }): Promise<Project> => {
-    const { userId, role } = auth;
-    const permissions = authorizeRole(role);
+    const permissions = authorizeRole(auth.role);
 
     if (permissions.isAdmin || permissions.isHr) {
         const fProject = await projectDb.getProjectById({ id: projectId });
@@ -64,28 +61,30 @@ const updateProject = async ({
     projectId: number;
     projectInput: ProjectInput;
 }): Promise<Project> => {
-    const { userId, role } = auth;
+    if (!projectInput.id) throw new Error('ProjectInput Id is required.');
+
     const { id, name, color, userIds } = projectInput;
-    const permissions = authorizeRole(role);
 
-    if (id !== projectId) throw new Error('Project id mismatch.');
-
-    const project = await projectDb.getProjectById({ id });
-    if (!project) throw new Error(`Project with id <${id}> doesn't exist.`);
-
-    const dProject = await getDefaultProject();
-    if (dProject.getId() === project.getId()) throw new Error('Cannot update default project.');
-
-    const users = await userService.getUsersByIds({ userIds });
-
-    const uProject = new Project({
-        id,
-        name,
-        color,
-        users,
-    });
+    const permissions = authorizeRole(auth.role);
 
     if (permissions.isAdmin || permissions.isHr) {
+        if (id !== projectId) throw new Error('You are updating the wrong project.');
+
+        const project = await projectDb.getProjectById({ id });
+        if (!project) throw new Error(`Project with id <${id}> doesn't exist.`);
+
+        const dProject = await getDefaultProject();
+        if (dProject.getId() === project.getId()) throw new Error('Cannot update default project.');
+
+        const users = await userService.getUsersByIds({ userIds: userIds });
+
+        const uProject = new Project({
+            id,
+            name,
+            color,
+            users,
+        });
+
         return await projectDb.updateProject(uProject);
     } else {
         throw new UnauthorizedError('credentials_required', {
@@ -101,16 +100,15 @@ const deleteProjectById = async ({
     auth: JwtToken;
     projectId: number;
 }): Promise<Project> => {
-    const { userId, role } = auth;
-    const permissions = authorizeRole(role);
-
-    const project = await projectDb.getProjectById({ id: projectId });
-    if (!project) throw new Error(`Project with id <${projectId}> doesn't exist.`);
-
-    const dProject = await getDefaultProject();
-    if (dProject.getId() === project.getId()) throw new Error('Cannot delete default project.');
+    const permissions = authorizeRole(auth.role);
 
     if (permissions.isAdmin) {
+        const project = await projectDb.getProjectById({ id: projectId });
+        if (!project) throw new Error(`Project with id <${projectId}> doesn't exist.`);
+
+        const dProject = await getDefaultProject();
+        if (dProject.getId() === project.getId()) throw new Error('Cannot delete default project.');
+
         return await projectDb.deleteProject(project);
     } else {
         throw new UnauthorizedError('credentials_required', {
@@ -126,9 +124,9 @@ const createProject = async ({
     auth: JwtToken;
     projectInput: ProjectInput;
 }): Promise<Project> => {
-    const { userId, role } = auth;
-    const permissions = authorizeRole(role);
     const { name, color, userIds } = projectInput;
+
+    const permissions = authorizeRole(auth.role);
 
     if (!permissions.isAdmin) {
         throw new UnauthorizedError('credentials_required', {
@@ -158,9 +156,7 @@ const getDefaultProject = async (): Promise<Project> => {
     return project;
 };
 
-const addUsersToDefaultProject = async (projectInput: ProjectInput): Promise<Project> => {
-    const { userIds } = projectInput;
-
+const addUsersToDefaultProject = async (userIds: number[]): Promise<Project> => {
     const dProject = await getDefaultProject();
     const users = await userService.getUsersByIds({ userIds });
 

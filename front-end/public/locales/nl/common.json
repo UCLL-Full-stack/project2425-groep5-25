@@ -186,6 +186,19 @@
                     "unique": "Je kunt dezelfde gebruiker niet meer dan één keer selecteren."
                 }
             }
+        },
+        "projectUsersDetails": {
+            "title": "Gebruikers informatie"
+        },
+        "timeBlockSideForm": {
+            "title": "Werk loggen",
+            "start": "Start met werken",
+            "stop": "Werken stoppen",
+            "processing": "Even geduld...",
+            "input": {
+                "label": "Selecteer Project",
+                "placeholder": "Selecteer Project om te beginnen"
+            }
         }
     },
     "error": {
@@ -196,5 +209,10 @@
         "genericError": "Er is een fout opgetreden.",
         "projectNotFound": "Project not found",
         "projectDeletedOrNotLoaded": "The project may have been deleted or is unavailable"
+    },
+    "roles": {
+        "hr": "HR",
+        "admin": "Beheerder",
+        "user": "Gebruiker"
     }
 }

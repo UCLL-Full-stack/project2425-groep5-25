@@ -101,17 +101,15 @@ const timeBlockRouter = express.Router();
  *               items:
  *                 $ref: '#/components/schemas/TimeBlock'
  */
-timeBlockRouter.get(
-    '/',
-    async (req: Request & { auth: JwtToken }, res: Response, next: NextFunction) => {
-        try {
-            const timeBlocks = await timeBlockService.getAllTimeBlocks();
-            res.status(200).json(timeBlocks);
-        } catch (error) {
-            next(error);
-        }
-    },
-);
+timeBlockRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const reqHeader = req as Request & { auth: JwtToken };
+        const timeBlocks = await timeBlockService.getAllTimeBlocks();
+        res.status(200).json(timeBlocks);
+    } catch (error) {
+        next(error);
+    }
+});
 
 /**
  * @swagger
@@ -137,21 +135,19 @@ timeBlockRouter.get(
  *             schema:
  *               $ref: '#/components/schemas/TimeBlock'
  */
-timeBlockRouter.post(
-    '/',
-    async (req: Request & { auth: JwtToken }, res: Response, next: NextFunction) => {
-        try {
-            const timeBlockInput = <TimeBlockInput>req.body;
-            const result = await timeBlockService.createTimeBlock({
-                auth: req.auth,
-                timeBlockInput,
-            });
-            res.status(201).json(result);
-        } catch (error) {
-            next(error);
-        }
-    },
-);
+timeBlockRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const reqHeader = req as Request & { auth: JwtToken };
+        const timeBlockInput = <TimeBlockInput>req.body;
+        const result = await timeBlockService.createTimeBlock({
+            auth: reqHeader.auth,
+            timeBlockInput,
+        });
+        res.status(201).json(result);
+    } catch (error) {
+        next(error);
+    }
+});
 
 /**
  * @swagger
@@ -177,18 +173,16 @@ timeBlockRouter.post(
  *             schema:
  *               $ref: '#/components/schemas/TimeBlock'
  */
-timeBlockRouter.put(
-    '/',
-    async (req: Request & { auth: JwtToken }, res: Response, next: NextFunction) => {
-        try {
-            const result = await timeBlockService.updateTimeBlock({
-                auth: req.auth,
-            });
-            res.status(200).json(result);
-        } catch (error) {
-            next(error);
-        }
-    },
-);
+timeBlockRouter.put('/', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const reqHeader = req as Request & { auth: JwtToken };
+        const result = await timeBlockService.updateTimeBlock({
+            auth: reqHeader.auth,
+        });
+        res.status(200).json(result);
+    } catch (error) {
+        next(error);
+    }
+});
 
 export { timeBlockRouter };

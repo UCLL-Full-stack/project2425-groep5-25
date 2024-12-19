@@ -109,34 +109,40 @@ const TimeBlockSideForm: React.FC<Props> = ({ projects }: Props) => {
     return (
         <>
             {projects && (
-                <div className="max-w-md p-6 bg-white min-w-[250px] rounded-lg shadow-lg border border-gray-200">
-                    <div className="mb-4">
+                <div className="detail-container logger">
+                    <div className="text-center">
+                        <h2 className="mb-6">{t('components.timeBlockSideForm.title')}</h2>
+                    </div>
+                    <form className="form-container">
                         <ProjectSelectField
-                            label="Project"
+                            label={t('components.timeBlockSideForm.input.label')}
                             projects={projects}
                             value={selectedProject}
                             onChange={setSelectedProject}
                             validate={validateProject}
-                            placeholder="Selecteer Project"
+                            placeholder={t('components.timeBlockSideForm.input.placeholder')}
                             required
                         />
-                    </div>
 
-                    <Button
-                        onClick={handleButton}
-                        isLoading={isButtonLoading}
-                        isDisabled={isButtonLoading}
-                        isActive={isButtonActive}
-                        label={
-                            isButtonLoading
-                                ? 'Processing...'
-                                : isButtonActive
-                                  ? 'Start working'
-                                  : 'Stop working'
-                        }
-                    />
+                        <Button
+                            onClick={handleButton}
+                            isLoading={isButtonLoading}
+                            isDisabled={isButtonLoading}
+                            isActive={isButtonActive}
+                            type="submit"
+                            label={
+                                isButtonLoading
+                                    ? t('components.timeBlockSideForm.processing')
+                                    : isButtonActive
+                                      ? t('components.timeBlockSideForm.start')
+                                      : t('components.timeBlockSideForm.stop')
+                            }
+                        />
 
-                    {errorLabelMessage && <ErrorMessage errorLabelMessage={errorLabelMessage} />}
+                        {errorLabelMessage && (
+                            <ErrorMessage errorLabelMessage={errorLabelMessage} />
+                        )}
+                    </form>
                 </div>
             )}
         </>

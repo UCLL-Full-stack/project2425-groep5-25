@@ -51,7 +51,7 @@ const SignUp: React.FC = () => {
 
             setTimeout(() => {
                 router.push('/');
-            }, 2750);
+            }, 2000);
         } catch (error) {
             if (error instanceof Error) {
                 setErrorLabelMessage({
@@ -82,7 +82,7 @@ const SignUp: React.FC = () => {
     );
 };
 
-export const getServerSideProps = async (context) => {
+export const getServerSideProps = async (context: any) => {
     const { locale } = context;
 
     return {
