@@ -1,8 +1,10 @@
 import ErrorMessage from '@components/layout/ErrorMessage';
+import Button from '@components/shared/Button';
 import ProjectSelectField from '@components/shared/ProjectSelectField';
-import { ErrorLabelMessage, ProjectOutput } from '@types';
+import { timeBlockService } from '@services/timeBlockService';
+import { ErrorLabelMessage, ProjectOutput, TimeBlockInput } from '@types';
 import { useTranslation } from 'next-i18next';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 type Props = {
     projects: ProjectOutput[];
@@ -10,24 +12,98 @@ type Props = {
 
 const TimeBlockSideForm: React.FC<Props> = ({ projects }: Props) => {
     const { t } = useTranslation();
-    const [isButtonActive, setIsButtonActive] = useState<boolean>(false);
+    const [isButtonActive, setIsButtonActive] = useState<boolean>(true);
+    const [isButtonLoading, setIsButtonDisabled] = useState<boolean>(false);
     const [selectedProject, setSelectedProject] = useState<ProjectOutput | null>(null);
     const [errorLabelMessage, setErrorLabelMessage] = useState<ErrorLabelMessage>();
+
+    useEffect(() => {
+        const savedButtonState = localStorage.getItem('isButtonActive');
+        if (savedButtonState !== null) {
+            setIsButtonActive(JSON.parse(savedButtonState));
+        }
+    }, []);
+
+    useEffect(() => {
+        localStorage.setItem('isButtonActive', JSON.stringify(isButtonActive));
+    }, [isButtonActive]);
 
     const validateProject = (project: ProjectOutput | null) => {
         if (!project) return 'Please select a project';
         return null;
     };
 
-    const handleButtonClick = () => {
-        const error = validateProject(selectedProject);
-        if (error) {
-            setErrorLabelMessage({ label: t('error.unexpectedErrorLabel'), message: error });
+    const validate = (): boolean => {
+        let valid = true;
+
+        const nameError = validateProject(selectedProject);
+
+        if (nameError) {
+            setErrorLabelMessage({
+                label: t('error.unexpectedErrorLabel'),
+                message: nameError || t('error.unexpectedErrorMessage'),
+            });
+            return false;
+        }
+
+        return valid;
+    };
+
+    const handleButton = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setErrorLabelMessage(undefined);
+
+        setIsButtonDisabled(true);
+        setTimeout(() => setIsButtonDisabled(false), 2000);
+
+        if (isButtonActive) {
+            await createTimeBlock();
+        } else {
+            await stopTimeBlock();
+        }
+    };
+
+    const createTimeBlock = async () => {
+        if (!validate()) {
             return;
         }
 
-        setErrorLabelMessage(undefined);
-        setIsButtonActive((prev) => !prev);
+        try {
+            const formData: TimeBlockInput = { projectId: selectedProject!.id };
+            const timeBlockResponse = await timeBlockService.startTimeBlock(formData);
+            const timeBlockJson = await timeBlockResponse.json();
+
+            if (!timeBlockResponse.ok)
+                throw new Error(timeBlockJson.message || t('error.unexpectedErrorMessage'));
+
+            setIsButtonActive(false);
+        } catch (error) {
+            if (error instanceof Error) {
+                setErrorLabelMessage({
+                    label: t('error.unexpectedErrorLabel'),
+                    message: error.message || t('error.unexpectedErrorMessage'),
+                });
+            }
+        }
+    };
+
+    const stopTimeBlock = async () => {
+        try {
+            const timeBlockResponse = await timeBlockService.stopTimeBlock();
+            const timeBlockJson = await timeBlockResponse.json();
+
+            if (!timeBlockResponse.ok)
+                throw new Error(timeBlockJson.message || t('error.unexpectedErrorMessage'));
+
+            setIsButtonActive(true);
+        } catch (error) {
+            if (error instanceof Error) {
+                setErrorLabelMessage({
+                    label: t('error.unexpectedErrorLabel'),
+                    message: error.message || t('error.unexpectedErrorMessage'),
+                });
+            }
+        }
     };
 
     return (
@@ -46,13 +122,19 @@ const TimeBlockSideForm: React.FC<Props> = ({ projects }: Props) => {
                         />
                     </div>
 
-                    <button
-                        type="button"
-                        onClick={handleButtonClick}
-                        className={`w-full py-2 px-4 rounded-lg shadow-md text-white transition duration-200 
-                    ${isButtonActive ? 'bg-red-500 hover:bg-red-600' : 'bg-blue-500 hover:bg-blue-600'}`}>
-                        {isButtonActive ? 'Stop working' : 'Start working'}
-                    </button>
+                    <Button
+                        onClick={handleButton}
+                        isLoading={isButtonLoading}
+                        isDisabled={isButtonLoading}
+                        isActive={isButtonActive}
+                        label={
+                            isButtonLoading
+                                ? 'Processing...'
+                                : isButtonActive
+                                  ? 'Start working'
+                                  : 'Stop working'
+                        }
+                    />
 
                     {errorLabelMessage && <ErrorMessage errorLabelMessage={errorLabelMessage} />}
                 </div>

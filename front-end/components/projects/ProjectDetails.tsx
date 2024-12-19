@@ -1,4 +1,5 @@
 import ErrorMessage from '@components/layout/ErrorMessage';
+import Button from '@components/shared/Button';
 import ColorSelectField from '@components/shared/ColorSelectField';
 import InputField from '@components/shared/InputField';
 import UserSelectField from '@components/shared/UserSelectField';
@@ -125,12 +126,10 @@ const ProjectDetails: React.FC<Props> = ({
                         />
 
                         {!showUserSelector ? (
-                            <button
-                                type="button"
-                                className="bg-blue-500 text-white px-6 py-2 rounded-md shadow-md hover:bg-blue-600 transition duration-200"
-                                onClick={() => setShowUserSelector(true)}>
-                                {t('components.projectSidePanel.buttons.addUsers')}
-                            </button>
+                            <Button
+                                label={t('components.projectSidePanel.buttons.addUsers')}
+                                onClick={() => setShowUserSelector(true)}
+                            />
                         ) : (
                             <UserSelectField
                                 label={t('components.projectDetails.labels.users')}
