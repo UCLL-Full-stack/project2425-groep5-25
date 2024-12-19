@@ -2,7 +2,7 @@ import styles from '@styles/InputField.module.css';
 import { Color } from '@types';
 import React, { useState } from 'react';
 import Select from 'react-select';
-import { formatOptionLabel } from 'utils/optionFormatters';
+import { formatOptionLabelByValue } from 'utils/colorUtils';
 
 type Props = {
     label: string;
@@ -22,14 +22,12 @@ const ColorSelectField: React.FC<Props> = ({
     required,
 }: Props) => {
     const [error, setError] = useState<string | null>(null);
-    const options = Object.entries(Color)
-        .filter(([label, hex]) => hex !== Color.Gray)
-        .map(([label, hex]) => ({
-            value: hex,
-            label,
-        }));
+    const options = Object.entries(Color).map(([label, hex]) => ({
+        value: hex,
+        label,
+    }));
 
-    const validation = (newValue: Color | null) => {
+    const validateValue = (newValue: Color | null) => {
         if (newValue !== null && validate) {
             const validationError = validate(newValue);
             setError(validationError);
@@ -38,10 +36,10 @@ const ColorSelectField: React.FC<Props> = ({
         }
     };
 
-    const handleChange = (option: { value: string } | null) => {
+    const handleChange = (option: { value: any } | null) => {
         const selectedValue = (option?.value || null) as Color;
         onChange(selectedValue);
-        validation(selectedValue);
+        validateValue(selectedValue);
     };
 
     return (
@@ -52,10 +50,11 @@ const ColorSelectField: React.FC<Props> = ({
                     <Select
                         options={options}
                         value={options.find((option) => option.value === value) ?? null}
-                        required={required}
-                        placeholder={placeholder}
                         onChange={handleChange}
-                        formatOptionLabel={formatOptionLabel}
+                        formatOptionLabel={formatOptionLabelByValue}
+                        isSearchable={false}
+                        placeholder={placeholder}
+                        required={required}
                         className={`${error ? styles.error : ''}`}
                     />
                     {error && <span className={styles.errorMessage}>{error}</span>}

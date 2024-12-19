@@ -1,37 +1,31 @@
-import styles from '@styles/home.module.css';
-import Head from 'next/head';
+import MainLayout from '@components/layout/MainLayout';
+import handleTokenInfo from 'hooks/handleTokenInfo';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 const Home: React.FC = () => {
-    return (
-        <>
-            <Head>
-                <title>Time Tracker</title>
-                <meta name="description" content="Time tracker application" />
-                <meta name="viewport" content="width=device-width, initial-scale=1" />
-                <link rel="icon" href="/favicon.ico" />
-            </Head>
-            <main className={styles.main}>
-                <span>
-                    {/* <Image
-            src="/images/Logo-Icon.png"
-            alt="Time Tracker Logo"
-            className={styles.vercelLogo}
-            width={125}
-            height={125}
-            priority
-          /> */}
-                    <h1>Welcome!</h1>
-                </span>
+    const { t } = useTranslation();
+    const { userRole, userName, userFullName, userToken } = handleTokenInfo();
 
-                <div className={styles.description}>
-                    <p>
-                        This will be our main page, in the future, it remains empty for now. We make
-                        use of a of fake database, values or things stored will not be permanent.
-                    </p>
+    return (
+        <MainLayout title={t('pages.home.title')} description={t('pages.home.description')}>
+            <div className="flex justify-center w-full py-6">
+                <div className="text-center max-w-3xl w-full">
+                    <p className="text-lg text-gray-700">{t('pages.home.message')}</p>
                 </div>
-            </main>
-        </>
+            </div>
+        </MainLayout>
     );
+};
+
+export const getServerSideProps = async (context) => {
+    const { locale } = context;
+
+    return {
+        props: {
+            ...(await serverSideTranslations(locale ?? 'nl', ['common'])),
+        },
+    };
 };
 
 export default Home;

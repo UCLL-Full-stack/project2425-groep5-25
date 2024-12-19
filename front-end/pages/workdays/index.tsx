@@ -1,32 +1,33 @@
-import WeekPaginator from '@components/paginator/WeekPaginator';
-import Workday from '@components/workWeek/WorkDay';
+import MainLayout from '@components/layout/MainLayout';
+import WeekPaginator from '@components/shared/WeekPaginator';
+import TimeBlockSideForm from '@components/workWeek/TimeBlockSideForm';
+import Workweek from '@components/workWeek/WorkWeek';
+import { projectService } from '@services/projectService';
 import { workDayService } from '@services/workDayService';
-import styles from '@styles/home.module.css';
-import { WorkDayOutput } from '@types';
-import Head from 'next/head';
+import handleResponse from 'hooks/handleResponse';
+import handleTokenInfo from 'hooks/handleTokenInfo';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useEffect, useState } from 'react';
-import { getStartAndEndOfWeek } from 'utils/Date.utils';
+import useSWR, { mutate } from 'swr';
+import useInterval from 'use-interval';
+import { dateUtils } from 'utils/date';
 
 const Home: React.FC = () => {
-    const [workDays, setWorkDays] = useState<WorkDayOutput[]>([]);
+    const { t } = useTranslation();
+    const { handleApiResponse } = handleResponse();
+    const { userRole, userName, userFullName, userToken } = handleTokenInfo();
     const [currentWeekStart, setCurrentWeekStart] = useState<string>('');
     const [currentWeekEnd, setCurrentWeekEnd] = useState<string>('');
-
-    const getWorkWeekByDates = async (start: string, end: string) => {
-        const [response] = await Promise.all([workDayService.getWorkWeekByDates(start, end)]);
-        const [workDays] = await Promise.all([response.json()]);
-        setWorkDays(workDays);
-    };
 
     const updateWeek = (start: string, end: string) => {
         setCurrentWeekStart(start);
         setCurrentWeekEnd(end);
-        getWorkWeekByDates(start, end);
     };
 
     const resetToCurrentWeek = () => {
-        const today = new Date();
-        const { start, end } = getStartAndEndOfWeek(today);
+        const today = dateUtils.getLocalCurrentDate();
+        const { start, end } = dateUtils.getStartAndEndOfWeek(today);
         updateWeek(start, end);
     };
 
@@ -34,38 +35,74 @@ const Home: React.FC = () => {
         resetToCurrentWeek();
     }, []);
 
+    const getWorkWeekByDates = async (start: string, end: string) => {
+        try {
+            const [workDayResponse, projectsResponse] = await Promise.all([
+                workDayService.getWorkWeekByDates(start, end),
+                projectService.getAllProjectsByUserId(),
+            ]);
+
+            if (workDayResponse.ok && projectsResponse.ok) {
+                const [workDays, projects] = await Promise.all([
+                    handleApiResponse(workDayResponse),
+                    handleApiResponse(projectsResponse),
+                ]);
+
+                return { workDays, projects };
+            }
+            return null;
+        } catch (error) {
+            console.error('Error fetching data', error);
+            return null;
+        }
+    };
+
+    const { data, isLoading } = useSWR(
+        currentWeekStart && currentWeekEnd ? 'workWeekByDates' : null,
+        () => getWorkWeekByDates(currentWeekStart, currentWeekEnd),
+    );
+
+    useInterval(() => {
+        if (currentWeekStart && currentWeekEnd) {
+            mutate('workWeekByDates', getWorkWeekByDates(currentWeekStart, currentWeekEnd));
+        }
+    }, 1000);
+
     return (
         <>
-            <Head>
-                <title>Time Tracker</title>
-                <meta name="description" content="Time tracker application" />
-                <meta name="viewport" content="width=device-width, initial-scale=1" />
-                <link rel="icon" href="/favicon.ico" />
-            </Head>
-            <main className={styles.main}>
-                <h1>Workdays</h1>
-
-                <div className="d-flex gap-3 flex-column">
+            <MainLayout
+                title={t('pages.workDays.title')}
+                description={t('pages.workDays.description')}
+                isLoading={isLoading}
+                titleContent={
                     <WeekPaginator
                         currentWeekStart={currentWeekStart}
                         currentWeekEnd={currentWeekEnd}
                         updateWeek={updateWeek}
                         resetToCurrentWeek={resetToCurrentWeek}
                     />
-
-                    <div className="d-flex gap-3">
-                        {workDays.length > 0 ? (
-                            workDays.map((workday) => (
-                                <Workday key={workday.id} workday={workday} />
-                            ))
-                        ) : (
-                            <p>No workdays available for this week</p>
-                        )}
-                    </div>
-                </div>
-            </main>
+                }>
+                {data && (
+                    <>
+                        <div className="flex gap-6 mt-6 px-4 max-w-7xl">
+                            <Workweek workDays={data.workDays} />
+                            <TimeBlockSideForm projects={data.projects} />
+                        </div>
+                    </>
+                )}
+            </MainLayout>
         </>
     );
+};
+
+export const getServerSideProps = async (context) => {
+    const { locale } = context;
+
+    return {
+        props: {
+            ...(await serverSideTranslations(locale ?? 'nl', ['common'])),
+        },
+    };
 };
 
 export default Home;

@@ -1,28 +1,25 @@
-import ColorSelectField from '@components/selects/ColorSelectField';
-import InputField from '@components/selects/InputField';
-import UserSelectField from '@components/selects/UserSelectField';
-import ErrorMessage from '@components/shared/ErrorMessage';
+import ErrorMessage from '@components/layout/ErrorMessage';
+import ColorSelectField from '@components/shared/ColorSelectField';
+import InputField from '@components/shared/InputField';
+import UserSelectField from '@components/shared/UserSelectField';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { projectService } from '@services/projectService';
 import styles from '@styles/ProjectSidePanel.module.css';
-import { Color, ErrorLabelMessage, IdName, ProjectInput, ProjectOutput } from '@types';
+import { Color, ErrorLabelMessage, IdName, ProjectInput } from '@types';
+import { useTranslation } from 'next-i18next';
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 
 type Props = {
     userIdNames: Array<IdName>;
-    addProject: (project: ProjectOutput) => void;
     onProjectCreated: () => void;
     onClose: () => void;
 };
 
-const ProjectSidePanel: React.FC<Props> = ({
-    userIdNames,
-    addProject,
-    onProjectCreated,
-    onClose,
-}: Props) => {
+const ProjectSidePanel: React.FC<Props> = ({ userIdNames, onProjectCreated, onClose }: Props) => {
+    const { t } = useTranslation();
+
     const [name, setName] = useState<string | null>(null);
     const [color, setColor] = useState<Color | null>(null);
     const [userIds, setUserIds] = useState<number[]>([]);
@@ -30,21 +27,26 @@ const ProjectSidePanel: React.FC<Props> = ({
     const [errorLabelMessage, setErrorLabelMessage] = useState<ErrorLabelMessage>();
 
     const validateName = (name: string | null) => {
-        if (!name || name?.trim().length < 6)
-            return 'Project name must be at least 6 characters long';
+        if (!name?.trim()) return t('components.projectSidePanel.validate.name.required');
+        if (name.trim().length < 6) return t('components.projectSidePanel.validate.name.minLength');
+        if (name.trim().length > 15)
+            return t('components.projectSidePanel.validate.name.maxLength');
+        if (!/^[a-zA-Z0-9 ]+$/.test(name))
+            return t('components.projectSidePanel.validate.name.invalid');
         return null;
     };
 
     const validateColor = (color: Color | null) => {
-        if (!color || !Object.values(Color).includes(color))
-            return 'Please select a valid project color.';
+        if (!color?.trim()) return t('components.projectSidePanel.validate.color.required');
+        if (!Object.values(Color).includes(color))
+            return t('components.projectSidePanel.validate.color.invalid');
         return null;
     };
 
     const validateUserSelection = (value: number[]) => {
         const uniqueUserIds = new Set(value);
         if (uniqueUserIds.size !== value.length)
-            return 'You cannot select the same user more than once.';
+            return t('components.projectSidePanel.validate.users.unique');
         return null;
     };
 
@@ -57,8 +59,8 @@ const ProjectSidePanel: React.FC<Props> = ({
 
         if (nameError || colorError || userError) {
             setErrorLabelMessage({
-                label: 'Validation Error',
-                message: nameError || colorError || userError || '',
+                label: t('error.unexpectedErrorLabel'),
+                message: nameError || colorError || userError || t('error.unexpectedErrorMessage'),
             });
             return false;
         }
@@ -75,31 +77,21 @@ const ProjectSidePanel: React.FC<Props> = ({
         }
 
         try {
-            const projectFormData: ProjectInput = { name: name!, color: color!, userIds };
-            const [projectResponse] = await Promise.all([
-                projectService.createProject(projectFormData),
-            ]);
+            const formData: ProjectInput = { name: name!, color: color!, userIds };
+            const [projectResponse] = await Promise.all([projectService.createProject(formData)]);
             const [projectJson] = await Promise.all([projectResponse.json()]);
 
             if (!projectResponse.ok)
-                throw new Error(
-                    projectJson.message || 'An error occurred while creating the project.',
-                );
+                throw new Error(projectJson.message || t('error.unexpectedErrorMessage'));
 
             onProjectCreated();
-            toast.success(`Project was created successfully!`);
+            toast.success(t('components.projectSidePanel.toast.success'));
             onClose();
-
-            addProject({
-                id: projectJson.id,
-                name: projectJson.name,
-                color: projectJson.color,
-            });
         } catch (error) {
             if (error instanceof Error) {
                 setErrorLabelMessage({
-                    label: 'Validation Error',
-                    message: error.message,
+                    label: t('error.unexpectedErrorLabel'),
+                    message: error.message || t('error.unexpectedErrorMessage'),
                 });
             }
         }
@@ -109,7 +101,7 @@ const ProjectSidePanel: React.FC<Props> = ({
         <>
             <div className={styles['side-panel']}>
                 <div className={styles['title-container']}>
-                    <h6>Create a project</h6>
+                    <h6>{t('components.projectSidePanel.title')}</h6>
                     <button onClick={onClose} className={styles.closeButton}>
                         <FontAwesomeIcon icon={faTimes} />
                     </button>
@@ -117,44 +109,46 @@ const ProjectSidePanel: React.FC<Props> = ({
                 <form onSubmit={createProject} className={styles['form-container']}>
                     <InputField
                         type="text"
-                        label="Project Name:"
+                        label={t('components.projectSidePanel.labels.name')}
                         value={name}
                         onChange={setName}
                         validate={validateName}
-                        placeholder="Enter name"
+                        placeholder={t('components.projectSidePanel.placeholders.name')}
                         required
                     />
 
                     <ColorSelectField
-                        label="Select Color:"
+                        label={t('components.projectSidePanel.labels.color')}
                         value={color}
                         onChange={setColor}
                         validate={validateColor}
-                        placeholder="Select a color"
+                        placeholder={t('components.projectSidePanel.placeholders.color')}
                         required
                     />
 
                     {!showUserSelector ? (
                         <button
                             type="button"
-                            className={styles.button}
+                            className="bg-blue-500 text-white px-6 py-2 rounded-md shadow-md hover:bg-blue-600 transition duration-200"
                             onClick={() => setShowUserSelector(true)}>
-                            Want to add users?
+                            {t('components.projectSidePanel.buttons.addUsers')}
                         </button>
                     ) : (
                         <UserSelectField
-                            label="Select Users:"
+                            label={t('components.projectSidePanel.labels.users')}
                             userIdNames={userIdNames}
                             value={userIds}
                             onChange={setUserIds}
                             validate={validateUserSelection}
-                            placeholder="Select users (optional)"
+                            placeholder={t('components.projectSidePanel.placeholders.users')}
                             required={false}
                         />
                     )}
 
-                    <button type="submit" className={styles.button}>
-                        Create Project
+                    <button
+                        type="submit"
+                        className="bg-blue-500 text-white px-6 py-2 rounded-md shadow-md hover:bg-blue-600 transition duration-200">
+                        {t('components.projectSidePanel.buttons.createProject')}
                     </button>
 
                     {errorLabelMessage && <ErrorMessage errorLabelMessage={errorLabelMessage} />}

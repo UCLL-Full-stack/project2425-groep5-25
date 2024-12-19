@@ -3,6 +3,7 @@ import cors from 'cors';
 import * as dotenv from 'dotenv';
 import express, { NextFunction, Request, Response } from 'express';
 import { expressjwt } from 'express-jwt';
+import helmet from 'helmet';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { projectRouter } from './controller/project.routes';
@@ -12,10 +13,26 @@ import { workDayRouter } from './controller/workDay.routes';
 import { processEnv } from './env/env';
 
 const app = express();
-dotenv.config();
+app.use(helmet());
 
+app.use(
+    helmet.contentSecurityPolicy({
+        directives: {
+            connectSrc: ["'self'", 'https://api.ucll.be'],
+        },
+    }),
+);
+
+dotenv.config();
 const publicApiPort = processEnv.getApiPort();
 const publicFrontEndPort = processEnv.getFrontEndPort();
+
+app.use(
+    cors({
+        origin: `http://localhost:${publicFrontEndPort}`,
+    }),
+    bodyParser.json(),
+);
 
 app.use(
     expressjwt({
@@ -24,13 +41,6 @@ app.use(
     }).unless({
         path: ['/api-docs', /^\/api-docs\/.*/, '/users/signup', '/users/login', '/status'],
     }),
-);
-
-app.use(
-    cors({
-        origin: `http://localhost:${publicFrontEndPort}`,
-    }),
-    bodyParser.json(),
 );
 
 app.use('/projects', projectRouter);
@@ -58,6 +68,8 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     if (err.name === 'UnauthorizedError') {
         res.status(401).json({ status: 'Unauthorized', message: err.message });
+    } else if (err.name === 'NotFoundError') {
+        res.status(404).json({ status: 'Not Found', message: err.message });
     } else {
         res.status(400).json({ status: 'Application Error', message: err.message });
     }

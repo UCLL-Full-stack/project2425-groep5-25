@@ -78,6 +78,29 @@ export class WorkSchedule extends ModelBase {
         return this.user;
     }
 
+    getHoursForDay(date: Date): number | null {
+        const dayOfWeek = date.getDay();
+
+        switch (dayOfWeek) {
+            case 0:
+                return this.sundayHours;
+            case 1:
+                return this.mondayHours;
+            case 2:
+                return this.tuesdayHours;
+            case 3:
+                return this.wednesdayHours;
+            case 4:
+                return this.thursdayHours;
+            case 5:
+                return this.fridayHours;
+            case 6:
+                return this.saturdayHours;
+            default:
+                return null;
+        }
+    }
+
     validate(workSchedule: {
         mondayHours: number;
         tuesdayHours: number;
@@ -88,32 +111,26 @@ export class WorkSchedule extends ModelBase {
         sundayHours: number;
         user: User;
     }) {
-        if (workSchedule.mondayHours < 0)
-            throw new Error('WorkSchedule validation: Monday hours must be a non-negative number');
+        if (workSchedule.mondayHours < 0 || workSchedule.mondayHours > 8)
+            throw new Error('WorkSchedule validation: Monday hours must be in range of 0-8');
 
-        if (workSchedule.tuesdayHours < 0)
-            throw new Error('WorkSchedule validation: Tuesday hours must be a non-negative number');
+        if (workSchedule.tuesdayHours < 0 || workSchedule.tuesdayHours > 8)
+            throw new Error('WorkSchedule validation: Tuesday hours must be in range of 0-8');
 
-        if (workSchedule.wednesdayHours < 0)
-            throw new Error(
-                'WorkSchedule validation: Wednesday hours must be a non-negative number',
-            );
+        if (workSchedule.wednesdayHours < 0 || workSchedule.wednesdayHours > 8)
+            throw new Error('WorkSchedule validation: Wednesday hours must be in range of 0-8');
 
-        if (workSchedule.thursdayHours < 0)
-            throw new Error(
-                'WorkSchedule validation: Thursday hours must be a non-negative number',
-            );
+        if (workSchedule.thursdayHours < 0 || workSchedule.thursdayHours > 8)
+            throw new Error('WorkSchedule validation: Thursday hours must be in range of 0-8');
 
-        if (workSchedule.fridayHours < 0)
-            throw new Error('WorkSchedule validation: Friday hours must be a non-negative number');
+        if (workSchedule.fridayHours < 0 || workSchedule.fridayHours > 8)
+            throw new Error('WorkSchedule validation: Friday hours must be in range of 0-8');
 
-        if (workSchedule.saturdayHours < 0)
-            throw new Error(
-                'WorkSchedule validation: Saturday hours must be a non-negative number',
-            );
+        if (workSchedule.saturdayHours < 0 || workSchedule.saturdayHours > 8)
+            throw new Error('WorkSchedule validation: Saturday hours must be in range of 0-8');
 
-        if (workSchedule.sundayHours < 0)
-            throw new Error('WorkSchedule validation: Sunday hours must be a non-negative number');
+        if (workSchedule.sundayHours < 0 || workSchedule.sundayHours > 8)
+            throw new Error('WorkSchedule validation: Sunday hours must be in range of 0-8');
 
         if (!workSchedule.user || !workSchedule.user.getId())
             throw new Error('WorkSchedule validation: User must be valid');

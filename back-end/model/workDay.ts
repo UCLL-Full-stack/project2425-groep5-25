@@ -4,6 +4,7 @@ import {
     User as PrismaUser,
     Workday as PrismaWorkday,
 } from '@prisma/client';
+import { dateUtils } from '../utils/date';
 import { ModelBase } from './modelBase';
 import { TimeBlock } from './timeBlock';
 import { User } from './user';
@@ -72,7 +73,7 @@ export class WorkDay extends ModelBase {
     }) {
         if (!workDay.date) throw new Error('WorkDay validation: Date is required');
 
-        if (workDay.date > new Date())
+        if (workDay.date > dateUtils.getLocalCurrentDate())
             throw new Error('WorkDay validation: Date cannot be in the future');
 
         if (workDay.expectedHours < 0)
@@ -101,7 +102,7 @@ export class WorkDay extends ModelBase {
             this.expectedHours === workDay.getExpectedHours() &&
             this.achievedHours === workDay.getAchievedHours() &&
             this.date === workDay.getDate() &&
-            this.user == workDay.getUser() &&
+            this.user.equals(workDay.getUser()) &&
             this.timeBlocks.every((timeBlock, index) =>
                 timeBlock.equals(workDay.getTimeBlocks()[index]),
             )

@@ -30,6 +30,20 @@ export type ProjectToUserInput = {
     userIds?: number[];
 };
 
+export type UserInput = {
+    id?: number;
+    userName?: string;
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+    passWord?: string;
+};
+
+export type TimeBlockInput = {
+    id?: number;
+    projectId?: number;
+};
+
 /* OUTPUT VALUES */
 
 export type WorkDayOutput = {
