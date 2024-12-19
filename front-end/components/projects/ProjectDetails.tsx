@@ -96,7 +96,7 @@ const ProjectDetails: React.FC<Props> = ({
         setName(project.name);
         setColor(getColorEnumFromHex(project.color));
         setUserIds(project.users?.map((user) => user.id ?? 0) || []);
-    }, []);
+    }, [project, userIdNames]);
 
     return (
         <>

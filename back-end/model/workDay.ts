@@ -60,8 +60,8 @@ export class WorkDay extends ModelBase {
         return this.user;
     }
 
-    getTimeBlocks(): TimeBlock[] | undefined {
-        return this.timeBlocks;
+    getTimeBlocks(): TimeBlock[] {
+        return this.timeBlocks || [];
     }
 
     validate(workDay: {
@@ -103,6 +103,7 @@ export class WorkDay extends ModelBase {
             this.achievedHours === workDay.getAchievedHours() &&
             this.date === workDay.getDate() &&
             this.user.equals(workDay.getUser()) &&
+            this.timeBlocks !== undefined &&
             this.timeBlocks.every((timeBlock, index) =>
                 timeBlock.equals(workDay.getTimeBlocks()[index]),
             )
