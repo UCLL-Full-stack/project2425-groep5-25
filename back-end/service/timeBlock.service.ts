@@ -42,8 +42,12 @@ const createTimeBlock = async ({
     if (!fProject) throw new Error(`Project with id <${projectId}> doesn't exist.`);
 
     const userProjects = await projectDb.getProjectsByUserId({ userId });
-    if (!userProjects.includes(fProject))
+    const isUserAssignedToProject = userProjects.some(
+        (project) => project.getId() === fProject.getId(),
+    );
+    if (!isUserAssignedToProject) {
         throw new Error(`User <${userId}> is not assigned to project <${projectId}>.`);
+    }
 
     const fWorkSchedule = await workScheduleDb.getWorkScheduleByUserId({ userId });
     if (!fWorkSchedule) throw new Error(`Work schedule for user <${userId}> doesn't exist.`);

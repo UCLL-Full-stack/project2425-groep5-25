@@ -11,7 +11,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useEffect, useState } from 'react';
 import useSWR, { mutate } from 'swr';
 import useInterval from 'use-interval';
-import { getStartAndEndOfWeek } from 'utils/dateTimeUtils';
+import { dateUtils } from 'utils/date';
 
 const Home: React.FC = () => {
     const { t } = useTranslation();
@@ -26,8 +26,8 @@ const Home: React.FC = () => {
     };
 
     const resetToCurrentWeek = () => {
-        const today = new Date();
-        const { start, end } = getStartAndEndOfWeek(today);
+        const today = dateUtils.getLocalCurrentDate();
+        const { start, end } = dateUtils.getStartAndEndOfWeek(today);
         updateWeek(start, end);
     };
 

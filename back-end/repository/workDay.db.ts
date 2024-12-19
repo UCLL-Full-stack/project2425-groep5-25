@@ -7,7 +7,10 @@ const getAllWorkDays = async (): Promise<WorkDay[]> => {
         const workDaysPrisma = await database.workday.findMany({
             include: {
                 user: true,
-                timeBlocks: { include: { project: { include: { users: true } } } },
+                timeBlocks: {
+                    include: { project: { include: { users: true } } },
+                    orderBy: { startTime: 'asc' },
+                },
             },
         });
 
@@ -35,7 +38,10 @@ const getWorkWeekByDates = async ({
             },
             include: {
                 user: true,
-                timeBlocks: { include: { project: { include: { users: true } } } },
+                timeBlocks: {
+                    include: { project: { include: { users: true } } },
+                    orderBy: { startTime: 'asc' },
+                },
             },
             orderBy: { date: 'asc' },
         });
@@ -65,7 +71,10 @@ const getCurrentWorkDay = async ({
             },
             include: {
                 user: true,
-                timeBlocks: { include: { project: { include: { users: true } } } },
+                timeBlocks: {
+                    include: { project: { include: { users: true } } },
+                    orderBy: { startTime: 'asc' },
+                },
             },
         });
 
@@ -92,7 +101,10 @@ const createWorkDay = async (workDay: WorkDay): Promise<WorkDay> => {
             },
             include: {
                 user: true,
-                timeBlocks: { include: { project: { include: { users: true } } } },
+                timeBlocks: {
+                    include: { project: { include: { users: true } } },
+                    orderBy: { startTime: 'asc' },
+                },
             },
         });
 
