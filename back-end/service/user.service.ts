@@ -11,7 +11,7 @@ const getAllUsers = async (): Promise<User[]> => {
 };
 
 const getAllUsersIdName = async (): Promise<IdName[]> => {
-    const users = await userDb.getAllUsers();
+    const users = await getAllUsers();
     return users.map((user) => ({
         id: user.getId(),
         name: `${user.getFirstName()} ${user.getLastName()}`,
