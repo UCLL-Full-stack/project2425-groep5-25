@@ -51,7 +51,7 @@ const SignUp: React.FC = () => {
 
             setTimeout(() => {
                 router.push('/');
-            }, 2750);
+            }, 2000);
         } catch (error) {
             if (error instanceof Error) {
                 setErrorLabelMessage({

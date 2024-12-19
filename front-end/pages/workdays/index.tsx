@@ -42,12 +42,9 @@ const Home: React.FC = () => {
                 projectService.getAllProjectsByUserId(),
             ]);
 
+            const projects = await handleApiResponse(projectsResponse);
             if (workDayResponse.ok && projectsResponse.ok) {
-                const [workDays, projects] = await Promise.all([
-                    handleApiResponse(workDayResponse),
-                    handleApiResponse(projectsResponse),
-                ]);
-
+                const workDays = await handleApiResponse(workDayResponse);
                 return { workDays, projects };
             }
             return null;
@@ -75,16 +72,18 @@ const Home: React.FC = () => {
                 description={t('pages.workDays.description')}
                 isLoading={isLoading}
                 titleContent={
-                    <WeekPaginator
-                        currentWeekStart={currentWeekStart}
-                        currentWeekEnd={currentWeekEnd}
-                        updateWeek={updateWeek}
-                        resetToCurrentWeek={resetToCurrentWeek}
-                    />
+                    data && (
+                        <WeekPaginator
+                            currentWeekStart={currentWeekStart}
+                            currentWeekEnd={currentWeekEnd}
+                            updateWeek={updateWeek}
+                            resetToCurrentWeek={resetToCurrentWeek}
+                        />
+                    )
                 }>
                 {data && (
                     <>
-                        <div className="flex gap-6 mt-6 px-4 max-w-7xl">
+                        <div className="main-workweek-container">
                             <Workweek workDays={data.workDays} />
                             <TimeBlockSideForm projects={data.projects} />
                         </div>

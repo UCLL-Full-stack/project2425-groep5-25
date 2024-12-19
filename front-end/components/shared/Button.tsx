@@ -6,6 +6,7 @@ type Props = {
     isDisabled?: boolean;
     label: string;
     isActive?: boolean;
+    type?: 'button' | 'submit' | 'reset';
 };
 
 const Button: React.FC<Props> = ({
@@ -14,10 +15,11 @@ const Button: React.FC<Props> = ({
     isDisabled = false,
     label,
     isActive = true,
+    type = 'button',
 }: Props) => {
     return (
         <button
-            type="button"
+            type={type}
             onClick={onClick}
             disabled={isDisabled}
             className={`w-full py-2 px-4 rounded-lg shadow-md text-white transition duration-100 

@@ -1,6 +1,7 @@
 import MainLayout from '@components/layout/MainLayout';
 import ProjectOverviewTable from '@components/projects/ProjectOverviewTable';
 import ProjectSidePanel from '@components/projects/ProjectSidePanel';
+import Button from '@components/shared/Button';
 import { projectService } from '@services/projectService';
 import { userService } from '@services/userService';
 import handleResponse from 'hooks/handleResponse';
@@ -53,11 +54,11 @@ const Home: React.FC = () => {
                 titleContent={
                     data &&
                     userRole === 'admin' && (
-                        <button
+                        <Button
+                            type="button"
+                            label={t('pages.projects.addProject')}
                             onClick={() => setIsSidePanelOpen(!isSidePanelOpen)}
-                            className="bg-blue-500 text-white px-6 py-2 rounded-md shadow-md hover:bg-blue-600 transition duration-200">
-                            {t('pages.projects.addProject')}
-                        </button>
+                        />
                     )
                 }>
                 {data && (

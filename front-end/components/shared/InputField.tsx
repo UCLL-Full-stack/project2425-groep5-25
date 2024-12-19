@@ -1,4 +1,3 @@
-import styles from '@styles/InputField.module.css';
 import React, { useState } from 'react';
 
 type Props = {
@@ -39,18 +38,18 @@ const InputField: React.FC<Props> = ({
 
     return (
         <>
-            <div className={styles.inputContainer}>
+            <div className="input-container">
                 <label>{label}</label>
-                <div className={styles.innerInputContainer}>
+                <div className="input-inner-container">
                     <input
                         type={type}
                         value={value || ''}
                         onChange={(e) => handleChange({ value: e.target.value })}
                         placeholder={placeholder}
                         required={required}
-                        className={`${styles.input} ${error ? styles.error : ''}`}
+                        className={`input input-h ${error ? 'error' : ''}`}
                     />
-                    {error && <span className={styles.errorMessage}>{error}</span>}
+                    {error && <span className="input-error-message">{error}</span>}
                 </div>
             </div>
         </>

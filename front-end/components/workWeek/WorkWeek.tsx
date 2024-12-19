@@ -13,15 +13,13 @@ const Workweek: React.FC<Props> = ({ workDays }: Props) => {
     return (
         <>
             {workDays && (
-                <div className="flex gap-3">
+                <div className="workweek-container">
                     {workDays.length ? (
                         workDays.map((workday: WorkDayOutput) => (
                             <Workday key={workday.id} workday={workday} />
                         ))
                     ) : (
-                        <p className="text-center text-gray-500">
-                            {t('pages.workDays.noWorkdays')}
-                        </p>
+                        <p className="text-center">{t('pages.workDays.noWorkdays')}</p>
                     )}
                 </div>
             )}
