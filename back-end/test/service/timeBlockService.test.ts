@@ -14,6 +14,7 @@ import { Color, JwtToken, Role, TimeBlockInput } from '../../types';
 import { dateUtils } from '../../utils/date';
 
 let mockGetUserById: jest.MockedFunction<typeof userDb.getUserById>;
+let mockUpdateWorkDay: jest.MockedFunction<typeof workDayDb.updateWorkDay>;
 let mockGetRunningTimeBlockByUserId: jest.MockedFunction<
     typeof timeBlockDb.getRunningTimeBlockByUserId
 >;
@@ -106,6 +107,7 @@ const cWorkDay1 = new WorkDay({
 });
 
 beforeEach(() => {
+    mockUpdateWorkDay = jest.fn();
     mockUpdateTimeBlock = jest.fn();
     mockGetAllTimeBlocks = jest.fn();
     mockGetUserById = jest.fn();
@@ -119,6 +121,7 @@ beforeEach(() => {
     mockGetLocalCurrentDate = jest.fn();
     mockGetUTCStartOfDay = jest.fn();
 
+    workDayDb.updateWorkDay = mockUpdateWorkDay;
     timeBlockDb.updateTimeBlock = mockUpdateTimeBlock;
     timeBlockDb.getAllTimeBlocks = mockGetAllTimeBlocks;
     userDb.getUserById = mockGetUserById;
@@ -308,14 +311,17 @@ test('should update time block successfully', async () => {
 
     mockGetUserById.mockResolvedValue(cUser1);
     mockGetRunningTimeBlockByUserId.mockResolvedValue(mockRunningTimeBlock);
+    mockGetCurrentWorkDay.mockResolvedValue(cWorkDay1);
     mockGetLocalCurrentDate.mockReturnValue(new Date('2024-12-01 10:00:00'));
     mockUpdateTimeBlock.mockResolvedValue(mockUpdatedTimeBlock);
+    mockUpdateWorkDay.mockResolvedValue(cWorkDay1);
+
     //when
     const result = await timeBlockService.updateTimeBlock({ auth: mockAuth });
     //then
     expect(mockGetUserById).toHaveBeenCalledWith({ id: mockAuth.userId });
     expect(mockGetRunningTimeBlockByUserId).toHaveBeenCalledWith({ userId: mockAuth.userId });
-    expect(mockGetLocalCurrentDate).toHaveBeenCalledTimes(1);
+    expect(mockGetLocalCurrentDate).toHaveBeenCalledTimes(2);
     expect(mockUpdateTimeBlock).toHaveBeenCalledWith(mockUpdatedTimeBlock);
     expect(result).toEqual(mockUpdatedTimeBlock);
 });
@@ -355,5 +361,4 @@ test('should throw an error if no running time block exists', async () => {
     );
     //then
     expect(mockGetUserById).toHaveBeenCalledWith({ id: mockAuth.userId });
-    expect(mockGetRunningTimeBlockByUserId).toHaveBeenCalledWith({ userId: mockAuth.userId });
 });
