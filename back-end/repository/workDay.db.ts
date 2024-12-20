@@ -8,6 +8,7 @@ const getAllWorkDays = async (): Promise<WorkDay[]> => {
             include: {
                 user: true,
                 timeBlocks: {
+                    where: { endTime: { not: null } },
                     include: { project: { include: { users: true } } },
                     orderBy: { startTime: 'asc' },
                 },
@@ -39,6 +40,7 @@ const getWorkWeekByDates = async ({
             include: {
                 user: true,
                 timeBlocks: {
+                    where: { endTime: { not: null } },
                     include: { project: { include: { users: true } } },
                     orderBy: { startTime: 'asc' },
                 },
@@ -72,6 +74,7 @@ const getCurrentWorkDay = async ({
             include: {
                 user: true,
                 timeBlocks: {
+                    where: { endTime: { not: null } },
                     include: { project: { include: { users: true } } },
                     orderBy: { startTime: 'asc' },
                 },
@@ -102,6 +105,7 @@ const createWorkDay = async (workDay: WorkDay): Promise<WorkDay> => {
             include: {
                 user: true,
                 timeBlocks: {
+                    where: { endTime: { not: null } },
                     include: { project: { include: { users: true } } },
                     orderBy: { startTime: 'asc' },
                 },
@@ -115,9 +119,44 @@ const createWorkDay = async (workDay: WorkDay): Promise<WorkDay> => {
     }
 };
 
+const updateWorkDay = async (workDay: WorkDay): Promise<WorkDay> => {
+    try {
+        const updatedWorkDayPrisma = await database.workday.update({
+            where: {
+                id: workDay.getId(),
+            },
+            data: {
+                date: workDay.getDate(),
+                expectedHours: workDay.getExpectedHours(),
+                achievedHours: workDay.getAchievedHours(),
+                timeBlocks: {
+                    connect: workDay
+                        .getTimeBlocks()
+                        .map((timeBlock) => ({ id: timeBlock.getId() })),
+                },
+                user: { connect: { id: workDay.getUser().getId() } },
+            },
+            include: {
+                user: true,
+                timeBlocks: {
+                    where: { endTime: { not: null } },
+                    include: { project: { include: { users: true } } },
+                    orderBy: { startTime: 'asc' },
+                },
+            },
+        });
+
+        return WorkDay.from(updatedWorkDayPrisma);
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
+
 export const workDayDb = {
     getAllWorkDays,
     getWorkWeekByDates,
     getCurrentWorkDay,
     createWorkDay,
+    updateWorkDay,
 };
