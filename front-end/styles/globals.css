@@ -58,7 +58,12 @@
     .header-user-role,
     .header-nav-link,
     .header-logout-button {
-        @apply text-white text-lg font-medium hover:border-b-2 border-white;
+        @apply text-white text-lg font-medium;
+    }
+
+    .header-nav-link,
+    .header-logout-button {
+        @apply hover:border-b-2 border-white;
     }
 
     .link-active {
@@ -132,7 +137,7 @@
 /* Table Components */
 @layer components {
     .table-container {
-        @apply min-w-full text-sm table-auto border-collapse;
+        @apply min-w-full text-sm table-auto border-collapse border border-gray-300;
     }
 
     .table-header {
@@ -144,7 +149,7 @@
     }
 
     .table-body {
-        @apply border border-gray-300 tracking-wider;
+        @apply tracking-wider;
     }
 
     .table-body > tr {
@@ -152,7 +157,7 @@
     }
 
     .table-body > tr > td {
-        @apply px-4 py-2 text-sm text-gray-900 border-r;
+        @apply px-4 py-2 text-sm text-gray-900 border-r text-left;
     }
 
     .table-body > tr > td:last-child {

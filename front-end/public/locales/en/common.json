@@ -4,7 +4,13 @@
         "home": {
             "title": "Home",
             "description": "Time Tracker Home",
-            "message": "Welcome to our homepage! Here we are working on the core functionalities of our project. Please note that we are currently using a temporary database. All data entered here is not permanent and is for testing purposes only. Thank you for your patience while we continue to build and improve!"
+            "message": "Welcome to our homepage! Here we are working on the core functionalities of our project. Please note that we are currently using a temporary database. All data entered here is not permanent and is for testing purposes only. Thank you for your patience while we continue to build and improve!",
+            "table": {
+                "title": "Created Users",
+                "userName": "Username",
+                "passWord": "Password",
+                "role": "Role"
+            }
         },
         "workDays": {
             "title": "Workdays",
