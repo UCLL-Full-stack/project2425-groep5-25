@@ -7,6 +7,7 @@ import { projectDb } from '../../repository/project.db';
 import { projectService } from '../../service/project.service';
 import { userService } from '../../service/user.service';
 import { Color, JwtToken, ProjectInput, Role } from '../../types';
+
 let mockGetAllProjects: jest.MockedFunction<typeof projectDb.getAllProjects>;
 let mockGetProjectsByUserId: jest.MockedFunction<typeof projectDb.getProjectsByUserId>;
 let mockGetProjectById: jest.MockedFunction<typeof projectDb.getProjectById>;
@@ -36,46 +37,54 @@ const cUser2 = new User({
     passWord: '@Password123!',
     role: 'admin' as Role,
 });
+
 const defaultProject = new Project({
     id: 1,
     name: 'General',
     color: Color.Gray,
     users: [],
 });
+
 const updatedDefaultProject = new Project({
     id: 1,
     name: 'General',
     color: Color.Gray,
     users: [cUser1, cUser2],
 });
+
 const cProject5 = new Project({
     id: 5,
     name: 'Test22',
     color: Color.Gray,
     users: [cUser1],
 });
+
 const cProject3 = new Project({
     name: 'Test1234',
     color: Color.Orange,
     users: [cUser2],
 });
+
 const cProject2 = new Project({
     name: 'Test123',
     color: Color.Blue,
     users: [cUser2],
 });
+
 const projectForUpdate = new Project({
     id: 5,
     name: 'updatedname',
     color: Color.Red,
     users: [cUser2],
 });
+
 const updatedProject = new Project({
     id: 5,
     name: 'updatedname',
     color: Color.Red,
     users: [cUser1, cUser2],
 });
+
 const mockAllProjects = [cProject5, cProject2, cProject3];
 const mockProjectsForUser = [cProject3, cProject2];
 const projectIdForSearchFunctions = 1;
@@ -89,6 +98,7 @@ const projectInputForDefaultProject: ProjectInput = {
     color: Color.Red,
     userIds: [2],
 };
+
 //expectedProject does not contain a id field because it shows that which given input triggered our mocks and while creating a project pretty normal you dont have a id
 const expectedProject = new Project({
     name: projectInput.name!,
@@ -106,6 +116,7 @@ beforeEach(() => {
     mockDeleteProject = jest.fn();
     mockCreateProject = jest.fn();
     mockaddUsersToProject = jest.fn();
+
     projectDb.addUsersToProject = mockaddUsersToProject;
     projectDb.createProject = mockCreateProject;
     projectDb.deleteProject = mockDeleteProject;
@@ -116,9 +127,11 @@ beforeEach(() => {
     projectDb.getAllProjects = mockGetAllProjects;
     projectDb.getProjectById = mockGetProjectById;
 });
+
 afterEach(() => {
     jest.clearAllMocks();
 });
+
 //getAllProjects
 test('should return all projects for admin and hr ', async () => {
     //given
@@ -131,6 +144,7 @@ test('should return all projects for admin and hr ', async () => {
 
     expect(mockGetAllProjects).toHaveBeenCalledTimes(1);
 });
+
 test('should not return all projects instead should return your project(getProjectByUserId) user ', async () => {
     //given
     mockGetProjectsByUserId.mockResolvedValue(mockProjectsForUser);
@@ -142,6 +156,7 @@ test('should not return all projects instead should return your project(getProje
 
     //here we wont expect our mockGetAllProject to be called not even once therefore not used our service should lead to getProjectsByUserId once role given as user and here we are mocking that to return projects for user.
 });
+
 test('should  throw an error if user not authorized  ', async () => {
     //given
     //when
@@ -163,6 +178,7 @@ test('should  return projects for a user(getProjectByUserId) ', async () => {
     expect(mockGetProjectsByUserId).toHaveBeenCalledWith({ userId: 1 });
     expect(result).toEqual(mockProjectsForUser);
 });
+
 test('should  throw an error if user not authorized  ', async () => {
     //given
     //when
@@ -184,6 +200,7 @@ test('should  return a project with given id  ', async () => {
     expect(mockGetProjectById).toHaveBeenCalledWith({ id: 5 }); //here we pass projectId in service but in projectdb that we ve already mocked expects just id not a projectId SO if you are mockin db give expected parameter names as well good to know .
     expect(result).toEqual(cProject5);
 });
+
 test('should  throw an error if project does not exist  ', async () => {
     //given
     mockGetProjectById.mockResolvedValue(null); //here we are mocking behaviour of db for an empty project return so that it throws an error
@@ -195,6 +212,7 @@ test('should  throw an error if project does not exist  ', async () => {
     //then
     expect(mockGetProjectById).toHaveBeenCalledWith({ id: 1 });
 });
+
 test('should  throw an error if user not authorized  ', async () => {
     //given
     //when
@@ -210,6 +228,7 @@ test('should  throw an error if user not authorized  ', async () => {
         }),
     );
 });
+
 //updateProject
 test('should  update a project with given id and project input ', async () => {
     //given
@@ -233,6 +252,7 @@ test('should  update a project with given id and project input ', async () => {
     expect(result).toEqual(updatedProject);
     //cant lie it was pain in the back door ohh
 });
+
 test('should throw an error if given project id mismatch ', async () => {
     //given
     //when
@@ -245,6 +265,7 @@ test('should throw an error if given project id mismatch ', async () => {
         }),
     ).rejects.toThrow('You are updating the wrong project.');
 });
+
 test('should throw an error if given project id does not exist ', async () => {
     //given
     mockGetProjectById.mockResolvedValue(null);
@@ -261,6 +282,7 @@ test('should throw an error if given project id does not exist ', async () => {
 
     expect(mockGetProjectById).toHaveBeenCalledTimes(1);
 });
+
 test('should throw an error if given project is default project ', async () => {
     //given
     mockGetProjectByName.mockResolvedValue(defaultProject);
@@ -279,6 +301,7 @@ test('should throw an error if given project is default project ', async () => {
     expect(mockGetProjectById).toHaveBeenCalledTimes(1);
     expect(mockGetProjectByName).toHaveBeenCalledTimes(1);
 });
+
 test('should  throw an error if user is not authorized ', async () => {
     //given
     // you need to mock everything beside updataProject because authorization is last step
@@ -302,6 +325,7 @@ test('should  throw an error if user is not authorized ', async () => {
 
     //here we pass projectId in service but in projectdb that we ve already mocked expects just id not a projectId SO if you are mockin db give expected parameter names as well good to know .
 });
+
 //deleteProjectById
 test('should  delete a project with given id ', async () => {
     //given
@@ -321,6 +345,7 @@ test('should  delete a project with given id ', async () => {
     expect(mockDeleteProject).toHaveBeenCalledTimes(1);
     expect(result).toEqual(cProject5);
 });
+
 test('should throw an error if the project with given id does not exist ', async () => {
     //given
     mockGetProjectById.mockResolvedValue(null);
@@ -338,6 +363,7 @@ test('should throw an error if the project with given id does not exist ', async
 
     expect(mockGetProjectById).toHaveBeenCalledTimes(1);
 });
+
 test('should throw an error if the given project is default  ', async () => {
     //given
     mockGetProjectById.mockResolvedValue(defaultProject);
@@ -357,6 +383,7 @@ test('should throw an error if the given project is default  ', async () => {
     expect(mockGetProjectByName).toHaveBeenCalledWith({ name: 'General' });
     expect(mockGetProjectByName).toHaveBeenCalledTimes(1);
 });
+
 test('should throw an error if use is not authorized ', async () => {
     //given
     mockGetProjectById.mockResolvedValue(cProject5);
@@ -376,6 +403,7 @@ test('should throw an error if use is not authorized ', async () => {
         }),
     );
 });
+
 //createProject
 test('should create a project with given project input ', async () => {
     //given
@@ -397,6 +425,7 @@ test('should create a project with given project input ', async () => {
 
     expect(result).toEqual(projectForUpdate);
 });
+
 test('should throw an error if given user is not authorized ', async () => {
     //given
     //when
@@ -412,6 +441,7 @@ test('should throw an error if given user is not authorized ', async () => {
         }),
     );
 });
+
 test('should throw an error if given project already exists', async () => {
     //given
 
@@ -428,6 +458,7 @@ test('should throw an error if given project already exists', async () => {
     expect(mockGetProjectByName).toHaveBeenCalledTimes(1);
     expect(mockGetProjectByName).toHaveBeenCalledWith({ name: projectInput.name });
 });
+
 //addUsersToDefaultProject
 test('should add Users to the default project with given project input ', async () => {
     //given

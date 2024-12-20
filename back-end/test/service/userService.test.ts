@@ -37,6 +37,7 @@ const userInput: UserInput = {
     lastName: 'Crabbé',
     email: 'roel.crabbe@example.com',
 };
+
 const mockAllUsers: User[] = [cUser1, cUser2];
 const mockAllUsersIdNames: IdName[] = [
     {
@@ -91,6 +92,7 @@ beforeEach(() => {
 afterEach(() => {
     jest.clearAllMocks();
 });
+
 //getAllUsers
 test('should return all users ', async () => {
     //given
@@ -103,6 +105,7 @@ test('should return all users ', async () => {
 
     expect(mockGetAllUsers).toHaveBeenCalledTimes(1);
 });
+
 //getAllUsersIdName
 test('should  return all user id names  ', async () => {
     //given
@@ -113,6 +116,7 @@ test('should  return all user id names  ', async () => {
     expect(mockGetAllUsers).toHaveBeenCalledWith();
     expect(result).toEqual(mockAllUsersIdNames);
 });
+
 //getUserByUserName
 test('should return user with given username ', async () => {
     //given
@@ -124,6 +128,7 @@ test('should return user with given username ', async () => {
     expect(mockGetUserByUserName).toHaveBeenCalledTimes(1);
     expect(result).toEqual(cUser1);
 });
+
 test('should throw an error if given username does not exist ', async () => {
     //given
     mockGetUserByUserName.mockResolvedValue(null);
@@ -135,6 +140,7 @@ test('should throw an error if given username does not exist ', async () => {
     expect(mockGetUserByUserName).toHaveBeenCalledWith({ userName: userName });
     expect(mockGetUserByUserName).toHaveBeenCalledTimes(1);
 });
+
 //getUserById
 test('should return the user with given id ', async () => {
     //given
@@ -147,6 +153,7 @@ test('should return the user with given id ', async () => {
     expect(mockGetUserById).toBeCalledWith({ id: userId });
     expect(mockGetUserById).toHaveBeenCalledTimes(1);
 });
+
 test('should throw an error if given user id  does not exist ', async () => {
     //given
     mockGetUserById.mockResolvedValue(null);
@@ -158,6 +165,7 @@ test('should throw an error if given user id  does not exist ', async () => {
     expect(mockGetUserById).toHaveBeenCalledWith({ id: userId });
     expect(mockGetUserById).toHaveBeenCalledTimes(1);
 });
+
 //getUsersByIds
 test('should return the users with given ids ', async () => {
     //given
@@ -170,6 +178,7 @@ test('should return the users with given ids ', async () => {
     expect(mockGetUsersByIds).toBeCalledWith({ userIds: userIds });
     expect(mockGetUsersByIds).toHaveBeenCalledTimes(1);
 });
+
 test('should throw an error if given user ids  does not exist ', async () => {
     //given
     mockGetUsersByIds.mockResolvedValue([]);
@@ -287,6 +296,7 @@ test('Given correct credentials, user will be authenticated successfully', async
         role: validUser.getRole(),
     });
 });
+
 test('Given incorrect credentials, an error is thrown with message "Invalid credentials."', async () => {
     // given
     const invalidUser = new User({

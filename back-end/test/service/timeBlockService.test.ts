@@ -47,29 +47,34 @@ const cUser2 = new User({
     passWord: '@Password123!',
     role: 'admin' as Role,
 });
+
 const defaultProject = new Project({
     id: 1,
     name: 'General',
     color: Color.Gray,
     users: [],
 });
+
 const updatedDefaultProject = new Project({
     id: 1,
     name: 'General',
     color: Color.Gray,
     users: [cUser1, cUser2],
 });
+
 const cProject5 = new Project({
     id: 5,
     name: 'Test22',
     color: Color.Gray,
     users: [cUser1],
 });
+
 const cProject3 = new Project({
     name: 'Test1234',
     color: Color.Orange,
     users: [cUser2],
 });
+
 const cProject2 = new Project({
     name: 'Test123',
     color: Color.Blue,
@@ -91,6 +96,7 @@ const mockSchedule = new WorkSchedule({
     sundayHours: 0,
     user: cUser1,
 });
+
 const cWorkDay1 = new WorkDay({
     expectedHours: 8,
     achievedHours: 7,
@@ -162,6 +168,7 @@ test('should create a time block successfully', async () => {
     expect(mockCreateTimeBlock).toHaveBeenCalledTimes(1);
     expect(result).toBeInstanceOf(TimeBlock);
 });
+
 test('should throw an error if user already has a running time block', async () => {
     //given
     const mockAuth: JwtToken = { role: 'user', userId: 1 };
@@ -255,6 +262,7 @@ test('should throw an error if user does not exist', async () => {
     expect(mockGetUserById).toHaveBeenCalledWith({ id: mockAuth.userId });
     expect(mockGetUserById).toHaveBeenCalledTimes(1);
 });
+
 test('should throw an error if the user is not authorized', async () => {
     //given
     const mockAuth: JwtToken = { role: 'invalid_role' as Role, userId: 1 };
@@ -270,6 +278,7 @@ test('should throw an error if the user is not authorized', async () => {
         timeBlockService.createTimeBlock({ auth: mockAuth, timeBlockInput: mockTimeBlockInput }),
     ).rejects.toThrowError('You are not authorized to access this resource.');
 });
+
 test('should return all time blocks successfully', async () => {
     //given
     const mockTimeBlocks: TimeBlock[] = [cTimeBlock2, cTimeBlock3];
@@ -280,6 +289,7 @@ test('should return all time blocks successfully', async () => {
     expect(mockGetAllTimeBlocks).toHaveBeenCalledTimes(1);
     expect(result).toEqual(mockTimeBlocks);
 });
+
 test('should update time block successfully', async () => {
     //given
     const mockAuth: JwtToken = { role: 'user', userId: 1 };
@@ -309,6 +319,7 @@ test('should update time block successfully', async () => {
     expect(mockUpdateTimeBlock).toHaveBeenCalledWith(mockUpdatedTimeBlock);
     expect(result).toEqual(mockUpdatedTimeBlock);
 });
+
 test('should throw an error if user is not authorized', async () => {
     //given
     const mockAuth: JwtToken = { role: 'guest' as Role, userId: 1 };

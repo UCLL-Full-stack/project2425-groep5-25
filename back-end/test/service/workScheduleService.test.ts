@@ -10,8 +10,10 @@ let mockCreateWorkSchedule: jest.MockedFunction<typeof workScheduleDb.createWork
 
 beforeEach(() => {
     mockCreateWorkSchedule = jest.fn();
+
     workScheduleDb.createWorkSchedule = mockCreateWorkSchedule;
 });
+
 afterEach(() => {
     jest.clearAllMocks();
 });
@@ -27,6 +29,7 @@ test('should create a work schedule with default values', async () => {
         passWord: '@Password123!',
         role: 'user' as Role,
     });
+
     const expectedWorkSchedule = new WorkSchedule({
         mondayHours: 8,
         tuesdayHours: 8,

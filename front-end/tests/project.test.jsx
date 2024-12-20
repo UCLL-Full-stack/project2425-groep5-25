@@ -2,6 +2,7 @@ import ProjectOverviewTable from '@components/projects/ProjectOverviewTable';
 import '@testing-library/jest-dom';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { useRouter } from 'next/router';
+
 jest.mock('next/router', () => ({
     useRouter: jest.fn(),
 }));
