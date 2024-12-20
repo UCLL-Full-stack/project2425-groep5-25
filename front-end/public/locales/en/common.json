@@ -4,7 +4,8 @@
         "home": {
             "title": "Home",
             "description": "Time Tracker Home",
-            "message": "Welcome to our homepage! Here we are working on the core functionalities of our project. Please note that we are currently using a temporary database. All data entered here is not permanent and is for testing purposes only. Thank you for your patience while we continue to build and improve!",
+            "welcome": "Welcome on our homepage ",
+            "message": "Currently this page is empty. And our application is in beta mode. We use a database so all data you enter will be permanent. Be sure to check out our projects and workdays pages!",
             "table": {
                 "title": "Created Users",
                 "userName": "Username",

@@ -4,7 +4,8 @@
         "home": {
             "title": "Home",
             "description": "Time Tracker Home",
-            "message": "Welkom op onze hoofdpagina! Hier werken we aan de kernfunctionaliteiten van ons project. Houd er rekening mee dat we momenteel gebruikmaken van een tijdelijke database. Alle gegevens die hier worden ingevoerd, zijn niet permanent en dienen enkel voor testdoeleinden. Bedankt voor je geduld terwijl we blijven bouwen en verbeteren!",
+            "welcome": "Welkom op onze hoofdpagina ",
+            "message": "Momenteel is deze pagina nog leeg. En is ons applicatie in een beta mode. We maken gebruik van een database dus alle gegevens die je ingeeft zullen permanent zijn. Kijk zeker eens rond op onze projecten en werkdagen pagina's!",
             "table": {
                 "title": "Aangemaakte gebruikers",
                 "userName": "Gebruikersnaam",

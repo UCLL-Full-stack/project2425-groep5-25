@@ -4,7 +4,8 @@
         "home": {
             "title": "Anasayfa",
             "description": "Zaman İzleyici Anasayfa",
-            "message": "Ana sayfamıza hoş geldiniz! Burada projemizin temel işlevleri üzerinde çalışıyoruz. Şu anda geçici bir veritabanı kullanıyoruz, bu nedenle buraya girilen tüm veriler kalıcı değildir ve yalnızca test amaçlıdır. İnşa etmeye ve geliştirmeye devam ederken sabrınız için teşekkür ederiz!",
+            "welcome": "Ana sayfamıza hoş geldiniz ",
+            "message": "Bu sayfa şu anda boş. Ve uygulamamız beta modundadır. Girdiğiniz tüm verilerin kalıcı olması için bir veritabanı kullanıyoruz. Projelerimize ve çalışma günleri sayfalarımıza mutlaka göz atın!",
             "table": {
                 "title": "Oluşturulan Kullanıcılar",
                 "userName": "Kullanıcı Adı",

@@ -37,9 +37,12 @@ const Home: React.FC = () => {
     return (
         <MainLayout title={t('pages.home.title')} description={t('pages.home.description')}>
             <div className="flex justify-center w-full py-6">
-                <div className="text-center max-w-3xl w-full">
+                <div className="flex flex-col gap-4 max-w-2xl text-center w-full">
                     {userRole ? (
-                        <p className="text-lg text-gray-700">{t('pages.home.message')}</p>
+                        <>
+                            <h2>{t('pages.home.welcome') + userFullName}</h2>
+                            <p className="text-lg text-gray-700">{t('pages.home.message')}</p>
+                        </>
                     ) : (
                         <div className="flex flex-col gap-8 items-center justify-center">
                             <h2 className="text-xl font-semibold">{t('pages.home.table.title')}</h2>
