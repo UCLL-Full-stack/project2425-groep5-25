@@ -2,7 +2,7 @@ import { ProjectOutput } from '@types';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { formatOptionLabelByColor, getColorName } from 'utils/colorUtils';
+import { formatOptionLabelByColor, getColorName } from '../../utils/colorUtils';
 
 type Props = {
     projects: Array<ProjectOutput>;
