@@ -1,6 +1,6 @@
 import { WorkDayOutput } from '@types';
-
 import { dateUtils } from '@utils/date';
+import { useTranslation } from 'react-i18next';
 import TimeBlock from './TimeBlock';
 
 type props = {
@@ -8,6 +8,7 @@ type props = {
 };
 
 const Workday: React.FC<props> = ({ workday }) => {
+    const { t } = useTranslation();
     const dateNr = dateUtils.getDate(workday.date);
     const dateName = dateUtils.getDayInitials(workday.date);
 
@@ -35,10 +36,9 @@ const Workday: React.FC<props> = ({ workday }) => {
     const expectedHours = dateUtils.numberToDateString(workday.expectedHours);
     const achievedHours = dateUtils.numberToDateString(totalAchievedHours / 60);
 
-    console.log(workday);
     return (
         <>
-            {workday && Array.isArray(workday.timeBlocks) && workday.timeBlocks.length > 0 && (
+            {workday && Array.isArray(workday.timeBlocks) && workday.timeBlocks.length > 0 ? (
                 <div className="workday-container detail-container">
                     <div className="workday-header-container">
                         <span>
@@ -54,6 +54,8 @@ const Workday: React.FC<props> = ({ workday }) => {
                         ))}
                     </div>
                 </div>
+            ) : (
+                <p className="text-center">{t('pages.workDays.noWorkdays')}</p>
             )}
         </>
     );

@@ -19,7 +19,6 @@ type Props = {
 
 const ProjectSidePanel: React.FC<Props> = ({ userIdNames, onProjectCreated, onClose }: Props) => {
     const { t } = useTranslation();
-
     const [name, setName] = useState<string | null>(null);
     const [color, setColor] = useState<Color | null>(null);
     const [userIds, setUserIds] = useState<number[]>([]);
@@ -30,7 +29,7 @@ const ProjectSidePanel: React.FC<Props> = ({ userIdNames, onProjectCreated, onCl
     const validateName = (name: string | null) => {
         if (!name?.trim()) return t('components.projectSidePanel.validate.name.required');
         if (name.trim().length < 6) return t('components.projectSidePanel.validate.name.minLength');
-        if (name.trim().length > 15)
+        if (name.trim().length > 30)
             return t('components.projectSidePanel.validate.name.maxLength');
         if (!/^[a-zA-Z0-9 ]+$/.test(name))
             return t('components.projectSidePanel.validate.name.invalid');

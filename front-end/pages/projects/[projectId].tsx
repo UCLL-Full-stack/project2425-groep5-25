@@ -3,6 +3,7 @@ import MainLayout from '@components/layout/MainLayout';
 import ProjectDetails from '@components/projects/ProjectDetails';
 import ProjectUsersDetails from '@components/projects/ProjectUsersDetails';
 import Button from '@components/shared/Button';
+import ConfirmationDialog from '@components/shared/ConfirmationDialog';
 import handleResponse from '@hooks/handleResponse';
 import handleTokenInfo from '@hooks/handleTokenInfo';
 import { projectService } from '@services/projectService';
@@ -24,6 +25,7 @@ const ProjectById: React.FC = () => {
     const { userRole, userName, userFullName, userToken } = handleTokenInfo();
     const [errorLabelMessage, setErrorLabelMessage] = useState<ErrorLabelMessage>();
     const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(false);
+    const [isTryingToDelete, setIsTryingToDelete] = useState<boolean>(false);
     const [isDeleted, setIsDeleted] = useState(false);
 
     const getProjectByIdAndUsersIdName = async () => {
@@ -97,16 +99,16 @@ const ProjectById: React.FC = () => {
         }
     };
 
-    const deleteProject = async () => {
+    const deleteProject = () => {
+        setIsTryingToDelete(true);
         setErrorLabelMessage(undefined);
-
-        const confirmDelete = window.confirm(t('pages.projects.deleteConfirmation'));
-        if (!confirmDelete) {
-            return;
-        }
 
         setIsButtonDisabled(true);
         setTimeout(() => setIsButtonDisabled(false), 2000);
+    };
+
+    const confirmDelete = async () => {
+        setIsTryingToDelete(false);
 
         try {
             const [projectResponse] = await Promise.all([
@@ -136,6 +138,10 @@ const ProjectById: React.FC = () => {
                 });
             }
         }
+    };
+
+    const cancelDelete = () => {
+        setIsTryingToDelete(false);
     };
 
     const getTitle = () => {
@@ -194,6 +200,14 @@ const ProjectById: React.FC = () => {
                         )}
                     </div>
                 </div>
+
+                {isTryingToDelete && (
+                    <ConfirmationDialog
+                        onDelete={confirmDelete}
+                        onClose={cancelDelete}
+                        label={t('pages.projects.deleteConfirmation')}
+                    />
+                )}
             </MainLayout>
         </>
     );
