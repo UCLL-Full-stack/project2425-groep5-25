@@ -29,7 +29,8 @@
             "description": "Zaman İzleyici Projeler",
             "addProject": "Proje Ekle",
             "success": "Proje başarıyla güncellendi!",
-            "deleteProject": "Bu projeyi silmek istiyor musunuz?"
+            "deleteProject": "Bu projeyi silmek istiyor musunuz?",
+            "deleteConfirmation": "Bu projeyi silmek istediğinizden emin misiniz?"
         },
         "login": {
             "title": "Giriş Yap",
@@ -121,6 +122,9 @@
         "colorSelectField": {},
         "projectSidePanel": {
             "title": "Proje Ekle",
+            "toast": {
+                "success": "Proje başarıyla oluşturuldu!"
+            },
             "labels": {
                 "name": "Proje Adı",
                 "color": "Renk Seç",

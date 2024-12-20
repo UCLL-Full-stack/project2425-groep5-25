@@ -29,7 +29,8 @@
             "description": "Time Tracker Projecten",
             "addProject": "Project toevoegen",
             "success": "Project is succesvol bijgewerkt!",
-            "deleteProject": "Verwijder dit project?"
+            "deleteProject": "Verwijder dit project?",
+            "deleteConfirmation": "Ben je zeker dat je dit project wil verwijderen?"
         },
         "login": {
             "title": "Inloggen",
@@ -121,6 +122,9 @@
         "colorSelectField": {},
         "projectSidePanel": {
             "title": "Project toevoegen",
+            "toast": {
+                "success": "Project is succesvol aangemaakt!"
+            },
             "labels": {
                 "name": "Projectnaam",
                 "color": "Selecteer Kleur",

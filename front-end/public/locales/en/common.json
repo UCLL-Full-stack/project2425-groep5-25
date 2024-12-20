@@ -29,7 +29,8 @@
             "description": "Time Tracker Projects",
             "addProject": "Add Project",
             "success": "Project successfully updated!",
-            "deleteProject": "Delete this project?"
+            "deleteProject": "Delete this project?",
+            "deleteConfirmation": "Are you sure you want to delete this project?"
         },
         "login": {
             "title": "Log In",
@@ -121,6 +122,9 @@
         "colorSelectField": {},
         "projectSidePanel": {
             "title": "Add Project",
+            "toast": {
+                "success": "Project is successfully created!"
+            },
             "labels": {
                 "name": "Project Name",
                 "color": "Select Color",

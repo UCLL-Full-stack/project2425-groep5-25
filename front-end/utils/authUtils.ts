@@ -1,4 +1,6 @@
 export const getLoggedInUser = () => {
+    if (typeof window === 'undefined') return null;
+
     const user = localStorage.getItem('loggedInUser');
     if (user) {
         try {
