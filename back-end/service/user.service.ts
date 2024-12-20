@@ -11,7 +11,7 @@ const getAllUsers = async (): Promise<User[]> => {
 };
 
 const getAllUsersIdName = async (): Promise<IdName[]> => {
-    const users = await userDb.getAllUsers();
+    const users = await getAllUsers();
     return users.map((user) => ({
         id: user.getId(),
         name: `${user.getFirstName()} ${user.getLastName()}`,
@@ -61,10 +61,11 @@ const userSignUp = async (userInput: UserInput): Promise<AuthenticationResponse>
 
     const createdUser = await userDb.createUser(newUser);
     await workScheduleService.createDefaultWorkSchedule(createdUser);
-    await projectService.addUsersToDefaultProject({ userIds: [createdUser.getId()] });
+    await projectService.addUsersToDefaultProject([createdUser.getId()!]);
+
     return {
         userId: createdUser.getId(),
-        token: generateJwtToken({ userId: createdUser.getId(), role: createdUser.getRole() }),
+        token: generateJwtToken({ userId: createdUser.getId()!, role: createdUser.getRole() }),
         userName: createdUser.getUserName(),
         fullName: `${createdUser.getFirstName()} ${createdUser.getLastName()}`,
         role: createdUser.getRole(),
@@ -80,7 +81,7 @@ const userAuthenticate = async (userInput: UserInput): Promise<AuthenticationRes
 
     return {
         userId: user.getId(),
-        token: generateJwtToken({ userId: user.getId(), role: user.getRole() }),
+        token: generateJwtToken({ userId: user.getId()!, role: user.getRole() }),
         userName: user.getUserName(),
         fullName: `${user.getFirstName()} ${user.getLastName()}`,
         role: user.getRole(),

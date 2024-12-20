@@ -3,41 +3,304 @@
 @tailwind utilities;
 
 @layer base {
+    html,
+    body {
+        @apply h-screen w-screen bg-gray-50;
+        overflow: hidden;
+    }
+}
+
+@layer base {
     h1 {
         @apply text-center text-indigo-800 text-3xl;
     }
 
     h2,
     h3 {
-        @apply px-6 text-indigo-800 text-xl pt-6;
+        @apply text-center text-indigo-800 text-xl;
     }
 
-    thead tr {
-        @apply px-6 py-3 text-left;
+    p {
+        @apply text-gray-500;
     }
 
-    tbody tr {
-        @apply border-b even:bg-gray-100 hover:bg-gray-200;
+    ::-webkit-scrollbar {
+        width: 0.5rem;
+        height: 0.5rem;
     }
 
-    td,
-    th {
-        @apply px-6 py-3;
+    ::-webkit-scrollbar-track {
+        background-color: #f3f4f6;
+        border-radius: 0.5rem;
     }
 
-    table {
-        @apply text-sm;
+    ::-webkit-scrollbar-corner {
+        background-color: transparent;
+        border-color: transparent;
     }
 
-    .customDatePickerWidth,
-    .customDatePickerWidth > div.react-datepicker-wrapper,
-    .customDatePickerWidth
-        > div
-        > div.react-datepicker__input-container
-        .customDatePickerWidth
-        > div
-        > div.react-datepicker__input-container
-        input {
-        @apply w-full;
+    ::-webkit-scrollbar-thumb {
+        background: #c9c9c9;
+        border-radius: 0.5rem;
     }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: #757575;
+    }
+}
+
+/* Navigation */
+@layer components {
+    .header-name-link {
+        @apply text-2xl font-bold text-gray-400 hover:text-white transition duration-300;
+    }
+
+    .header-user-role,
+    .header-nav-link,
+    .header-logout-button {
+        @apply text-white text-lg font-medium;
+    }
+
+    .header-nav-link,
+    .header-logout-button {
+        @apply hover:border-b-2 border-white;
+    }
+
+    .link-active {
+        @apply border-b-2 border-white;
+    }
+
+    .header-container,
+    .header-name-container,
+    .header-center-container,
+    .header-nav,
+    .header-language-container {
+        @apply flex items-center;
+    }
+
+    .header-container {
+        @apply p-4 border-b bg-gray-800 max-w-full max-h-full;
+    }
+
+    .header-name-container {
+        @apply flex-1 gap-2 justify-start;
+    }
+
+    .header-center-container {
+        @apply flex-1 justify-center;
+    }
+
+    .header-nav {
+        @apply gap-8 items-center;
+    }
+
+    .header-language-container {
+        @apply flex-1 justify-end;
+    }
+}
+
+/* Main Layout */
+@layer components {
+    .main {
+        @apply p-8 bg-gray-50 max-w-full max-h-full;
+    }
+
+    .main-title-container,
+    .main-title,
+    .main-title-extra {
+        @apply flex items-center;
+    }
+
+    .main-head-container {
+        @apply border-b border-gray-400 pb-6;
+    }
+
+    .main-title-container {
+        @apply justify-between px-8;
+        height: 2.5rem;
+    }
+
+    .main-div-container {
+        @apply flex flex-col gap-8;
+    }
+
+    .spinner-container {
+        @apply flex items-center justify-center h-full w-full;
+        height: 55vh;
+    }
+
+    .main-inner-container {
+        @apply flex flex-col gap-4 px-8;
+    }
+}
+
+/* Table Components */
+@layer components {
+    .table-container {
+        @apply min-w-full text-sm table-auto border-collapse border border-gray-300;
+    }
+
+    .table-header {
+        @apply bg-gray-200 tracking-wider;
+    }
+
+    .table-header > tr > th {
+        @apply px-4 py-2 text-left text-sm font-semibold text-gray-700 border-b border-gray-300;
+    }
+
+    .table-body {
+        @apply tracking-wider;
+    }
+
+    .table-body > tr {
+        @apply hover:bg-gray-200 border-b hover:border-gray-400 even:bg-gray-100;
+    }
+
+    .table-body > tr > td {
+        @apply px-4 py-2 text-sm text-gray-900 border-r text-left;
+    }
+
+    .table-body > tr > td:last-child {
+        @apply border-r-0;
+    }
+}
+
+/* Form Components */
+@layer components {
+    .form-container {
+        @apply flex flex-col gap-4;
+    }
+}
+
+/* Side Panel */
+@layer components {
+    .side-panel-container {
+        @apply flex flex-col gap-4 fixed top-0 right-0 w-96 h-full bg-gray-100 border-l border-gray-300 shadow p-6 z-10;
+    }
+
+    .side-panel-container > div {
+        @apply flex items-center justify-between gap-4;
+    }
+
+    .side-panel-container > div > button {
+        @apply flex items-center bg-transparent cursor-pointer text-blue-500 hover:text-blue-600 text-xl;
+    }
+}
+
+/* Error Container */
+@layer components {
+    .error-container {
+        @apply bg-red-200 p-2 px-4 rounded flex flex-col gap-1;
+    }
+
+    .error-container > label {
+        @apply font-semibold text-red-600;
+    }
+
+    .error-container > p {
+        @apply text-red-600;
+    }
+}
+
+/* Input Field */
+@layer components {
+    .input-container,
+    .input-inner-container {
+        @apply flex flex-col gap-1;
+    }
+
+    .input-container > label {
+        @apply text-gray-600;
+    }
+
+    .input {
+        @apply p-2 border border-gray-300 rounded outline-none focus:outline-none focus:ring-2 focus:ring-blue-500;
+    }
+
+    .input.error {
+        @apply outline-none ring-2 ring-red-500;
+    }
+
+    .input-error-message {
+        @apply text-red-500 text-sm mx-2;
+    }
+
+    .input-h {
+        @apply h-10;
+    }
+}
+
+/* Project Detail */
+@layer components {
+    .project-detail-container {
+        @apply px-20 max-w-full max-h-full;
+    }
+
+    .project-inner-detail-container {
+        @apply flex justify-between;
+    }
+
+    .detail-container {
+        @apply max-w-3xl p-8 bg-white shadow-md rounded-xl border border-gray-300;
+    }
+
+    .user-wrapper {
+        @apply mx-4 border border-gray-200 bg-gray-100 rounded-lg shadow-sm p-4;
+    }
+
+    .user-scroll {
+        @apply space-y-4 overflow-y-auto;
+        max-height: 38rem;
+    }
+}
+
+/* Workday */
+@layer components {
+    .main-workweek-container {
+        @apply flex justify-between;
+        max-height: 45rem;
+    }
+
+    .logger {
+        @apply h-fit;
+        min-width: 22rem;
+    }
+
+    .workweek-container {
+        @apply flex gap-2;
+    }
+
+    .workday-container {
+        @apply flex flex-col gap-2 w-fit border border-gray-400 p-2 rounded-lg;
+        height: 45rem;
+    }
+
+    .workday-header-container {
+        @apply flex justify-between items-center border-b border-gray-400 pb-1 px-2;
+    }
+
+    .worday-timeblock-container {
+        @apply flex flex-col gap-2 w-fit h-fit overflow-y-auto;
+    }
+
+    .timeblock-container {
+        @apply flex flex-col rounded gap-2 w-60 p-3 border-2 mx-1;
+    }
+
+    .timeblock-inner-container {
+        @apply flex justify-between items-center;
+    }
+}
+
+.confirmation-dialog-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
 }

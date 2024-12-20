@@ -1,6 +1,6 @@
 import { ProjectInput } from '@types';
+import { getToken } from '@utils/authUtils';
 import { processEnv } from 'env/env';
-import { getToken } from 'utils/authUtils';
 
 const getAllProjects = async () => {
     return await fetch(processEnv.getApiUrl() + `/projects`, {

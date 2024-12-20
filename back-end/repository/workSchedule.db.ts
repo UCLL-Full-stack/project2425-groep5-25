@@ -24,7 +24,11 @@ const createWorkSchedule = async (workSchedule: WorkSchedule): Promise<WorkSched
     }
 };
 
-const getWorkScheduleByUserId = async ({ userId }: { userId: number }): Promise<WorkSchedule> => {
+const getWorkScheduleByUserId = async ({
+    userId,
+}: {
+    userId: number;
+}): Promise<WorkSchedule | null> => {
     try {
         const workSchedulePrisma = await database.workSchedule.findFirst({
             where: {
@@ -35,7 +39,7 @@ const getWorkScheduleByUserId = async ({ userId }: { userId: number }): Promise<
             },
         });
 
-        return WorkSchedule.from(workSchedulePrisma);
+        return workSchedulePrisma ? WorkSchedule.from(workSchedulePrisma) : null;
     } catch (error) {
         console.error(error);
         throw new Error('Database error. See server log for details.');

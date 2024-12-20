@@ -1,9 +1,9 @@
+import Language from '@components/language/Language';
 import handleTokenInfo from 'hooks/handleTokenInfo';
 import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
-import Language from '../language/Language';
 
 const Header: React.FC = () => {
     const router = useRouter();
@@ -13,77 +13,76 @@ const Header: React.FC = () => {
     const handleLogout = () => {
         localStorage.clear();
 
-        toast.success(t('header.logoutSuccess'));
+        toast.success(t('components.navigation.logoutSuccess'));
 
         setTimeout(() => {
-            router.push('/login');
-        }, 2750);
+            router.push('/');
+        }, 2000);
     };
 
     return (
         <>
-            <header className="flex justify-between items-center p-4 border-b bg-gray-800">
-                <div className="flex items-center space-x-2">
-                    <Link
-                        href="/"
-                        className="text-2xl font-bold text-gray-400 hover:text-white transition duration-300">
+            <header className="header-container">
+                <div className="header-name-container">
+                    <Link href="/" className="header-name-link">
                         {t('appName')}
                     </Link>
-                    {userRole && (userRole == 'admin' || userRole == 'hr') && (
-                        <span className="text-white text-lg font-medium">
-                            ({userRole === 'admin' ? 'Admin' : userRole === 'hr' ? 'HR' : ''})
-                        </span>
+                    {userRole && (userRole === 'admin' || userRole === 'hr') && (
+                        <span className="header-user-role">({t('roles.' + userRole)})</span>
                     )}
                 </div>
 
-                <nav className="flex space-x-6">
-                    <Link
-                        href="/"
-                        className={`text-white text-lg font-medium ${
-                            router.pathname === '/' ? 'border-b-2 border-white' : ''
-                        }`}>
-                        {t('components.navigation.home')}
-                    </Link>
-                    <Link
-                        href="/projects"
-                        className={`text-white text-lg font-medium ${
-                            router.pathname === '/projects' ? 'border-b-2 border-white' : ''
-                        }`}>
-                        {t('components.navigation.projects')}
-                    </Link>
-                    <Link
-                        href="/workdays"
-                        className={`text-white text-lg font-medium ${
-                            router.pathname === '/workdays' ? 'border-b-2 border-white' : ''
-                        }`}>
-                        {t('components.navigation.workDays')}
-                    </Link>
-                    {userRole ? (
-                        <button
-                            onClick={handleLogout}
-                            className="text-white text-lg font-medium hover:underline">
-                            {t('components.navigation.logout')}
-                        </button>
-                    ) : (
-                        <>
-                            <Link
-                                href="/login"
-                                className={`text-white text-lg font-medium ${
-                                    router.pathname === '/login' ? 'border-b-2 border-white' : ''
-                                }`}>
-                                {t('components.navigation.login')}
-                            </Link>
-                            <Link
-                                href="/signup"
-                                className={`text-white text-lg font-medium ${
-                                    router.pathname === '/signup' ? 'border-b-2 border-white' : ''
-                                }`}>
-                                {t('components.navigation.signUp')}
-                            </Link>
-                        </>
-                    )}
-                </nav>
-                <Language />
+                <div className="header-center-container">
+                    <nav className="header-nav">
+                        <Link
+                            href="/"
+                            className={`header-nav-link ${
+                                router.pathname === '/' ? 'link-active' : ''
+                            }`}>
+                            {t('components.navigation.home')}
+                        </Link>
+                        <Link
+                            href="/projects"
+                            className={`header-nav-link ${
+                                router.pathname === '/projects' ? 'link-active' : ''
+                            }`}>
+                            {t('components.navigation.projects')}
+                        </Link>
+                        <Link
+                            href="/workdays"
+                            className={`header-nav-link ${
+                                router.pathname === '/workdays' ? 'link-active' : ''
+                            }`}>
+                            {t('components.navigation.workDays')}
+                        </Link>
+                        {userRole ? (
+                            <button onClick={handleLogout} className="header-logout-button">
+                                {t('components.navigation.logout')}
+                            </button>
+                        ) : (
+                            <>
+                                <Link
+                                    href="/login"
+                                    className={`header-nav-link ${
+                                        router.pathname === '/login' ? 'link-active' : ''
+                                    }`}>
+                                    {t('components.navigation.login')}
+                                </Link>
+                                <Link
+                                    href="/signup"
+                                    className={`header-nav-link ${
+                                        router.pathname === '/signup' ? 'link-active' : ''
+                                    }`}>
+                                    {t('components.navigation.signUp')}
+                                </Link>
+                            </>
+                        )}
+                    </nav>
+                </div>
+
+                <div className="header-language-container">
+                    <Language />
+                </div>
             </header>
         </>
     );

@@ -4,7 +4,14 @@
         "home": {
             "title": "Home",
             "description": "Time Tracker Home",
-            "message": "Welkom op onze hoofdpagina! Hier werken we aan de kernfunctionaliteiten van ons project. Houd er rekening mee dat we momenteel gebruikmaken van een tijdelijke database. Alle gegevens die hier worden ingevoerd, zijn niet permanent en dienen enkel voor testdoeleinden. Bedankt voor je geduld terwijl we blijven bouwen en verbeteren!"
+            "welcome": "Welkom op onze hoofdpagina ",
+            "message": "Momenteel is deze pagina nog leeg. En is ons applicatie in een beta mode. We maken gebruik van een database dus alle gegevens die je ingeeft zullen permanent zijn. Kijk zeker eens rond op onze projecten en werkdagen pagina's!",
+            "table": {
+                "title": "Aangemaakte gebruikers",
+                "userName": "Gebruikersnaam",
+                "passWord": "Wachtwoord",
+                "role": "Rol"
+            }
         },
         "workDays": {
             "title": "Werkdagen",
@@ -22,7 +29,8 @@
             "description": "Time Tracker Projecten",
             "addProject": "Project toevoegen",
             "success": "Project is succesvol bijgewerkt!",
-            "deleteProject": "Verwijder dit project?"
+            "deleteProject": "Verwijder dit project?",
+            "deleteConfirmation": "Ben je zeker dat je dit project wil verwijderen?"
         },
         "login": {
             "title": "Inloggen",
@@ -114,6 +122,9 @@
         "colorSelectField": {},
         "projectSidePanel": {
             "title": "Project toevoegen",
+            "toast": {
+                "success": "Project is succesvol aangemaakt!"
+            },
             "labels": {
                 "name": "Projectnaam",
                 "color": "Selecteer Kleur",
@@ -156,6 +167,7 @@
         "errorMessage": {},
         "projectDetails": {
             "title": "Project bijwerken",
+            "noUsers": "Dit project heeft nog geen gebruikers",
             "labels": {
                 "name": "Projectnaam",
                 "color": "Selecteer Kleur",
@@ -186,6 +198,19 @@
                     "unique": "Je kunt dezelfde gebruiker niet meer dan één keer selecteren."
                 }
             }
+        },
+        "projectUsersDetails": {
+            "title": "Gebruikers informatie"
+        },
+        "timeBlockSideForm": {
+            "title": "Werk loggen",
+            "start": "Start met werken",
+            "stop": "Werken stoppen",
+            "processing": "Even geduld...",
+            "input": {
+                "label": "Selecteer Project",
+                "placeholder": "Selecteer Project om te beginnen"
+            }
         }
     },
     "error": {
@@ -196,5 +221,14 @@
         "genericError": "Er is een fout opgetreden.",
         "projectNotFound": "Project not found",
         "projectDeletedOrNotLoaded": "The project may have been deleted or is unavailable"
+    },
+    "roles": {
+        "hr": "HR",
+        "admin": "Beheerder",
+        "user": "Gebruiker"
+    },
+    "buttons": {
+        "yes": "Ja",
+        "no": "Nee"
     }
 }

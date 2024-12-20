@@ -4,7 +4,14 @@
         "home": {
             "title": "Home",
             "description": "Time Tracker Home",
-            "message": "Welcome to our homepage! Here we are working on the core features of our project. Please note that we are currently using a temporary database. All data entered here is not permanent and is for testing purposes only. Thank you for your patience as we continue building and improving!"
+            "welcome": "Welcome on our homepage ",
+            "message": "Currently this page is empty. And our application is in beta mode. We use a database so all data you enter will be permanent. Be sure to check out our projects and workdays pages!",
+            "table": {
+                "title": "Created Users",
+                "userName": "Username",
+                "passWord": "Password",
+                "role": "Role"
+            }
         },
         "workDays": {
             "title": "Workdays",
@@ -20,11 +27,14 @@
         "projects": {
             "title": "Projects",
             "description": "Time Tracker Projects",
-            "addProject": "Add Project"
+            "addProject": "Add Project",
+            "success": "Project successfully updated!",
+            "deleteProject": "Delete this project?",
+            "deleteConfirmation": "Are you sure you want to delete this project?"
         },
         "login": {
-            "title": "Login",
-            "description": "Time Tracker Login",
+            "title": "Log In",
+            "description": "Time Tracker Log In",
             "success": "Login successful. You will be redirected..."
         }
     },
@@ -54,19 +64,21 @@
             },
             "buttons": {
                 "signUp": "Sign Up",
-                "login": "Login"
+                "login": "Log In"
             },
             "validate": {
                 "firstName": {
                     "required": "First name is required",
                     "minLength": "First name must be at least 2 characters",
-                    "capitalLetter": "First name must start with a capital letter",
+                    "maxLength": "First name must be no more than 20 characters",
+                    "capitalLetter": "First name must start with an uppercase letter",
                     "lettersOnly": "First name can only contain letters (including accents)"
                 },
                 "lastName": {
                     "required": "Last name is required",
                     "minLength": "Last name must be at least 2 characters",
-                    "capitalLetter": "Last name must start with a capital letter",
+                    "maxLength": "Last name must be no more than 20 characters",
+                    "capitalLetter": "Last name must start with an uppercase letter",
                     "lettersOnly": "Last name can only contain letters (including accents)"
                 },
                 "email": {
@@ -76,11 +88,13 @@
                 "userName": {
                     "required": "Username is required",
                     "minLength": "Username must be at least 6 characters",
+                    "maxLenght": "Username must be no more than 30 characters",
                     "format": "Username can only contain letters, numbers, and underscores"
                 },
                 "passWord": {
                     "required": "Password is required",
                     "minLength": "Password must be at least 6 characters",
+                    "maxLength": "Password must be no more than 30 characters",
                     "uppercase": "Password must contain at least one uppercase letter",
                     "number": "Password must contain at least one number",
                     "special": "Password must contain at least one special character (@, $, !, %, *, ?, & or #)"
@@ -99,14 +113,18 @@
             "home": "Home",
             "projects": "Projects",
             "workDays": "Workdays",
-            "logout": "Logout",
-            "login": "Login",
+            "logout": "Log Out",
+            "login": "Log In",
             "signUp": "Sign Up",
-            "logoutSuccess": "You have logged out! You will be redirected..."
+            "logoutSuccess": "You have been logged out! You will be redirected..."
         },
         "inputField": {},
         "colorSelectField": {},
         "projectSidePanel": {
+            "title": "Add Project",
+            "toast": {
+                "success": "Project is successfully created!"
+            },
             "labels": {
                 "name": "Project Name",
                 "color": "Select Color",
@@ -118,11 +136,53 @@
                 "users": "Select users (optional)"
             },
             "buttons": {
-                "addUsers": "Add Users",
+                "addUsers": "Add or modify users",
                 "createProject": "Create Project"
             },
+            "validate": {
+                "name": {
+                    "required": "Project name is required",
+                    "minLength": "Project name must be at least 6 characters",
+                    "maxLength": "Project name must be no more than 30 characters",
+                    "invalid": "Project name can only contain letters, numbers, and spaces"
+                },
+                "color": {
+                    "required": "Color is required",
+                    "invalid": "Select a valid project color"
+                },
+                "users": {
+                    "unique": "You cannot select the same user more than once."
+                }
+            }
+        },
+        "projectOverviewTable": {
+            "labels": {
+                "id": "ID",
+                "color": "Color",
+                "name": "Project Name",
+                "userCount": "Number of Users"
+            }
+        },
+        "mainLayout": {},
+        "errorMessage": {},
+        "projectDetails": {
+            "title": "Update Project",
+            "noUsers": "This project doesn't have any users",
+            "labels": {
+                "name": "Project Name",
+                "color": "Select Color",
+                "users": "Select Users"
+            },
+            "placeholders": {
+                "name": "Enter a name",
+                "color": "Select a color",
+                "users": "Select users (optional)"
+            },
+            "buttons": {
+                "updateProject": "Update Project"
+            },
             "toast": {
-                "success": "Project successfully created!"
+                "success": "Project successfully updated!"
             },
             "validate": {
                 "name": {
@@ -139,22 +199,36 @@
                 }
             }
         },
-        "projectOverviewTable": {
-            "labels": {
-                "id": "Id",
-                "color": "Color",
-                "name": "Project Name",
-                "userCount": "User Count"
-            }
+        "projectUsersDetails": {
+            "title": "User Information"
         },
-        "mainLayout": {},
-        "errorMessage": {}
+        "timeBlockSideForm": {
+            "title": "Log Work",
+            "start": "Start Working",
+            "stop": "Stop Working",
+            "processing": "Please wait...",
+            "input": {
+                "label": "Select Project",
+                "placeholder": "Select a project to begin"
+            }
+        }
     },
     "error": {
         "unexpectedErrorLabel": "Unexpected Error",
         "unexpectedErrorMessage": "An unexpected error occurred. Please try again later.",
         "forbidden": "You do not have permission to view this page.",
         "unauthorized": "You are not authorized. Please log in.",
-        "genericError": "An error occurred."
+        "genericError": "An error occurred.",
+        "projectNotFound": "Project not found",
+        "projectDeletedOrNotLoaded": "The project may have been deleted or is unavailable"
+    },
+    "roles": {
+        "hr": "HR",
+        "admin": "Administrator",
+        "user": "User"
+    },
+    "buttons": {
+        "yes": "Yes",
+        "no": "No"
     }
 }

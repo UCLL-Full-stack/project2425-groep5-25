@@ -66,6 +66,21 @@ export class TimeBlock extends ModelBase {
         );
     }
 
+    calculateTimeWorked(): number {
+        if (!this.endTime) {
+            return 0;
+        }
+
+        const diffInMs = this.endTime.getTime() - this.startTime.getTime();
+
+        if (diffInMs < 0) {
+            throw new Error('TimeBlock validation: Start time cannot be after end time');
+        }
+
+        const totalMinutes = diffInMs / (1000 * 60);
+        return totalMinutes / 60;
+    }
+
     static from({
         id,
         startTime,

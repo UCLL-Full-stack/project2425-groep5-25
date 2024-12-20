@@ -1,8 +1,9 @@
+import handleTokenInfo from '@hooks/handleTokenInfo';
 import { ProjectOutput } from '@types';
+import { formatOptionLabelByColor, getColorName } from '@utils/colorUtils';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { formatOptionLabelByColor, getColorName } from 'utils/colorUtils';
 
 type Props = {
     projects: Array<ProjectOutput>;
@@ -11,9 +12,10 @@ type Props = {
 const ProjectOverviewTable: React.FC<Props> = ({ projects }: Props) => {
     const router = useRouter();
     const { t } = useTranslation();
+    const { userRole, userName, userFullName, userToken } = handleTokenInfo();
 
     const handleRowClick = (projectId: number | undefined) => {
-        if (projectId) {
+        if (projectId && userRole !== 'user') {
             router.push(`/projects/${projectId}`);
         }
     };
@@ -21,52 +23,32 @@ const ProjectOverviewTable: React.FC<Props> = ({ projects }: Props) => {
     return (
         <>
             {projects && (
-                <table className="min-w-full table-auto border-collapse">
-                    <thead className="bg-gray-100">
+                <table className="table-container">
+                    <thead className="table-header">
                         <tr>
-                            <th
-                                scope="col"
-                                className="px-4 py-2 text-left text-sm font-semibold text-gray-700 border-b">
-                                {t('components.projectOverviewTable.labels.id')}
-                            </th>
-                            <th
-                                scope="col"
-                                className="px-4 py-2 text-left text-sm font-semibold text-gray-700 border-b">
-                                {t('components.projectOverviewTable.labels.color')}
-                            </th>
-                            <th
-                                scope="col"
-                                className="px-4 py-2 text-left text-sm font-semibold text-gray-700 border-b">
-                                {t('components.projectOverviewTable.labels.name')}
-                            </th>
-                            <th
-                                scope="col"
-                                className="px-4 py-2 text-left text-sm font-semibold text-gray-700 border-b">
+                            <th scope="col">{t('components.projectOverviewTable.labels.id')}</th>
+                            <th scope="col">{t('components.projectOverviewTable.labels.color')}</th>
+                            <th scope="col">{t('components.projectOverviewTable.labels.name')}</th>
+                            <th scope="col">
                                 {t('components.projectOverviewTable.labels.userCount')}
                             </th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody className="table-body">
                         {projects.map((project, index) => (
                             <tr
+                                role="button"
                                 key={index}
-                                className="cursor-pointer hover:bg-gray-50 border-b"
                                 onClick={() => handleRowClick(project.id)}>
-                                <td className="px-4 py-2 text-sm text-gray-900 border-r">
-                                    {project.id}
-                                </td>
-                                <td className="px-4 py-2 text-sm text-gray-900 border-r">
+                                <td className="border-r">{project.id}</td>
+                                <td className="border-r">
                                     {formatOptionLabelByColor({
                                         label: getColorName(project.color as string),
                                         color: project.color as string,
                                     })}
                                 </td>
-                                <td className="px-4 py-2 text-sm text-gray-900 border-r">
-                                    {project.name}
-                                </td>
-                                <td className="px-4 py-2 text-sm text-gray-900">
-                                    {project.users?.length}
-                                </td>
+                                <td className="border-r">{project.name}</td>
+                                <td>{project.users?.length}</td>
                             </tr>
                         ))}
                     </tbody>

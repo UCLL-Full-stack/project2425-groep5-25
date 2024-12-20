@@ -1,6 +1,6 @@
-import styles from '@styles/Workday.module.css';
 import { WorkDayOutput } from '@types';
-import { dateUtils } from 'utils/date';
+import { dateUtils } from '@utils/date';
+import { useTranslation } from 'react-i18next';
 import TimeBlock from './TimeBlock';
 
 type props = {
@@ -8,6 +8,7 @@ type props = {
 };
 
 const Workday: React.FC<props> = ({ workday }) => {
+    const { t } = useTranslation();
     const dateNr = dateUtils.getDate(workday.date);
     const dateName = dateUtils.getDayInitials(workday.date);
 
@@ -24,6 +25,12 @@ const Workday: React.FC<props> = ({ workday }) => {
             }, 0) ?? 0;
     } catch (error) {
         console.error(error);
+        if (error instanceof Error) {
+            console.error(
+                'There was an error when doing calculations on a workday.',
+                error.message,
+            );
+        }
     }
 
     const expectedHours = dateUtils.numberToDateString(workday.expectedHours);
@@ -31,9 +38,9 @@ const Workday: React.FC<props> = ({ workday }) => {
 
     return (
         <>
-            {workday && (
-                <div className={styles.container}>
-                    <div className={styles.informationContainer}>
+            {workday && Array.isArray(workday.timeBlocks) && workday.timeBlocks.length > 0 ? (
+                <div className="workday-container detail-container">
+                    <div className="workday-header-container">
                         <span>
                             {dateName} {dateNr}
                         </span>
@@ -41,14 +48,14 @@ const Workday: React.FC<props> = ({ workday }) => {
                             {achievedHours} / {expectedHours}
                         </span>
                     </div>
-                    <div className={styles.timeBlocksContainer}>
-                        {workday.timeBlocks &&
-                            workday.timeBlocks.length > 0 &&
-                            workday.timeBlocks.map((timeBlock) => (
-                                <TimeBlock key={timeBlock.id} timeBlock={timeBlock} />
-                            ))}
+                    <div className="worday-timeblock-container">
+                        {workday.timeBlocks.map((timeBlock) => (
+                            <TimeBlock key={timeBlock.id} timeBlock={timeBlock} />
+                        ))}
                     </div>
                 </div>
+            ) : (
+                <p className="text-center">{t('pages.workDays.noWorkdays')}</p>
             )}
         </>
     );

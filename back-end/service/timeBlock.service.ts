@@ -4,7 +4,7 @@ import { WorkDay } from '../model/workDay';
 import { projectDb } from '../repository/project.db';
 import { timeBlockDb } from '../repository/timeBlock.db';
 import { userDb } from '../repository/user.db';
-import { authorizeRole } from '../repository/utils/jwt';
+import { isValidRole } from '../repository/utils/jwt';
 import { workDayDb } from '../repository/workDay.db';
 import { workScheduleDb } from '../repository/workSchedule.db';
 import { JwtToken, TimeBlockInput } from '../types';
@@ -22,21 +22,21 @@ const createTimeBlock = async ({
     timeBlockInput: TimeBlockInput;
 }): Promise<TimeBlock> => {
     const { role, userId } = auth;
-    const permissions = authorizeRole(role);
     const { projectId } = timeBlockInput;
-    const startDate = dateUtils.getLocalCurrentDate();
 
-    if (!permissions.isAdmin && !permissions.isHr && !permissions.isUser) {
+    if (!isValidRole(role)) {
         throw new UnauthorizedError('credentials_required', {
             message: 'You are not authorized to access this resource.',
         });
     }
 
+    const startDate = dateUtils.getLocalCurrentDate();
+
     const fUser = await userDb.getUserById({ id: userId });
     if (!fUser) throw new Error(`User with id <${userId}> does not exist.`);
 
     const fTimeBlock = await timeBlockDb.getRunningTimeBlockByUserId({ userId });
-    if (fTimeBlock) throw new Error(`You are not working on anything.`);
+    if (fTimeBlock) throw new Error(`You are currently working on another timeBlock`);
 
     const fProject = await projectDb.getProjectById({ id: projectId });
     if (!fProject) throw new Error(`Project with id <${projectId}> doesn't exist.`);
@@ -75,17 +75,20 @@ const createTimeBlock = async ({
 
 const updateTimeBlock = async ({ auth }: { auth: JwtToken }): Promise<TimeBlock> => {
     const { role, userId } = auth;
-    const permissions = authorizeRole(role);
-    const endDate = dateUtils.getLocalCurrentDate();
 
-    if (!permissions.isAdmin && !permissions.isHr && !permissions.isUser) {
+    if (!isValidRole(role)) {
         throw new UnauthorizedError('credentials_required', {
             message: 'You are not authorized to access this resource.',
         });
     }
 
+    const endDate = dateUtils.getLocalCurrentDate();
+
     const fUser = await userDb.getUserById({ id: userId });
     if (!fUser) throw new Error(`User with id <${userId}> does not exist.`);
+
+    const fWorkDay = await workDayDb.getCurrentWorkDay({ date: endDate, userId });
+    if (!fWorkDay) throw new Error(`You are not working on anything.`);
 
     const fTimeBlock = await timeBlockDb.getRunningTimeBlockByUserId({ userId });
     if (!fTimeBlock) throw new Error(`You are not working on anything.`);
@@ -97,7 +100,22 @@ const updateTimeBlock = async ({ auth }: { auth: JwtToken }): Promise<TimeBlock>
         project: fTimeBlock.getProject(),
     });
 
-    return await timeBlockDb.updateTimeBlock(uTimeBlock);
+    const updatedTimeBlock = await timeBlockDb.updateTimeBlock(uTimeBlock);
+    const achievedHours = updatedTimeBlock.calculateTimeWorked();
+
+    const totalAchievedHours = (fWorkDay.getAchievedHours() || 0) + achievedHours;
+
+    const uWorkday = new WorkDay({
+        id: fWorkDay.getId(),
+        date: fWorkDay.getDate(),
+        expectedHours: fWorkDay.getExpectedHours(),
+        achievedHours: totalAchievedHours,
+        timeBlocks: fWorkDay.getTimeBlocks(),
+        user: fWorkDay.getUser(),
+    });
+
+    await workDayDb.updateWorkDay(uWorkday);
+    return updatedTimeBlock;
 };
 
 export const timeBlockService = {

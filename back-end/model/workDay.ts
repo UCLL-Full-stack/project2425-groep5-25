@@ -60,8 +60,8 @@ export class WorkDay extends ModelBase {
         return this.user;
     }
 
-    getTimeBlocks(): TimeBlock[] | undefined {
-        return this.timeBlocks;
+    getTimeBlocks(): TimeBlock[] {
+        return this.timeBlocks || [];
     }
 
     validate(workDay: {
@@ -103,10 +103,42 @@ export class WorkDay extends ModelBase {
             this.achievedHours === workDay.getAchievedHours() &&
             this.date === workDay.getDate() &&
             this.user.equals(workDay.getUser()) &&
+            this.timeBlocks !== undefined &&
             this.timeBlocks.every((timeBlock, index) =>
                 timeBlock.equals(workDay.getTimeBlocks()[index]),
             )
         );
+    }
+
+    static calculateAchievedTime(workday: WorkDay): number {
+        if (!workday.timeBlocks || workday.timeBlocks.length === 0) {
+            return 0;
+        }
+
+        let totalMinutes = 0;
+
+        for (const block of workday.timeBlocks) {
+            const startTime = block.getStartTime();
+            const endTime = block.getEndTime();
+
+            if (!endTime) {
+                continue;
+            }
+
+            if (isNaN(startTime.getTime()) || isNaN(endTime.getTime())) {
+                throw new Error('Invalid date in TimeBlock');
+            }
+
+            const diffInMs = endTime.getTime() - startTime.getTime();
+
+            if (diffInMs < 0) {
+                throw new Error('Invalid duration in TimeBlock');
+            }
+
+            totalMinutes += Math.floor(diffInMs / (1000 * 60));
+        }
+
+        return totalMinutes / 60;
     }
 
     static from({

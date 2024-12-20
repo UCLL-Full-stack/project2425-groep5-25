@@ -1,8 +1,7 @@
-import styles from '@styles/InputField.module.css';
 import { ProjectOutput } from '@types';
+import { formatOptionLabelByColor } from '@utils/colorUtils';
 import React, { useState } from 'react';
 import Select from 'react-select';
-import { formatOptionLabelByColor } from 'utils/colorUtils';
 
 type Props = {
     label: string;
@@ -40,7 +39,7 @@ const ProjectSelectField: React.FC<Props> = ({
         }
     };
 
-    const handleChange = (option: { value: number; label: string } | null) => {
+    const handleChange = (option: { value: number | any; label: string } | null) => {
         const selectedValue = option
             ? projects.find((opt) => opt.id === option.value) || null
             : null;
@@ -50,9 +49,9 @@ const ProjectSelectField: React.FC<Props> = ({
 
     return (
         <>
-            <div className={styles.inputContainer}>
+            <div className="input-container">
                 <label>{label}</label>
-                <div className={styles.innerInputContainer}>
+                <div className="input-inner-container">
                     <Select
                         options={formattedOptions}
                         value={
@@ -65,9 +64,9 @@ const ProjectSelectField: React.FC<Props> = ({
                         isSearchable={false}
                         placeholder={placeholder}
                         required={required}
-                        className={`${error ? styles.error : ''}`}
+                        className={`input-h ${error ? 'error' : ''}`}
                     />
-                    {error && <span className={styles.errorMessage}>{error}</span>}
+                    {error && <span className="input-error-message">{error}</span>}
                 </div>
             </div>
         </>

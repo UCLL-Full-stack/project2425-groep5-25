@@ -1,4 +1,6 @@
+import { UnauthorizedError } from 'express-jwt';
 import { WorkDay } from '../model/workDay';
+import { isValidRole } from '../repository/utils/jwt';
 import { workDayDb } from '../repository/workDay.db';
 import { JwtToken } from '../types';
 
@@ -16,6 +18,12 @@ const getWorkWeekByDates = async ({
     auth: JwtToken;
 }): Promise<WorkDay[]> => {
     const { userId, role } = auth;
+
+    if (!isValidRole(role)) {
+        throw new UnauthorizedError('credentials_required', {
+            message: 'You are not authorized to access this resource.',
+        });
+    }
 
     const startDate = new Date(start);
     if (isNaN(startDate.getTime()))

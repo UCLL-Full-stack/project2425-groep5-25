@@ -2,11 +2,13 @@ import ErrorMessage from '@components/layout/ErrorMessage';
 import MainLayout from '@components/layout/MainLayout';
 import ProjectDetails from '@components/projects/ProjectDetails';
 import ProjectUsersDetails from '@components/projects/ProjectUsersDetails';
+import Button from '@components/shared/Button';
+import ConfirmationDialog from '@components/shared/ConfirmationDialog';
+import handleResponse from '@hooks/handleResponse';
+import handleTokenInfo from '@hooks/handleTokenInfo';
 import { projectService } from '@services/projectService';
 import { userService } from '@services/userService';
 import { ErrorLabelMessage, ProjectInput } from '@types';
-import handleResponse from 'hooks/handleResponse';
-import handleTokenInfo from 'hooks/handleTokenInfo';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -19,9 +21,11 @@ const ProjectById: React.FC = () => {
     const router = useRouter();
     const { projectId } = router.query;
     const { t } = useTranslation();
-    const { handleApiResponse } = handleResponse();
+    const { handleUnauthorized } = handleResponse();
     const { userRole, userName, userFullName, userToken } = handleTokenInfo();
     const [errorLabelMessage, setErrorLabelMessage] = useState<ErrorLabelMessage>();
+    const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(false);
+    const [isTryingToDelete, setIsTryingToDelete] = useState<boolean>(false);
     const [isDeleted, setIsDeleted] = useState(false);
 
     const getProjectByIdAndUsersIdName = async () => {
@@ -35,9 +39,12 @@ const ProjectById: React.FC = () => {
                 usersResponse = await userService.getAllUsersIdName();
             }
 
-            const project = await handleApiResponse(projectResponse);
+            await handleUnauthorized(projectResponse);
+            await handleUnauthorized(usersResponse);
+
             if (projectResponse.ok && (!usersResponse || usersResponse.ok)) {
-                const userIdNames = usersResponse ? await handleApiResponse(usersResponse) : null;
+                const project = await projectResponse.json();
+                const userIdNames = usersResponse ? await usersResponse.json() : null;
                 return { project, userIdNames };
             }
             return null;
@@ -92,13 +99,16 @@ const ProjectById: React.FC = () => {
         }
     };
 
-    const deleteProject = async () => {
+    const deleteProject = () => {
+        setIsTryingToDelete(true);
         setErrorLabelMessage(undefined);
 
-        const confirmDelete = window.confirm(t('pages.projects.deleteConfirmation'));
-        if (!confirmDelete) {
-            return;
-        }
+        setIsButtonDisabled(true);
+        setTimeout(() => setIsButtonDisabled(false), 2000);
+    };
+
+    const confirmDelete = async () => {
+        setIsTryingToDelete(false);
 
         try {
             const [projectResponse] = await Promise.all([
@@ -119,7 +129,7 @@ const ProjectById: React.FC = () => {
 
             setTimeout(() => {
                 router.push('/projects');
-            }, 2750);
+            }, 2000);
         } catch (error) {
             if (error instanceof Error) {
                 setErrorLabelMessage({
@@ -128,6 +138,10 @@ const ProjectById: React.FC = () => {
                 });
             }
         }
+    };
+
+    const cancelDelete = () => {
+        setIsTryingToDelete(false);
     };
 
     const getTitle = () => {
@@ -146,46 +160,60 @@ const ProjectById: React.FC = () => {
                 titleContent={
                     data &&
                     userRole === 'admin' && (
-                        <button
+                        <Button
+                            type="button"
                             onClick={deleteProject}
-                            className="bg-blue-500 text-white px-6 py-2 rounded-md shadow-md hover:bg-blue-600 transition duration-200">
-                            {t('pages.projects.deleteProject')}
-                        </button>
+                            isLoading={isButtonDisabled}
+                            isDisabled={isButtonDisabled}
+                            label={
+                                isButtonDisabled
+                                    ? t('components.timeBlockSideForm.processing')
+                                    : t('pages.projects.deleteProject')
+                            }
+                        />
                     )
                 }>
-                <div className="flex justify-center gap-8">
-                    {data ? (
-                        <>
-                            <div className="w-full max-w-3xl">
-                                <ProjectDetails
-                                    onSubmit={handleUpdate}
-                                    clearParentErrors={() => setErrorLabelMessage(undefined)}
-                                    project={data.project}
-                                    userIdNames={data.userIdNames}
-                                />
-                                {errorLabelMessage && (
-                                    <div className="w-full max-w-3xl mt-6 px-4">
-                                        <ErrorMessage errorLabelMessage={errorLabelMessage} />
-                                    </div>
-                                )}
+                <div className="project-detail-container">
+                    <div className="project-inner-detail-container">
+                        {data ? (
+                            <>
+                                <div className="w-full max-w-3xl h-fit">
+                                    <ProjectDetails
+                                        onSubmit={handleUpdate}
+                                        clearParentErrors={() => setErrorLabelMessage(undefined)}
+                                        project={data.project}
+                                        userIdNames={data.userIdNames}>
+                                        {errorLabelMessage && (
+                                            <ErrorMessage errorLabelMessage={errorLabelMessage} />
+                                        )}
+                                    </ProjectDetails>
+                                </div>
+                                <div className="w-full max-w-3xl">
+                                    <ProjectUsersDetails project={data.project} />
+                                </div>
+                            </>
+                        ) : (
+                            <div className="w-full text-center mt-4">
+                                <p>{t('error.projectNotFound')}</p>
+                                <p>{t('error.projectDeletedOrNotLoaded')}</p>
                             </div>
-                            <div className="w-full max-w-3xl">
-                                <ProjectUsersDetails project={data.project} />
-                            </div>
-                        </>
-                    ) : (
-                        <div className="w-full text-center mt-4">
-                            <p>{t('error.projectNotFound')}</p>
-                            <p>{t('error.projectDeletedOrNotLoaded')}</p>
-                        </div>
-                    )}
+                        )}
+                    </div>
                 </div>
+
+                {isTryingToDelete && (
+                    <ConfirmationDialog
+                        onDelete={confirmDelete}
+                        onClose={cancelDelete}
+                        label={t('pages.projects.deleteConfirmation')}
+                    />
+                )}
             </MainLayout>
         </>
     );
 };
 
-export const getServerSideProps = async (context) => {
+export const getServerSideProps = async (context: any) => {
     const { locale } = context;
 
     return {

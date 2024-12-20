@@ -70,18 +70,7 @@ const getStartAndEndOfWeek = (date: Date): { start: string; end: string } => {
     };
 };
 
-export const dateUtils = {
-    getLocalCurrentDate,
-    formatDate,
-    calcTimeBetweenString,
-    calcTimeBetween,
-    getDate,
-    getDayInitials,
-    numberToDateString,
-    getStartAndEndOfWeek,
-};
-
-export const formatWeekDisplay = (start: string, end: string): string => {
+const formatWeekDisplay = (start: string, end: string): string => {
     const startDate = new Date(start);
     const endDate = new Date(end);
 
@@ -97,4 +86,16 @@ export const formatWeekDisplay = (start: string, end: string): string => {
     const endDay = endDate.getDate();
 
     return `${capitalizedMonthYear} ${startDay} - ${endDay}`;
+};
+
+export const dateUtils = {
+    getLocalCurrentDate,
+    formatDate,
+    calcTimeBetweenString,
+    calcTimeBetween,
+    getDate,
+    getDayInitials,
+    numberToDateString,
+    getStartAndEndOfWeek,
+    formatWeekDisplay,
 };
