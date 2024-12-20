@@ -36,7 +36,7 @@ const createTimeBlock = async ({
     if (!fUser) throw new Error(`User with id <${userId}> does not exist.`);
 
     const fTimeBlock = await timeBlockDb.getRunningTimeBlockByUserId({ userId });
-    if (fTimeBlock) throw new Error(`You are not working on anything.`);
+    if (fTimeBlock) throw new Error(`You are currently working on another timeBlock`);
 
     const fProject = await projectDb.getProjectById({ id: projectId });
     if (!fProject) throw new Error(`Project with id <${projectId}> doesn't exist.`);

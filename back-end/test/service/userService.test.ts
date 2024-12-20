@@ -1,10 +1,14 @@
 import { afterEach, beforeEach, expect, jest, test } from '@jest/globals';
 import bcrypt from 'bcrypt';
+import { Project } from '../../model/project';
 import { User } from '../../model/user';
+import { WorkSchedule } from '../../model/workSchedule';
 import { userDb } from '../../repository/user.db';
 import { generateJwtToken } from '../../repository/utils/jwt';
+import { projectService } from '../../service/project.service';
 import { userService } from '../../service/user.service';
-import { IdName, Role, UserInput } from '../../types';
+import { workScheduleService } from '../../service/workSchedule.service';
+import { Color, IdName, Role, UserInput } from '../../types';
 
 const cUser1 = new User({
     id: 1,
@@ -25,6 +29,7 @@ const cUser2 = new User({
     passWord: '@Password123!',
     role: 'admin' as Role,
 });
+
 const userInput: UserInput = {
     userName: 'Roel_Crabbe',
     passWord: '@Password123!',
@@ -43,13 +48,7 @@ const mockAllUsersIdNames: IdName[] = [
         name: `${cUser2.getFirstName()} ${cUser2.getLastName()}`,
     },
 ];
-const mockUserInput: UserInput = {
-    userName: 'test123',
-    firstName: 'Test',
-    lastName: 'Test',
-    email: 'test@gmail.com',
-    passWord: 'Test123@',
-};
+
 const userName = 'Yasir_DaBoss';
 const userId = 1;
 const userIds = [1, 2];
@@ -60,13 +59,27 @@ let mockGetUserByUserName: jest.MockedFunction<typeof userDb.getUserByUserName>;
 let mockGetUsersByIds: jest.MockedFunction<typeof userDb.getUsersByIds>;
 let mockGetUserById: jest.MockedFunction<typeof userDb.getUserById>;
 let mockBcryptHash: jest.MockedFunction<typeof bcrypt.hash>;
+let mockCreateUser: jest.MockedFunction<typeof userDb.createUser>;
+let mockCreateDefaultWorkSchedule: jest.MockedFunction<
+    typeof workScheduleService.createDefaultWorkSchedule
+>;
+let mockAddUsersToDefaultProject: jest.MockedFunction<
+    typeof projectService.addUsersToDefaultProject
+>;
 beforeEach(() => {
     //getUserByUserNameMock = jest.fn();
     mockGetAllUsers = jest.fn();
     mockGetUserByUserName = jest.fn();
     mockGetUserById = jest.fn();
     mockGetUsersByIds = jest.fn();
+    mockCreateUser = jest.fn();
+    mockCreateDefaultWorkSchedule = jest.fn();
+    mockAddUsersToDefaultProject = jest.fn();
+
     //need hotfix mockBcryptHash=jest.fn();
+    projectService.addUsersToDefaultProject = mockAddUsersToDefaultProject;
+    userDb.createUser = mockCreateUser;
+    workScheduleService.createDefaultWorkSchedule = mockCreateDefaultWorkSchedule;
     userDb.getUsersByIds = mockGetUsersByIds;
     userDb.getUserById = mockGetUserById;
     userDb.getUserByUserName = mockGetUserByUserName;
@@ -169,29 +182,81 @@ test('should throw an error if given user ids  does not exist ', async () => {
     expect(mockGetUsersByIds).toHaveBeenCalledTimes(1);
 });
 //userSignUp
-//need hotfix
-// test('should signup a user with given user input ', async () => {
-//     //given
-//     mockGetUserByUserName.mockResolvedValue(null);
-//     //when
-//     const result = await userService.userSignUp(userInput);
 
-//     //then
-//     expect(mockGetUserByUserName).toHaveBeenCalledWith({ userName: 'Yasir_DaBoss' });
-//     expect(mockGetUserByUserName).toHaveBeenCalledTimes(1);
-//     expect(result).toEqual(cUser1);
-// });
-// test('should throw an error if given username does not exist ', async () => {
-//     //given
-//     mockGetUserByUserName.mockResolvedValue(null);
-//     //when
-//     await expect(userService.getUserByUserName({ userName: userName })).rejects.toThrowError(
-//         new Error(`User with username <${userName}> does not exist.`),
-//     );
-//     //then
-//     expect(mockGetUserByUserName).toHaveBeenCalledWith({ userName: userName });
-//     expect(mockGetUserByUserName).toHaveBeenCalledTimes(1);
-// });
+test('should signup a user with given user input ', async () => {
+    //given
+    const validUser = new User({
+        id: 1,
+        userName: 'Roel_Crabbe',
+        passWord: await bcrypt.hash('@Password123!', 12),
+        firstName: 'Roel',
+        lastName: 'Crabbé',
+        email: 'roel.crabbe@example.com',
+        role: 'user' as Role,
+    });
+    const defaultProjectForSignup = new Project({
+        id: 1,
+        name: 'General',
+        color: Color.Gray,
+        users: [validUser],
+    });
+    const defaultWorkSchedule = new WorkSchedule({
+        mondayHours: 8,
+        tuesdayHours: 8,
+        wednesdayHours: 8,
+        thursdayHours: 8,
+        fridayHours: 8,
+        saturdayHours: 0,
+        sundayHours: 0,
+        user: validUser,
+    });
+
+    mockGetUserByUserName.mockResolvedValue(null);
+    mockCreateUser.mockResolvedValue(validUser);
+    mockCreateDefaultWorkSchedule.mockResolvedValue(defaultWorkSchedule);
+    mockAddUsersToDefaultProject.mockResolvedValue(defaultProjectForSignup);
+    //const isValidPassword = await bcrypt.compare('@Password123!', userInputObject.getPassWord());
+
+    //when
+    const result = await userService.userSignUp(userInput);
+
+    //then
+
+    expect(mockGetUserByUserName).toHaveBeenCalledWith({ userName: 'Roel_Crabbe' });
+    expect(mockGetUserByUserName).toHaveBeenCalledTimes(1);
+    // expect(mockCreateUser).toHaveBeenCalledWith(validUser);
+    expect(mockGetUserByUserName).toHaveBeenCalledTimes(1);
+    expect(mockCreateDefaultWorkSchedule).toHaveBeenCalledWith(validUser);
+    expect(mockGetUserByUserName).toHaveBeenCalledTimes(1);
+    expect(result).toEqual({
+        userId: validUser.getId(),
+        token: generateJwtToken({ userId: validUser.getId(), role: validUser.getRole() }),
+        userName: validUser.getUserName(),
+        fullName: `${validUser.getFirstName()} ${validUser.getLastName()}`,
+        role: validUser.getRole(),
+    });
+});
+
+test('should throw an error if given username does not exist ', async () => {
+    //given
+    const validUser = new User({
+        id: 1,
+        userName: 'Roel_Crabbe',
+        passWord: await bcrypt.hash('@Password123!', 12),
+        firstName: 'Roel',
+        lastName: 'Crabbé',
+        email: 'roel.crabbe@example.com',
+        role: 'user' as Role,
+    });
+    mockGetUserByUserName.mockResolvedValue(validUser);
+    //when
+    await expect(userService.userSignUp(userInput)).rejects.toThrowError(
+        new Error(`User with username <${userInput.userName}> already exists.`),
+    );
+    //then
+    expect(mockGetUserByUserName).toHaveBeenCalledWith({ userName: userInput.userName });
+    expect(mockGetUserByUserName).toHaveBeenCalledTimes(1);
+});
 
 //userAuthenticate
 test('Given correct credentials, user will be authenticated successfully', async () => {
@@ -205,7 +270,6 @@ test('Given correct credentials, user will be authenticated successfully', async
         email: 'roel.crabbe@example.com',
         role: 'user' as Role,
     });
-
     mockGetUserByUserName.mockResolvedValue(validUser);
 
     // when
@@ -223,56 +287,30 @@ test('Given correct credentials, user will be authenticated successfully', async
         role: validUser.getRole(),
     });
 });
+test('Given incorrect credentials, an error is thrown with message "Invalid credentials."', async () => {
+    // given
+    const invalidUser = new User({
+        id: 1,
+        userName: 'Roel_Crabbe',
+        passWord: await bcrypt.hash('@Password123!', 12), // hashed correct password
+        firstName: 'Roel',
+        lastName: 'Crabbé',
+        email: 'roel.crabbe@example.com',
+        role: 'user' as Role,
+    });
+    mockGetUserByUserName.mockResolvedValue(invalidUser);
 
-// test('Given correct values a user will be created with those values', async () => {
-//     // When
-//     getUserByUserNameMock.mockResolvedValue(null);
+    const invalidUserInput = {
+        userName: 'Roel_Crabbe',
+        passWord: 'WrongPassword123!',
+    };
 
-//     const hashedPassword = await bcrypt.hash(cUser.getPassWord()!, 12);
+    // when
+    await expect(userService.userAuthenticate(invalidUserInput)).rejects.toThrow(
+        'Invalid credentials.',
+    );
 
-//     const mockCreatedUser = new User({
-//         id: 1,
-//         userName: cUser.getUserName(),
-//         passWord: hashedPassword,
-//         firstName: cUser.getFirstName(),
-//         lastName: cUser.getLastName(),
-//         email: cUser.getEmail(),
-//         role: cUser.getRole(),
-//     });
-
-//     userSignUpMock.mockResolvedValue(mockCreatedUser);
-//     // createDefaultWorkScheduleMock.mockResolvedValue(mockCreatedUser);
-//     // getUsersByIdsMock.mockResolvedValue([mockCreatedUser]);
-
-//     // When
-//     const result = await userService.userSignUp({
-//         userName: userInput.userName,
-//         passWord: userInput.passWord,
-//         firstName: userInput.firstName,
-//         lastName: userInput.lastName,
-//         email: userInput.email,
-//     });
-
-//     // Then
-//     expect(getUserByUserNameMock).toHaveBeenCalledTimes(1);
-//     expect(getUserByUserNameMock).toHaveBeenCalledWith({ userName: userInput.userName });
-
-//     expect(userSignUpMock).toHaveBeenCalledTimes(1);
-//     expect(userSignUpMock).toHaveBeenCalledWith(
-//         new User({
-//             id: 1,
-//             userName: cUser.getUserName(),
-//             passWord: hashedPassword,
-//             firstName: cUser.getFirstName(),
-//             lastName: cUser.getLastName(),
-//             email: cUser.getEmail(),
-//             role: cUser.getRole(),
-//         }),
-//     );
-
-//     expect(createDefaultWorkScheduleMock).toHaveBeenCalledTimes(1);
-//     expect(createDefaultWorkScheduleMock).toHaveBeenCalledWith(mockCreatedUser);
-
-//     expect(getUsersByIdsMock).toHaveBeenCalledTimes(1);
-//     expect(getUsersByIdsMock).toHaveBeenCalledWith({ userIds: [mockCreatedUser.getId()] });
-// });
+    // then
+    expect(mockGetUserByUserName).toHaveBeenCalledTimes(1);
+    expect(mockGetUserByUserName).toHaveBeenCalledWith({ userName: invalidUserInput.userName });
+});
