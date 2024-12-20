@@ -281,7 +281,7 @@ test('Given correct credentials, user will be authenticated successfully', async
 
     expect(result).toEqual({
         userId: validUser.getId(),
-        token: generateJwtToken({ userId: validUser.getId(), role: validUser.getRole() }),
+        token: generateJwtToken({ userId: validUser.getId() ?? 0, role: validUser.getRole() }),
         userName: validUser.getUserName(),
         fullName: `${validUser.getFirstName()} ${validUser.getLastName()}`,
         role: validUser.getRole(),
@@ -303,6 +303,9 @@ test('Given incorrect credentials, an error is thrown with message "Invalid cred
     const invalidUserInput = {
         userName: 'Roel_Crabbe',
         passWord: 'WrongPassword123!',
+        firstName: 'Roel',
+        lastName: 'Crabbe',
+        email: 'RoelCrabbe@gmail.com',
     };
 
     // when
