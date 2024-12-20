@@ -1,4 +1,3 @@
-import styles from '@styles/InputField.module.css';
 import { ProjectOutput } from '@types';
 import React, { useState } from 'react';
 import Select from 'react-select';
@@ -50,9 +49,9 @@ const ProjectSelectField: React.FC<Props> = ({
 
     return (
         <>
-            <div className={styles.inputContainer}>
+            <div className="input-container">
                 <label>{label}</label>
-                <div className={styles.innerInputContainer}>
+                <div className="input-inner-container">
                     <Select
                         options={formattedOptions}
                         value={
@@ -65,9 +64,9 @@ const ProjectSelectField: React.FC<Props> = ({
                         isSearchable={false}
                         placeholder={placeholder}
                         required={required}
-                        className={`${error ? styles.error : ''}`}
+                        className={`input-h ${error ? 'error' : ''}`}
                     />
-                    {error && <span className={styles.errorMessage}>{error}</span>}
+                    {error && <span className="input-error-message">{error}</span>}
                 </div>
             </div>
         </>

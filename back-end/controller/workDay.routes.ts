@@ -65,17 +65,15 @@ const workDayRouter = express.Router();
  *             schema:
  *               $ref: '#/components/schemas/WorkDayResponse'
  */
-workDayRouter.get(
-    '',
-    async (req: Request & { auth: JwtToken }, res: Response, next: NextFunction) => {
-        try {
-            const workDays = await workDayService.getAllWorkDays();
-            res.status(200).json(workDays);
-        } catch (error) {
-            next(error);
-        }
-    },
-);
+workDayRouter.get('', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const reqHeader = req as Request & { auth: JwtToken };
+        const workDays = await workDayService.getAllWorkDays();
+        res.status(200).json(workDays);
+    } catch (error) {
+        next(error);
+    }
+});
 
 /**
  * @swagger
@@ -109,21 +107,19 @@ workDayRouter.get(
  *             schema:
  *               $ref: '#/components/schemas/WorkDayResponse'
  */
-workDayRouter.get(
-    '/:start/:end',
-    async (req: Request & { auth: JwtToken }, res: Response, next: NextFunction) => {
-        try {
-            const { start, end } = req.params;
-            const workDays = await workDayService.getWorkWeekByDates({
-                start,
-                end,
-                auth: req.auth,
-            });
-            res.status(200).json(workDays);
-        } catch (error) {
-            next(error);
-        }
-    },
-);
+workDayRouter.get('/:start/:end', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const reqHeader = req as Request & { auth: JwtToken };
+        const { start, end } = req.params;
+        const workDays = await workDayService.getWorkWeekByDates({
+            start,
+            end,
+            auth: reqHeader.auth,
+        });
+        res.status(200).json(workDays);
+    } catch (error) {
+        next(error);
+    }
+});
 
 export { workDayRouter };

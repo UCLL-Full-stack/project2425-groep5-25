@@ -124,17 +124,15 @@ const userRouter = express.Router();
  *               items:
  *                 $ref: '#/components/schemas/IdName'
  */
-userRouter.get(
-    '/id-name',
-    async (req: Request & { auth: JwtToken }, res: Response, next: NextFunction) => {
-        try {
-            const users = await userService.getAllUsersIdName();
-            res.status(200).json(users);
-        } catch (error) {
-            next(error);
-        }
-    },
-);
+userRouter.get('/id-name', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const reqHeader = req as Request & { auth: JwtToken };
+        const users = await userService.getAllUsersIdName();
+        res.status(200).json(users);
+    } catch (error) {
+        next(error);
+    }
+});
 
 /**
  * @swagger

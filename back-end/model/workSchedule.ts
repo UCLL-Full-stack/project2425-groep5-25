@@ -78,7 +78,7 @@ export class WorkSchedule extends ModelBase {
         return this.user;
     }
 
-    getHoursForDay(date: Date): number | null {
+    getHoursForDay(date: Date): number {
         const dayOfWeek = date.getDay();
 
         switch (dayOfWeek) {
@@ -97,7 +97,7 @@ export class WorkSchedule extends ModelBase {
             case 6:
                 return this.saturdayHours;
             default:
-                return null;
+                return 0;
         }
     }
 

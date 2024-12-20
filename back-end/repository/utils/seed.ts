@@ -6,6 +6,33 @@ import { dateUtils } from '../../utils/date';
 
 const prisma = new PrismaClient();
 
+const customUsers = [
+    {
+        firstName: 'Roel',
+        lastName: 'Crabbé',
+        userName: 'Roel_Crabbe',
+        email: 'roel.crabbe@example.com',
+        password: '@Roel_Crabbe123',
+        role: 'admin',
+    },
+    {
+        firstName: 'Yasir',
+        lastName: 'Hozan',
+        userName: 'Yasir_Hozan',
+        email: 'yasir.hozan@example.com',
+        password: '@Yasir_Hozan123',
+        role: 'hr',
+    },
+    {
+        firstName: 'Johan',
+        lastName: 'Pieck',
+        userName: 'Johan_Pieck',
+        email: 'johan.pieck@example.com',
+        password: '@Johan_Pieck123',
+        role: 'user',
+    },
+];
+
 const main = async () => {
     // Step 1: Clean the database
     await prisma.timeBlock.deleteMany();
@@ -15,31 +42,49 @@ const main = async () => {
     await prisma.project.deleteMany();
     console.log('Cleaned the database!');
 
-    // Step 2: Generate Users First (Without Work Schedule)
-    const users = await Promise.all(
-        Array.from({ length: 20 }).map(async () => {
-            const firstName = casual.first_name;
-            const lastName = casual.last_name;
-            const username = firstName + '_' + lastName;
-            const password = await bcrypt.hash('@' + username + '123', 12);
-            const email = firstName.toLowerCase() + '.' + lastName.toLowerCase() + '@gmail.com';
-
+    // Step 1: Add custom users to the database and get their IDs
+    const createdCustomUsers = await Promise.all(
+        customUsers.map(async (user) => {
+            const passwordHash = await bcrypt.hash(user.password, 12); // Hash the password
             return prisma.user.create({
                 data: {
-                    userName: username,
-                    firstName: firstName,
-                    lastName: lastName,
-                    email: email,
-                    passWord: password,
-                    role: casual.random_element(['admin', 'user', 'hr']) as Role,
+                    userName: user.userName,
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    email: user.email,
+                    passWord: passwordHash,
+                    role: user.role,
                 },
             });
         }),
     );
-    console.log('Users created successfully!');
 
-    // Step 3: Create WorkSchedules and associate them with Users
-    const workSchedules = await Promise.all(
+    const users = [
+        ...createdCustomUsers,
+        ...(await Promise.all(
+            Array.from({ length: 20 }).map(async () => {
+                const firstName = casual.first_name;
+                const lastName = casual.last_name;
+                const username = firstName + '_' + lastName;
+                const password = await bcrypt.hash('@' + username + '123', 12);
+                const email = firstName.toLowerCase() + '.' + lastName.toLowerCase() + '@gmail.com';
+
+                return prisma.user.create({
+                    data: {
+                        userName: username,
+                        firstName: firstName,
+                        lastName: lastName,
+                        email: email,
+                        passWord: password,
+                        role: 'admin' as Role,
+                    },
+                });
+            }),
+        )),
+    ];
+
+    // Step 3: Create WorkSchedules for all users (now with IDs)
+    await Promise.all(
         users.map((user) =>
             prisma.workSchedule.create({
                 data: {
@@ -55,7 +100,8 @@ const main = async () => {
             }),
         ),
     );
-    console.log('WorkSchedules created successfully and associated with users!');
+
+    console.log('WorkSchedules created successfully!');
 
     // Step 4: Create the Global Project (default project)
     const globalProject = await prisma.project.create({
@@ -103,7 +149,7 @@ const main = async () => {
     // Step 7: Generate Workdays for Users
     const workdays = await Promise.all(
         users.map(async (user) => {
-            const today = new Date();
+            const today = dateUtils.getLocalCurrentDate();
             const workSchedule = await prisma.workSchedule.findUnique({
                 where: { userId: user.id },
             });
@@ -113,7 +159,7 @@ const main = async () => {
                 return [];
             }
 
-            const userWorkdays = Array.from({ length: 365 }).map((_, index) => {
+            const userWorkdays = Array.from({ length: 30 }).map((_, index) => {
                 const workdayDate = new Date(today);
                 workdayDate.setDate(today.getDate() - index);
                 const startOfWorkday = dateUtils.getUTCStartOfDay(workdayDate);
@@ -166,11 +212,18 @@ const main = async () => {
     console.log('Workdays created successfully!');
 
     // Step 8: Generate TimeBlocks for each Workday and Update Achieved Hours
-    const timeBlocks = await Promise.all(
+    await Promise.all(
         workdays.map((userWorkdays, userIndex) => {
             const user = users[userIndex];
+
+            const validWorkdays = userWorkdays.filter(
+                (workday) => workday !== null && workday !== undefined,
+            );
+
             return Promise.all(
-                userWorkdays.map(async (workday) => {
+                validWorkdays.map(async (workday) => {
+                    if (!workday) return;
+
                     const userProjects = await prisma.project.findMany({
                         where: {
                             users: {
@@ -183,6 +236,7 @@ const main = async () => {
                         Array.from({ length: casual.integer(2, 5) }).map(() => {
                             const workdayDate = new Date(workday.date);
                             workdayDate.setUTCHours(8, 0, 0, 0);
+
                             const startHour = casual.integer(8, 17);
                             const startMinute = casual.integer(0, 59);
                             const startDateTime = new Date(workday.date);

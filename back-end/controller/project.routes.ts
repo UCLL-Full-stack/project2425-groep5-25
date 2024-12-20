@@ -109,17 +109,15 @@ const projectRouter = express.Router();
  *               items:
  *                 $ref: '#/components/schemas/ProjectDto'
  */
-projectRouter.get(
-    '/',
-    async (req: Request & { auth: JwtToken }, res: Response, next: NextFunction) => {
-        try {
-            const projects = await projectService.getAllProjects({ auth: req.auth });
-            res.status(200).json(projects);
-        } catch (error) {
-            next(error);
-        }
-    },
-);
+projectRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const reqHeader = req as Request & { auth: JwtToken };
+        const projects = await projectService.getAllProjects({ auth: reqHeader.auth });
+        res.status(200).json(projects);
+    } catch (error) {
+        next(error);
+    }
+});
 
 /**
  * @swagger
@@ -145,21 +143,19 @@ projectRouter.get(
  *             schema:
  *               $ref: '#/components/schemas/ProjectDto'
  */
-projectRouter.post(
-    '/',
-    async (req: Request & { auth: JwtToken }, res: Response, next: NextFunction) => {
-        try {
-            const projectInput = <ProjectInput>req.body;
-            const result = await projectService.createProject({
-                auth: req.auth,
-                projectInput,
-            });
-            res.status(201).json(result);
-        } catch (error) {
-            next(error);
-        }
-    },
-);
+projectRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const reqHeader = req as Request & { auth: JwtToken };
+        const projectInput = <ProjectInput>req.body;
+        const result = await projectService.createProject({
+            auth: reqHeader.auth,
+            projectInput,
+        });
+        res.status(201).json(result);
+    } catch (error) {
+        next(error);
+    }
+});
 
 /**
  * @swagger
@@ -181,19 +177,17 @@ projectRouter.post(
  *               items:
  *                 $ref: '#/components/schemas/ProjectDto'
  */
-projectRouter.get(
-    '/user',
-    async (req: Request & { auth: JwtToken }, res: Response, next: NextFunction) => {
-        try {
-            const projects = await projectService.getAllProjectsByUserId({
-                auth: req.auth,
-            });
-            res.status(200).json(projects);
-        } catch (error) {
-            next(error);
-        }
-    },
-);
+projectRouter.get('/user', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const reqHeader = req as Request & { auth: JwtToken };
+        const projects = await projectService.getAllProjectsByUserId({
+            auth: reqHeader.auth,
+        });
+        res.status(200).json(projects);
+    } catch (error) {
+        next(error);
+    }
+});
 
 /**
  * @swagger
@@ -221,21 +215,19 @@ projectRouter.get(
  *             schema:
  *               $ref: '#/components/schemas/ProjectDto'
  */
-projectRouter.get(
-    '/:id',
-    async (req: Request & { auth: JwtToken }, res: Response, next: NextFunction) => {
-        try {
-            const projectId = Number(req.params.id);
-            const project = await projectService.getProjectById({
-                auth: req.auth,
-                projectId: projectId,
-            });
-            res.status(200).json(project);
-        } catch (error) {
-            next(error);
-        }
-    },
-);
+projectRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const reqHeader = req as Request & { auth: JwtToken };
+        const projectId = Number(req.params.id);
+        const project = await projectService.getProjectById({
+            auth: reqHeader.auth,
+            projectId: projectId,
+        });
+        res.status(200).json(project);
+    } catch (error) {
+        next(error);
+    }
+});
 
 /**
  * @swagger
@@ -261,23 +253,21 @@ projectRouter.get(
  *             schema:
  *               $ref: '#/components/schemas/ProjectDto'
  */
-projectRouter.put(
-    '/:id',
-    async (req: Request & { auth: JwtToken }, res: Response, next: NextFunction) => {
-        try {
-            const projectId = Number(req.params.id);
-            const projectInput = <ProjectInput>req.body;
-            const result = await projectService.updateProject({
-                auth: req.auth,
-                projectId,
-                projectInput,
-            });
-            res.status(200).json(result);
-        } catch (error) {
-            next(error);
-        }
-    },
-);
+projectRouter.put('/:id', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const reqHeader = req as Request & { auth: JwtToken };
+        const projectId = Number(req.params.id);
+        const projectInput = <ProjectInput>req.body;
+        const result = await projectService.updateProject({
+            auth: reqHeader.auth,
+            projectId,
+            projectInput,
+        });
+        res.status(200).json(result);
+    } catch (error) {
+        next(error);
+    }
+});
 
 /**
  * @swagger
@@ -305,20 +295,18 @@ projectRouter.put(
  *             schema:
  *               $ref: '#/components/schemas/ProjectDto'
  */
-projectRouter.delete(
-    '/:id',
-    async (req: Request & { auth: JwtToken }, res: Response, next: NextFunction) => {
-        try {
-            const projectId = Number(req.params.id);
-            const result = await projectService.deleteProjectById({
-                auth: req.auth,
-                projectId,
-            });
-            res.status(200).json(result);
-        } catch (error) {
-            next(error);
-        }
-    },
-);
+projectRouter.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const reqHeader = req as Request & { auth: JwtToken };
+        const projectId = Number(req.params.id);
+        const result = await projectService.deleteProjectById({
+            auth: reqHeader.auth,
+            projectId,
+        });
+        res.status(200).json(result);
+    } catch (error) {
+        next(error);
+    }
+});
 
 export { projectRouter };

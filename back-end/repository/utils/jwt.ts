@@ -25,4 +25,9 @@ const authorizeRole = (role: Role) => {
     }
 };
 
-export { authorizeRole, generateJwtToken };
+const isValidRole = (role: Role): boolean => {
+    const validRoles: Role[] = ['admin', 'user', 'hr'];
+    return validRoles.includes(role);
+};
+
+export { authorizeRole, generateJwtToken, isValidRole };

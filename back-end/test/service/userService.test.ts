@@ -230,7 +230,7 @@ test('should signup a user with given user input ', async () => {
     expect(mockGetUserByUserName).toHaveBeenCalledTimes(1);
     expect(result).toEqual({
         userId: validUser.getId(),
-        token: generateJwtToken({ userId: validUser.getId(), role: validUser.getRole() }),
+        token: generateJwtToken({ userId: validUser.getId()!, role: validUser.getRole() }),
         userName: validUser.getUserName(),
         fullName: `${validUser.getFirstName()} ${validUser.getLastName()}`,
         role: validUser.getRole(),

@@ -15,7 +15,7 @@ import { dateUtils } from 'utils/date';
 
 const Home: React.FC = () => {
     const { t } = useTranslation();
-    const { handleApiResponse } = handleResponse();
+    const { handleUnauthorized } = handleResponse();
     const { userRole, userName, userFullName, userToken } = handleTokenInfo();
     const [currentWeekStart, setCurrentWeekStart] = useState<string>('');
     const [currentWeekEnd, setCurrentWeekEnd] = useState<string>('');
@@ -42,12 +42,12 @@ const Home: React.FC = () => {
                 projectService.getAllProjectsByUserId(),
             ]);
 
-            if (workDayResponse.ok && projectsResponse.ok) {
-                const [workDays, projects] = await Promise.all([
-                    handleApiResponse(workDayResponse),
-                    handleApiResponse(projectsResponse),
-                ]);
+            await handleUnauthorized(workDayResponse);
+            await handleUnauthorized(projectsResponse);
 
+            if (workDayResponse.ok && projectsResponse.ok) {
+                const projects = await projectsResponse.json();
+                const workDays = await workDayResponse.json();
                 return { workDays, projects };
             }
             return null;
@@ -75,16 +75,18 @@ const Home: React.FC = () => {
                 description={t('pages.workDays.description')}
                 isLoading={isLoading}
                 titleContent={
-                    <WeekPaginator
-                        currentWeekStart={currentWeekStart}
-                        currentWeekEnd={currentWeekEnd}
-                        updateWeek={updateWeek}
-                        resetToCurrentWeek={resetToCurrentWeek}
-                    />
+                    data && (
+                        <WeekPaginator
+                            currentWeekStart={currentWeekStart}
+                            currentWeekEnd={currentWeekEnd}
+                            updateWeek={updateWeek}
+                            resetToCurrentWeek={resetToCurrentWeek}
+                        />
+                    )
                 }>
                 {data && (
                     <>
-                        <div className="flex gap-6 mt-6 px-4 max-w-7xl">
+                        <div className="main-workweek-container">
                             <Workweek workDays={data.workDays} />
                             <TimeBlockSideForm projects={data.projects} />
                         </div>
@@ -95,7 +97,7 @@ const Home: React.FC = () => {
     );
 };
 
-export const getServerSideProps = async (context) => {
+export const getServerSideProps = async (context: any) => {
     const { locale } = context;
 
     return {

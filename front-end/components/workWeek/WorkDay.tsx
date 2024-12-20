@@ -1,4 +1,3 @@
-import styles from '@styles/Workday.module.css';
 import { WorkDayOutput } from '@types';
 import { dateUtils } from 'utils/date';
 import TimeBlock from './TimeBlock';
@@ -24,6 +23,12 @@ const Workday: React.FC<props> = ({ workday }) => {
             }, 0) ?? 0;
     } catch (error) {
         console.error(error);
+        if (error instanceof Error) {
+            console.error(
+                'There was an error when doing calculations on a workday.',
+                error.message,
+            );
+        }
     }
 
     const expectedHours = dateUtils.numberToDateString(workday.expectedHours);
@@ -32,8 +37,8 @@ const Workday: React.FC<props> = ({ workday }) => {
     return (
         <>
             {workday && (
-                <div className={styles.container}>
-                    <div className={styles.informationContainer}>
+                <div className="workday-container detail-container">
+                    <div className="workday-header-container">
                         <span>
                             {dateName} {dateNr}
                         </span>
@@ -41,7 +46,7 @@ const Workday: React.FC<props> = ({ workday }) => {
                             {achievedHours} / {expectedHours}
                         </span>
                     </div>
-                    <div className={styles.timeBlocksContainer}>
+                    <div className="worday-timeblock-container">
                         {workday.timeBlocks &&
                             workday.timeBlocks.length > 0 &&
                             workday.timeBlocks.map((timeBlock) => (

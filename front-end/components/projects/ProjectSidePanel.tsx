@@ -1,11 +1,11 @@
 import ErrorMessage from '@components/layout/ErrorMessage';
+import Button from '@components/shared/Button';
 import ColorSelectField from '@components/shared/ColorSelectField';
 import InputField from '@components/shared/InputField';
 import UserSelectField from '@components/shared/UserSelectField';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { projectService } from '@services/projectService';
-import styles from '@styles/ProjectSidePanel.module.css';
 import { Color, ErrorLabelMessage, IdName, ProjectInput } from '@types';
 import { useTranslation } from 'next-i18next';
 import React, { useState } from 'react';
@@ -25,6 +25,7 @@ const ProjectSidePanel: React.FC<Props> = ({ userIdNames, onProjectCreated, onCl
     const [userIds, setUserIds] = useState<number[]>([]);
     const [showUserSelector, setShowUserSelector] = useState<boolean>(false);
     const [errorLabelMessage, setErrorLabelMessage] = useState<ErrorLabelMessage>();
+    const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(false);
 
     const validateName = (name: string | null) => {
         if (!name?.trim()) return t('components.projectSidePanel.validate.name.required');
@@ -72,6 +73,9 @@ const ProjectSidePanel: React.FC<Props> = ({ userIdNames, onProjectCreated, onCl
         e.preventDefault();
         setErrorLabelMessage(undefined);
 
+        setIsButtonDisabled(true);
+        setTimeout(() => setIsButtonDisabled(false), 2000);
+
         if (!validate()) {
             return;
         }
@@ -99,14 +103,14 @@ const ProjectSidePanel: React.FC<Props> = ({ userIdNames, onProjectCreated, onCl
 
     return (
         <>
-            <div className={styles['side-panel']}>
-                <div className={styles['title-container']}>
-                    <h6>{t('components.projectSidePanel.title')}</h6>
-                    <button onClick={onClose} className={styles.closeButton}>
+            <div className="side-panel-container">
+                <div>
+                    <h2>{t('components.projectSidePanel.title')}</h2>
+                    <button onClick={onClose}>
                         <FontAwesomeIcon icon={faTimes} />
                     </button>
                 </div>
-                <form onSubmit={createProject} className={styles['form-container']}>
+                <form onSubmit={createProject} className="form-container">
                     <InputField
                         type="text"
                         label={t('components.projectSidePanel.labels.name')}
@@ -127,12 +131,11 @@ const ProjectSidePanel: React.FC<Props> = ({ userIdNames, onProjectCreated, onCl
                     />
 
                     {!showUserSelector ? (
-                        <button
+                        <Button
                             type="button"
-                            className="bg-blue-500 text-white px-6 py-2 rounded-md shadow-md hover:bg-blue-600 transition duration-200"
-                            onClick={() => setShowUserSelector(true)}>
-                            {t('components.projectSidePanel.buttons.addUsers')}
-                        </button>
+                            label={t('components.projectSidePanel.buttons.addUsers')}
+                            onClick={() => setShowUserSelector(true)}
+                        />
                     ) : (
                         <UserSelectField
                             label={t('components.projectSidePanel.labels.users')}
@@ -145,11 +148,17 @@ const ProjectSidePanel: React.FC<Props> = ({ userIdNames, onProjectCreated, onCl
                         />
                     )}
 
-                    <button
+                    <Button
                         type="submit"
-                        className="bg-blue-500 text-white px-6 py-2 rounded-md shadow-md hover:bg-blue-600 transition duration-200">
-                        {t('components.projectSidePanel.buttons.createProject')}
-                    </button>
+                        onClick={createProject}
+                        isLoading={isButtonDisabled}
+                        isDisabled={isButtonDisabled}
+                        label={
+                            isButtonDisabled
+                                ? t('components.timeBlockSideForm.processing')
+                                : t('components.projectSidePanel.buttons.createProject')
+                        }
+                    />
 
                     {errorLabelMessage && <ErrorMessage errorLabelMessage={errorLabelMessage} />}
                 </form>

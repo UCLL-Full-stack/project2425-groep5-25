@@ -17,16 +17,15 @@ const WeekPaginator: React.FC<Props> = ({
     resetToCurrentWeek,
 }: Props) => {
     const { t } = useTranslation();
+    const currentDate = dateUtils.getLocalCurrentDate();
 
     const goToPreviousWeek = () => {
-        const currentDate = dateUtils.getLocalCurrentDate();
         currentDate.setDate(currentDate.getDate() - 7);
         const { start, end } = dateUtils.getStartAndEndOfWeek(currentDate);
         updateWeek(start, end);
     };
 
     const goToNextWeek = () => {
-        const currentDate = dateUtils.getLocalCurrentDate();
         currentDate.setDate(currentDate.getDate() + 7);
         const { start, end } = dateUtils.getStartAndEndOfWeek(currentDate);
         updateWeek(start, end);
@@ -39,7 +38,7 @@ const WeekPaginator: React.FC<Props> = ({
                     {formatWeekDisplay(currentWeekStart, currentWeekEnd)}
                 </span>
 
-                <div className="flex justify-between gap-2 w-full">
+                <div className="flex justify-between w-full">
                     <button
                         className="text-2xl p-2 hover:text-blue-500"
                         onClick={goToPreviousWeek}

@@ -4,7 +4,7 @@ import ColorSelectField from '@components/shared/ColorSelectField';
 import InputField from '@components/shared/InputField';
 import UserSelectField from '@components/shared/UserSelectField';
 import { Color, ErrorLabelMessage, IdName, ProjectInput, ProjectOutput } from '@types';
-import { useEffect, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { getColorEnumFromHex } from 'utils/colorUtils';
 
@@ -13,6 +13,7 @@ type Props = {
     project: ProjectOutput;
     onSubmit: (data: ProjectInput) => void;
     clearParentErrors: () => void;
+    children: ReactNode;
 };
 
 const ProjectDetails: React.FC<Props> = ({
@@ -20,6 +21,7 @@ const ProjectDetails: React.FC<Props> = ({
     project,
     onSubmit,
     clearParentErrors,
+    children,
 }: Props) => {
     const { t } = useTranslation();
     const [name, setName] = useState<string | null>(null);
@@ -27,6 +29,7 @@ const ProjectDetails: React.FC<Props> = ({
     const [userIds, setUserIds] = useState<number[]>([]);
     const [showUserSelector, setShowUserSelector] = useState<boolean>(false);
     const [errorLabelMessage, setErrorLabelMessage] = useState<ErrorLabelMessage>();
+    const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(false);
 
     const validateName = (name: string | null) => {
         if (!name?.trim()) return t('components.projectDetails.validate.name.required');
@@ -76,6 +79,9 @@ const ProjectDetails: React.FC<Props> = ({
         e.preventDefault();
         clearAllErrors();
 
+        setIsButtonDisabled(true);
+        setTimeout(() => setIsButtonDisabled(false), 2000);
+
         if (!validate()) {
             return;
         }
@@ -94,18 +100,16 @@ const ProjectDetails: React.FC<Props> = ({
         setName(project.name);
         setColor(getColorEnumFromHex(project.color));
         setUserIds(project.users?.map((user) => user.id ?? 0) || []);
-    }, []);
+    }, [project, userIdNames]);
 
     return (
         <>
             {project && userIdNames && (
-                <div className="max-w-3xl mx-auto p-8 bg-white rounded-xl border shadow-md border-gray-300">
+                <div className="detail-container">
                     <div className="text-center">
-                        <h6 className="text-xl font-semibold text-gray-700 mb-6">
-                            {t('components.projectDetails.title')}
-                        </h6>
+                        <h2 className="mb-6">{t('components.projectDetails.title')}</h2>
                     </div>
-                    <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+                    <form onSubmit={handleSubmit} className="form-container">
                         <InputField
                             type="text"
                             label={t('components.projectDetails.labels.name')}
@@ -142,15 +146,23 @@ const ProjectDetails: React.FC<Props> = ({
                             />
                         )}
 
-                        <button
+                        <Button
                             type="submit"
-                            className="bg-blue-500 text-white px-6 py-2 rounded-md shadow-md hover:bg-blue-600 transition duration-200">
-                            {t('components.projectDetails.buttons.updateProject')}
-                        </button>
+                            onClick={handleSubmit}
+                            isLoading={isButtonDisabled}
+                            isDisabled={isButtonDisabled}
+                            label={
+                                isButtonDisabled
+                                    ? t('components.timeBlockSideForm.processing')
+                                    : t('components.projectDetails.buttons.updateProject')
+                            }
+                        />
 
                         {errorLabelMessage && (
                             <ErrorMessage errorLabelMessage={errorLabelMessage} />
                         )}
+
+                        {children}
                     </form>
                 </div>
             )}
