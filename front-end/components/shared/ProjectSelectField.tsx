@@ -39,7 +39,7 @@ const ProjectSelectField: React.FC<Props> = ({
         }
     };
 
-    const handleChange = (option: { value: number; label: string } | null) => {
+    const handleChange = (option: { value: number | any; label: string } | null) => {
         const selectedValue = option
             ? projects.find((opt) => opt.id === option.value) || null
             : null;
