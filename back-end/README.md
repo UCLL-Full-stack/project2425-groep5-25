@@ -4,6 +4,8 @@
 
 The backend requires an environment file (.env) to configure various settings, including API ports, database connections, and JWT authentication. Below are the necessary environment variables that need to be set.
 
+If you are unsure of this, the env/env.ts. Can offer you some help of what is needed or if it is even needed.
+
 ### Ports
 
 API_PORT=<your_api_port> # The port on which the backend API will run.
