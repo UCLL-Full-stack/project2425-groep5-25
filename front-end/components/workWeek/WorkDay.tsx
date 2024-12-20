@@ -34,9 +34,10 @@ const Workday: React.FC<props> = ({ workday }) => {
     const expectedHours = dateUtils.numberToDateString(workday.expectedHours);
     const achievedHours = dateUtils.numberToDateString(totalAchievedHours / 60);
 
+    console.log(workday);
     return (
         <>
-            {workday && (
+            {workday && Array.isArray(workday.timeBlocks) && workday.timeBlocks.length > 0 && (
                 <div className="workday-container detail-container">
                     <div className="workday-header-container">
                         <span>
@@ -47,11 +48,9 @@ const Workday: React.FC<props> = ({ workday }) => {
                         </span>
                     </div>
                     <div className="worday-timeblock-container">
-                        {workday.timeBlocks &&
-                            workday.timeBlocks.length > 0 &&
-                            workday.timeBlocks.map((timeBlock) => (
-                                <TimeBlock key={timeBlock.id} timeBlock={timeBlock} />
-                            ))}
+                        {workday.timeBlocks.map((timeBlock) => (
+                            <TimeBlock key={timeBlock.id} timeBlock={timeBlock} />
+                        ))}
                     </div>
                 </div>
             )}

@@ -110,6 +110,37 @@ export class WorkDay extends ModelBase {
         );
     }
 
+    static calculateAchievedTime(workday: WorkDay): number {
+        if (!workday.timeBlocks || workday.timeBlocks.length === 0) {
+            return 0;
+        }
+
+        let totalMinutes = 0;
+
+        for (const block of workday.timeBlocks) {
+            const startTime = block.getStartTime();
+            const endTime = block.getEndTime();
+
+            if (!endTime) {
+                continue;
+            }
+
+            if (isNaN(startTime.getTime()) || isNaN(endTime.getTime())) {
+                throw new Error('Invalid date in TimeBlock');
+            }
+
+            const diffInMs = endTime.getTime() - startTime.getTime();
+
+            if (diffInMs < 0) {
+                throw new Error('Invalid duration in TimeBlock');
+            }
+
+            totalMinutes += Math.floor(diffInMs / (1000 * 60));
+        }
+
+        return totalMinutes / 60;
+    }
+
     static from({
         id,
         expectedHours,
