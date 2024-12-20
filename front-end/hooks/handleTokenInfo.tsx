@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getFullName, getRole, getToken, getUserName } from 'utils/authUtils';
+import { getFullName, getLoggedInUser, getRole, getToken, getUserName } from 'utils/authUtils';
 
 const handleTokenInfo = () => {
     const [userRole, setUserRole] = useState<string | null>(null);
@@ -12,7 +12,7 @@ const handleTokenInfo = () => {
         setUsername(getUserName());
         setUserFullName(getFullName());
         setUserToken(getToken());
-    }, []);
+    }, [getLoggedInUser()]);
 
     return {
         userRole,
