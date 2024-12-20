@@ -1,5 +1,5 @@
+import handleTokenInfo from '@hooks/handleTokenInfo';
 import { ProjectOutput } from '@types';
-import handleTokenInfo from 'hooks/handleTokenInfo';
 import { useTranslation } from 'react-i18next';
 
 type Props = {

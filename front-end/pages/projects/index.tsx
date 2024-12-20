@@ -2,16 +2,15 @@ import MainLayout from '@components/layout/MainLayout';
 import ProjectOverviewTable from '@components/projects/ProjectOverviewTable';
 import ProjectSidePanel from '@components/projects/ProjectSidePanel';
 import Button from '@components/shared/Button';
+import handleResponse from '@hooks/handleResponse';
+import handleTokenInfo from '@hooks/handleTokenInfo';
 import { projectService } from '@services/projectService';
 import { userService } from '@services/userService';
-import handleResponse from 'hooks/handleResponse';
-import handleTokenInfo from 'hooks/handleTokenInfo';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useState } from 'react';
 import useSWR, { mutate } from 'swr';
 import useInterval from 'use-interval';
-
 const Home: React.FC = () => {
     const { t } = useTranslation();
     const { handleUnauthorized } = handleResponse();

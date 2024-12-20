@@ -1,5 +1,5 @@
+import { getFullName, getLoggedInUser, getRole, getToken, getUserName } from '@utils/authUtils';
 import { useEffect, useState } from 'react';
-import { getFullName, getLoggedInUser, getRole, getToken, getUserName } from 'utils/authUtils';
 
 const handleTokenInfo = () => {
     const [userRole, setUserRole] = useState<string | null>(null);

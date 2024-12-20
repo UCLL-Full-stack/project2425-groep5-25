@@ -1,6 +1,6 @@
 import { UserInput } from '@types';
+import { getToken } from '@utils/authUtils';
 import { processEnv } from 'env/env';
-import { getToken } from 'utils/authUtils';
 
 const getAllUsersIdName = async () => {
     return fetch(processEnv.getApiUrl() + `/users/id-name`, {

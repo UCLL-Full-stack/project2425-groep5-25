@@ -1,5 +1,6 @@
 import { WorkDayOutput } from '@types';
-import { dateUtils } from 'utils/date';
+
+import { dateUtils } from '@utils/date';
 import TimeBlock from './TimeBlock';
 
 type props = {

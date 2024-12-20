@@ -1,6 +1,6 @@
 import { TimeBlockInput } from '@types';
+import { getToken } from '@utils/authUtils';
 import { processEnv } from 'env/env';
-import { getToken } from 'utils/authUtils';
 
 const startTimeBlock = async (formData: TimeBlockInput) => {
     return await fetch(processEnv.getApiUrl() + `/timeblocks`, {

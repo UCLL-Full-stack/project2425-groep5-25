@@ -1,7 +1,7 @@
 import { ProjectOutput } from '@types';
+import { formatOptionLabelByColor } from '@utils/colorUtils';
 import React, { useState } from 'react';
 import Select from 'react-select';
-import { formatOptionLabelByColor } from 'utils/colorUtils';
 
 type Props = {
     label: string;
@@ -39,7 +39,7 @@ const ProjectSelectField: React.FC<Props> = ({
         }
     };
 
-    const handleChange = (option: { value: number; label: string } | null) => {
+    const handleChange = (option: { value: number | any; label: string } | null) => {
         const selectedValue = option
             ? projects.find((opt) => opt.id === option.value) || null
             : null;

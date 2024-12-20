@@ -1,5 +1,5 @@
+import { getToken } from '@utils/authUtils';
 import { processEnv } from 'env/env';
-import { getToken } from 'utils/authUtils';
 
 const getWorkWeekByDates = async (start: string, end: string) => {
     return fetch(processEnv.getApiUrl() + `/workdays/${start}/${end}`, {

@@ -5,8 +5,11 @@
             "@components/*": ["components/*"],
             "@services/*": ["services/*"],
             "@types": ["types/index.ts"],
-            "@styles/*": ["styles/*"]
+            "@styles/*": ["styles/*"],
+            "@utils/*": ["utils/*"],
+            "@hooks/*": ["hooks/*"]
         },
+        "jsx": "preserve",
         "lib": ["dom", "dom.iterable", "esnext"],
         "allowJs": true,
         "skipLibCheck": true,
@@ -19,7 +22,6 @@
         "moduleResolution": "node",
         "resolveJsonModule": true,
         "isolatedModules": true,
-        "jsx": "preserve",
         "plugins": [
             {
                 "name": "next"
@@ -28,6 +30,14 @@
         "strictNullChecks": true,
         "target": "ES2017"
     },
-    "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+    "include": [
+        "src",
+        "tests",
+        "next-env.d.ts",
+        "**/*.ts",
+        "**/*.tsx",
+        ".next/types/**/*.ts",
+        "babel.config.js"
+    ],
     "exclude": ["node_modules"]
 }

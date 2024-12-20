@@ -51,3 +51,10 @@ jobs:
         cd back-end
         rm -rf node_modules/.cache
         npm test
+
+    - name: Test frontend
+      if: matrix.build-mode == 'manual'
+      run: |
+        cd front-end
+        rm -rf node_modules/.cache
+        npm test

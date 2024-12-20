@@ -1,7 +1,7 @@
+import { dateUtils } from '@utils/date';
 import { useTranslation } from 'next-i18next';
 import React from 'react';
 import { FaArrowLeft, FaArrowRight, FaCalendarDay } from 'react-icons/fa';
-import { dateUtils, formatWeekDisplay } from 'utils/date';
 
 type Props = {
     currentWeekStart: string;
@@ -35,7 +35,7 @@ const WeekPaginator: React.FC<Props> = ({
         <>
             <div className="flex items-center w-max">
                 <span className="inline-block w-max">
-                    {formatWeekDisplay(currentWeekStart, currentWeekEnd)}
+                    {dateUtils.formatWeekDisplay(currentWeekStart, currentWeekEnd)}
                 </span>
 
                 <div className="flex justify-between w-full">
