@@ -299,6 +299,7 @@ test('should update time block successfully', async () => {
         startTime: new Date('2024-12-01 08:00:00'),
         project: cProject5,
     });
+
     const mockUpdatedTimeBlock = new TimeBlock({
         id: 1,
         startTime: mockRunningTimeBlock.getStartTime(),
