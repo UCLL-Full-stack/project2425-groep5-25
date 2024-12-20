@@ -103,7 +103,7 @@ const updateTimeBlock = async ({ auth }: { auth: JwtToken }): Promise<TimeBlock>
     const updatedTimeBlock = await timeBlockDb.updateTimeBlock(uTimeBlock);
     const achievedHours = updatedTimeBlock.calculateTimeWorked();
 
-    const totalAchievedHours = fWorkDay.getAchievedHours() || 0 + achievedHours;
+    const totalAchievedHours = (fWorkDay.getAchievedHours() || 0) + achievedHours;
 
     const uWorkday = new WorkDay({
         id: fWorkDay.getId(),
