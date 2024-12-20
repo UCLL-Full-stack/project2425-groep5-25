@@ -20,9 +20,10 @@ const ProjectById: React.FC = () => {
     const router = useRouter();
     const { projectId } = router.query;
     const { t } = useTranslation();
-    const { handleApiResponse } = handleResponse();
+    const { handleUnauthorized } = handleResponse();
     const { userRole, userName, userFullName, userToken } = handleTokenInfo();
     const [errorLabelMessage, setErrorLabelMessage] = useState<ErrorLabelMessage>();
+    const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(false);
     const [isDeleted, setIsDeleted] = useState(false);
 
     const getProjectByIdAndUsersIdName = async () => {
@@ -36,9 +37,12 @@ const ProjectById: React.FC = () => {
                 usersResponse = await userService.getAllUsersIdName();
             }
 
-            const project = await handleApiResponse(projectResponse);
+            await handleUnauthorized(projectResponse);
+            await handleUnauthorized(usersResponse);
+
             if (projectResponse.ok && (!usersResponse || usersResponse.ok)) {
-                const userIdNames = usersResponse ? await handleApiResponse(usersResponse) : null;
+                const project = await projectResponse.json();
+                const userIdNames = usersResponse ? await usersResponse.json() : null;
                 return { project, userIdNames };
             }
             return null;
@@ -101,6 +105,9 @@ const ProjectById: React.FC = () => {
             return;
         }
 
+        setIsButtonDisabled(true);
+        setTimeout(() => setIsButtonDisabled(false), 2000);
+
         try {
             const [projectResponse] = await Promise.all([
                 projectService.deleteProjectById(projectId as string),
@@ -149,8 +156,14 @@ const ProjectById: React.FC = () => {
                     userRole === 'admin' && (
                         <Button
                             type="button"
-                            label={t('pages.projects.deleteProject')}
                             onClick={deleteProject}
+                            isLoading={isButtonDisabled}
+                            isDisabled={isButtonDisabled}
+                            label={
+                                isButtonDisabled
+                                    ? t('components.timeBlockSideForm.processing')
+                                    : t('pages.projects.deleteProject')
+                            }
                         />
                     )
                 }>

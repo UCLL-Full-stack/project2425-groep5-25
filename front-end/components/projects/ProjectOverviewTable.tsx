@@ -1,4 +1,5 @@
 import { ProjectOutput } from '@types';
+import handleTokenInfo from 'hooks/handleTokenInfo';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -11,9 +12,10 @@ type Props = {
 const ProjectOverviewTable: React.FC<Props> = ({ projects }: Props) => {
     const router = useRouter();
     const { t } = useTranslation();
+    const { userRole, userName, userFullName, userToken } = handleTokenInfo();
 
     const handleRowClick = (projectId: number | undefined) => {
-        if (projectId) {
+        if (projectId && userRole !== 'user') {
             router.push(`/projects/${projectId}`);
         }
     };
@@ -34,7 +36,10 @@ const ProjectOverviewTable: React.FC<Props> = ({ projects }: Props) => {
                     </thead>
                     <tbody className="table-body">
                         {projects.map((project, index) => (
-                            <tr key={index} onClick={() => handleRowClick(project.id)}>
+                            <tr
+                                role="button"
+                                key={index}
+                                onClick={() => handleRowClick(project.id)}>
                                 <td className="border-r">{project.id}</td>
                                 <td className="border-r">
                                     {formatOptionLabelByColor({

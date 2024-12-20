@@ -25,6 +25,7 @@ const ProjectSidePanel: React.FC<Props> = ({ userIdNames, onProjectCreated, onCl
     const [userIds, setUserIds] = useState<number[]>([]);
     const [showUserSelector, setShowUserSelector] = useState<boolean>(false);
     const [errorLabelMessage, setErrorLabelMessage] = useState<ErrorLabelMessage>();
+    const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(false);
 
     const validateName = (name: string | null) => {
         if (!name?.trim()) return t('components.projectSidePanel.validate.name.required');
@@ -71,6 +72,9 @@ const ProjectSidePanel: React.FC<Props> = ({ userIdNames, onProjectCreated, onCl
     const createProject = async (e: React.FormEvent) => {
         e.preventDefault();
         setErrorLabelMessage(undefined);
+
+        setIsButtonDisabled(true);
+        setTimeout(() => setIsButtonDisabled(false), 2000);
 
         if (!validate()) {
             return;
@@ -146,8 +150,14 @@ const ProjectSidePanel: React.FC<Props> = ({ userIdNames, onProjectCreated, onCl
 
                     <Button
                         type="submit"
-                        label={t('components.projectSidePanel.buttons.createProject')}
                         onClick={createProject}
+                        isLoading={isButtonDisabled}
+                        isDisabled={isButtonDisabled}
+                        label={
+                            isButtonDisabled
+                                ? t('components.timeBlockSideForm.processing')
+                                : t('components.projectSidePanel.buttons.createProject')
+                        }
                     />
 
                     {errorLabelMessage && <ErrorMessage errorLabelMessage={errorLabelMessage} />}

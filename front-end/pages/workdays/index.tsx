@@ -15,7 +15,7 @@ import { dateUtils } from 'utils/date';
 
 const Home: React.FC = () => {
     const { t } = useTranslation();
-    const { handleApiResponse } = handleResponse();
+    const { handleUnauthorized } = handleResponse();
     const { userRole, userName, userFullName, userToken } = handleTokenInfo();
     const [currentWeekStart, setCurrentWeekStart] = useState<string>('');
     const [currentWeekEnd, setCurrentWeekEnd] = useState<string>('');
@@ -42,9 +42,12 @@ const Home: React.FC = () => {
                 projectService.getAllProjectsByUserId(),
             ]);
 
-            const projects = await handleApiResponse(projectsResponse);
+            await handleUnauthorized(workDayResponse);
+            await handleUnauthorized(projectsResponse);
+
             if (workDayResponse.ok && projectsResponse.ok) {
-                const workDays = await handleApiResponse(workDayResponse);
+                const projects = await projectsResponse.json();
+                const workDays = await workDayResponse.json();
                 return { workDays, projects };
             }
             return null;

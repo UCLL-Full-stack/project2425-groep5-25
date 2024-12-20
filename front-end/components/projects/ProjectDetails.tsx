@@ -29,6 +29,7 @@ const ProjectDetails: React.FC<Props> = ({
     const [userIds, setUserIds] = useState<number[]>([]);
     const [showUserSelector, setShowUserSelector] = useState<boolean>(false);
     const [errorLabelMessage, setErrorLabelMessage] = useState<ErrorLabelMessage>();
+    const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(false);
 
     const validateName = (name: string | null) => {
         if (!name?.trim()) return t('components.projectDetails.validate.name.required');
@@ -77,6 +78,9 @@ const ProjectDetails: React.FC<Props> = ({
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         clearAllErrors();
+
+        setIsButtonDisabled(true);
+        setTimeout(() => setIsButtonDisabled(false), 2000);
 
         if (!validate()) {
             return;
@@ -145,7 +149,13 @@ const ProjectDetails: React.FC<Props> = ({
                         <Button
                             type="submit"
                             onClick={handleSubmit}
-                            label={t('components.projectDetails.buttons.updateProject')}
+                            isLoading={isButtonDisabled}
+                            isDisabled={isButtonDisabled}
+                            label={
+                                isButtonDisabled
+                                    ? t('components.timeBlockSideForm.processing')
+                                    : t('components.projectDetails.buttons.updateProject')
+                            }
                         />
 
                         {errorLabelMessage && (

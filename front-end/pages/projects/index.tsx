@@ -14,7 +14,7 @@ import useInterval from 'use-interval';
 
 const Home: React.FC = () => {
     const { t } = useTranslation();
-    const { handleApiResponse } = handleResponse();
+    const { handleUnauthorized } = handleResponse();
     const { userRole, userName, userFullName, userToken } = handleTokenInfo();
     const [isSidePanelOpen, setIsSidePanelOpen] = useState<boolean>(false);
 
@@ -27,9 +27,12 @@ const Home: React.FC = () => {
                 usersResponse = await userService.getAllUsersIdName();
             }
 
-            const projects = await handleApiResponse(projectsResponse);
+            await handleUnauthorized(projectsResponse);
+            await handleUnauthorized(usersResponse);
+
             if (projectsResponse.ok && (!usersResponse || usersResponse.ok)) {
-                const userIdNames = usersResponse ? await handleApiResponse(usersResponse) : null;
+                const projects = await projectsResponse.json();
+                const userIdNames = usersResponse ? await usersResponse.json() : null;
                 return { projects, userIdNames };
             }
             return null;

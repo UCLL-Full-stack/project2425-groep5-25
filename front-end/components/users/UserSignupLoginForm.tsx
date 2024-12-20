@@ -12,13 +12,14 @@ type Props = {
 };
 
 const UserSignupLoginForm: React.FC<Props> = ({ isSignUp, onSubmit, clearParentErrors }: Props) => {
+    const { t } = useTranslation();
     const [userName, setUserName] = useState<string | null>(null);
     const [passWord, setPassWord] = useState<string | null>(null);
     const [email, setEmail] = useState<string | null>(null);
     const [firstName, setFirstName] = useState<string | null>(null);
     const [lastName, setLastName] = useState<string | null>(null);
     const [errorLabelMessage, setErrorLabelMessage] = useState<ErrorLabelMessage>();
-    const { t } = useTranslation();
+    const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(false);
 
     const validateFirstName = (firstName: string | null) => {
         if (!firstName?.trim())
@@ -128,6 +129,9 @@ const UserSignupLoginForm: React.FC<Props> = ({ isSignUp, onSubmit, clearParentE
         e.preventDefault();
         clearAllErrors();
 
+        setIsButtonDisabled(true);
+        setTimeout(() => setIsButtonDisabled(false), 2000);
+
         if (!validate()) {
             return;
         }
@@ -218,12 +222,16 @@ const UserSignupLoginForm: React.FC<Props> = ({ isSignUp, onSubmit, clearParentE
 
                 <Button
                     type="submit"
-                    label={
-                        isSignUp
-                            ? t('components.userSignUpLoginForm.buttons.signUp')
-                            : t('components.userSignUpLoginForm.buttons.login')
-                    }
                     onClick={handleSubmit}
+                    isLoading={isButtonDisabled}
+                    isDisabled={isButtonDisabled}
+                    label={
+                        isButtonDisabled
+                            ? t('components.timeBlockSideForm.processing')
+                            : isSignUp
+                              ? t('components.userSignUpLoginForm.buttons.signUp')
+                              : t('components.userSignUpLoginForm.buttons.login')
+                    }
                 />
 
                 {errorLabelMessage && <ErrorMessage errorLabelMessage={errorLabelMessage} />}

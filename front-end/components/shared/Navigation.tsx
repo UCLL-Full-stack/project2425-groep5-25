@@ -16,7 +16,7 @@ const Header: React.FC = () => {
         toast.success(t('components.navigation.logoutSuccess'));
 
         setTimeout(() => {
-            router.push('/login');
+            router.push('/');
         }, 2000);
     };
 

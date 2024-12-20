@@ -13,7 +13,7 @@ type Props = {
 const TimeBlockSideForm: React.FC<Props> = ({ projects }: Props) => {
     const { t } = useTranslation();
     const [isButtonActive, setIsButtonActive] = useState<boolean>(true);
-    const [isButtonLoading, setIsButtonDisabled] = useState<boolean>(false);
+    const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(false);
     const [selectedProject, setSelectedProject] = useState<ProjectOutput | null>(null);
     const [errorLabelMessage, setErrorLabelMessage] = useState<ErrorLabelMessage>();
 
@@ -125,13 +125,13 @@ const TimeBlockSideForm: React.FC<Props> = ({ projects }: Props) => {
                         />
 
                         <Button
-                            onClick={handleButton}
-                            isLoading={isButtonLoading}
-                            isDisabled={isButtonLoading}
-                            isActive={isButtonActive}
                             type="submit"
+                            onClick={handleButton}
+                            isLoading={isButtonDisabled}
+                            isDisabled={isButtonDisabled}
+                            isActive={isButtonActive}
                             label={
-                                isButtonLoading
+                                isButtonDisabled
                                     ? t('components.timeBlockSideForm.processing')
                                     : isButtonActive
                                       ? t('components.timeBlockSideForm.start')

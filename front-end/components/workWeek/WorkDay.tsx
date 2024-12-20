@@ -23,6 +23,12 @@ const Workday: React.FC<props> = ({ workday }) => {
             }, 0) ?? 0;
     } catch (error) {
         console.error(error);
+        if (error instanceof Error) {
+            console.error(
+                'There was an error when doing calculations on a workday.',
+                error.message,
+            );
+        }
     }
 
     const expectedHours = dateUtils.numberToDateString(workday.expectedHours);
@@ -31,14 +37,14 @@ const Workday: React.FC<props> = ({ workday }) => {
     return (
         <>
             {workday && (
-                <div className="workday-container">
+                <div className="workday-container detail-container">
                     <div className="workday-header-container">
-                        <p>
+                        <span>
                             {dateName} {dateNr}
-                        </p>
-                        <p>
+                        </span>
+                        <span>
                             {achievedHours} / {expectedHours}
-                        </p>
+                        </span>
                     </div>
                     <div className="worday-timeblock-container">
                         {workday.timeBlocks &&
