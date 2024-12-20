@@ -1,9 +1,9 @@
+import handleTokenInfo from '@hooks/handleTokenInfo';
 import { ProjectOutput } from '@types';
-import handleTokenInfo from 'hooks/handleTokenInfo';
+import { formatOptionLabelByColor, getColorName } from '@utils/colorUtils';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { formatOptionLabelByColor, getColorName } from '../../utils/colorUtils';
 
 type Props = {
     projects: Array<ProjectOutput>;

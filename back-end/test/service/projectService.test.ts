@@ -138,7 +138,6 @@ test('should return all projects for admin and hr ', async () => {
     mockGetAllProjects.mockResolvedValue(mockAllProjects);
     //when
     const result = await projectService.getAllProjects({ auth: authAdmin });
-    console.log(result);
     //then
     expect(result).toEqual(mockAllProjects);
 

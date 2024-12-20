@@ -5,7 +5,9 @@
             "@components/*": ["components/*"],
             "@services/*": ["services/*"],
             "@types": ["types/index.ts"],
-            "@styles/*": ["styles/*"]
+            "@styles/*": ["styles/*"],
+            "@utils/*": ["utils/*"],
+            "@hooks/*": ["hooks/*"]
         },
         "jsx": "preserve",
         "lib": ["dom", "dom.iterable", "esnext"],
@@ -35,7 +37,6 @@
         "**/*.ts",
         "**/*.tsx",
         ".next/types/**/*.ts",
-        "utils/dateµts",
         "babel.config.js"
     ],
     "exclude": ["node_modules"]

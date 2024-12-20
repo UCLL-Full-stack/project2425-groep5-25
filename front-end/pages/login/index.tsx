@@ -1,9 +1,9 @@
 import ErrorMessage from '@components/layout/ErrorMessage';
 import MainLayout from '@components/layout/MainLayout';
 import LoginSignup from '@components/users/UserSignupLoginForm';
+import handleTokenInfo from '@hooks/handleTokenInfo';
 import { userService } from '@services/userService';
 import { ErrorLabelMessage, UserInput } from '@types';
-import handleTokenInfo from 'hooks/handleTokenInfo';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import router from 'next/router';

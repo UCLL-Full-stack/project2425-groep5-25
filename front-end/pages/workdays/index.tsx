@@ -2,16 +2,16 @@ import MainLayout from '@components/layout/MainLayout';
 import WeekPaginator from '@components/shared/WeekPaginator';
 import TimeBlockSideForm from '@components/workWeek/TimeBlockSideForm';
 import Workweek from '@components/workWeek/WorkWeek';
+import handleResponse from '@hooks/handleResponse';
+import handleTokenInfo from '@hooks/handleTokenInfo';
 import { projectService } from '@services/projectService';
 import { workDayService } from '@services/workDayService';
-import handleResponse from 'hooks/handleResponse';
-import handleTokenInfo from 'hooks/handleTokenInfo';
+import { dateUtils } from '@utils/date';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useEffect, useState } from 'react';
 import useSWR, { mutate } from 'swr';
 import useInterval from 'use-interval';
-import { dateUtils } from 'utils/date';
 
 const Home: React.FC = () => {
     const { t } = useTranslation();

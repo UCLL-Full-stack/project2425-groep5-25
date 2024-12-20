@@ -1,9 +1,9 @@
+import Language from '@components/language/Language';
 import handleTokenInfo from 'hooks/handleTokenInfo';
 import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
-import Language from '../language/Language';
 
 const Header: React.FC = () => {
     const router = useRouter();

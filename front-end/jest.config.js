@@ -1,14 +1,17 @@
 module.exports = {
     testEnvironment: 'jsdom',
+    verbose: false,
     transform: {
         '^.+\\.[t|j]sx?$': 'babel-jest',
-        '^.+\\.(js|jsx)$': 'babel-jest', // Use babel-jest for .js and .jsx files
+        '^.+\\.(js|jsx)$': 'babel-jest',
     },
-    moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'], // Ensure Jest recognizes .ts, .tsx, .js, .jsx files
+    moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
     moduleNameMapper: {
-        '^@components/(.*)$': '<rootDir>/components/$1', // Map @components to src/components
-        '^@services/(.*)$': '<rootDir>/services/$1', // Map @services to src/services
-        '^@types$': '<rootDir>/types/index.ts', // Map @types to src/types/index.ts
-        '^@styles/(.*)$': '<rootDir>/styles/$1', // Map @styles to src/styles
+        '^@components/(.*)$': '<rootDir>/components/$1',
+        '^@services/(.*)$': '<rootDir>/services/$1',
+        '^@types$': '<rootDir>/types/index.ts',
+        '^@styles/(.*)$': '<rootDir>/styles/$1',
+        '^@hooks/(.*)$': '<rootDir>/hooks/$1',
+        '^@utils/(.*)$': '<rootDir>/utils/$1',
     },
 };

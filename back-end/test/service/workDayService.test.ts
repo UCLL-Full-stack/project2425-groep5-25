@@ -80,7 +80,6 @@ test('should return all work days', async () => {
     mockGetAllWorkDays.mockResolvedValue(mockWorkDays);
 
     const result = await workDayService.getAllWorkDays();
-    console.log(result);
     expect(result).toEqual(mockWorkDays);
 
     expect(mockGetAllWorkDays).toHaveBeenCalledTimes(1);

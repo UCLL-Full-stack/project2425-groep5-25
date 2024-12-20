@@ -1,7 +1,7 @@
 import { ProjectOutput } from '@types';
+import { formatOptionLabelByColor } from '@utils/colorUtils';
 import React, { useState } from 'react';
 import Select from 'react-select';
-import { formatOptionLabelByColor } from 'utils/colorUtils';
 
 type Props = {
     label: string;

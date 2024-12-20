@@ -4,9 +4,9 @@ import ColorSelectField from '@components/shared/ColorSelectField';
 import InputField from '@components/shared/InputField';
 import UserSelectField from '@components/shared/UserSelectField';
 import { Color, ErrorLabelMessage, IdName, ProjectInput, ProjectOutput } from '@types';
+import { getColorEnumFromHex } from '@utils/colorUtils';
 import { ReactNode, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { getColorEnumFromHex } from 'utils/colorUtils';
 
 type Props = {
     userIdNames: Array<IdName>;

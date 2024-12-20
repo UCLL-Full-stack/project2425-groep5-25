@@ -1,6 +1,6 @@
 import { TimeBlockOutput } from '@types';
-import { hexToRgba } from 'utils/colorUtils';
-import { dateUtils } from 'utils/date';
+import { hexToRgba } from '@utils/colorUtils';
+import { dateUtils } from '@utils/date';
 
 type props = {
     timeBlock: TimeBlockOutput;

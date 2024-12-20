@@ -1,5 +1,5 @@
 import MainLayout from '@components/layout/MainLayout';
-import handleTokenInfo from 'hooks/handleTokenInfo';
+import handleTokenInfo from '@hooks/handleTokenInfo';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
